@@ -1,0 +1,33 @@
+.NavBar {
+	display: flex;
+	flex-direction: row;
+	margin-right: 50px;
+}
+
+.Toggle {
+	font-size: 20px;
+	line-height: 64px;
+	padding: 0 24px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+
+.Toggle:hover {
+	color: #1890ff;
+	background-color: #f0f0f0;
+}
+
+.Logo {
+	text-align: center;
+	box-sizing: border-box;
+	height: 64px;
+	padding: 10px;
+}
+
+.AlignRight {
+	margin-left: auto;
+}
+
+.Avatar {
+	cursor: pointer;
+}

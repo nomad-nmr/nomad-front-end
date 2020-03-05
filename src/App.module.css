@@ -1,0 +1,18 @@
+.Content {
+	text-align: center;
+	min-height: 800px;
+	/* background-color: beige; */
+}
+
+.Sider {
+	background-color: #001529;
+}
+
+.Header {
+	box-shadow: 0 2px 8px #f0f1f2;
+	background-color: #f8f8f8;
+}
+
+.Footer {
+	background-color: #f0f0f0;
+}

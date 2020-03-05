@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { Layout } from 'antd'
+import classes from './App.module.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import AdminMenu from './components/AdminMenu/AdminMenu'
+import NavBar from './components/NavBar/NavBar'
+
+const { Header, Sider, Content, Footer } = Layout
+
+export class App extends Component {
+	state = {
+		adminAccess: true,
+		adminMenuCollapsed: true
+	}
+
+	toggleAdminMenu = () => {
+		this.setState(prevState => {
+			return { adminMenuCollapsed: !prevState.adminMenuCollapsed }
+		})
+	}
+
+	render() {
+		return (
+			<Layout>
+				{this.state.adminAccess ? (
+					<Sider
+						trigger={null}
+						className={classes.Sider}
+						collapsible
+						collapsed={this.state.adminMenuCollapsed}>
+						<AdminMenu collapsed={this.state.adminMenuCollapsed} />
+					</Sider>
+				) : null}
+
+				<Layout>
+					<Header className={classes.Header}>
+						<NavBar
+							collapsed={this.state.adminMenuCollapsed}
+							toggleClicked={this.toggleAdminMenu}
+							adminAccess={this.state.adminAccess}
+						/>
+					</Header>
+					<Content className={classes.Content}>Content</Content>
+					<Footer className={classes.Footer}>Footer</Footer>
+				</Layout>
+			</Layout>
+		)
+	}
 }
 
-export default App;
+export default App
