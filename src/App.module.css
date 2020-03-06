@@ -1,7 +1,6 @@
 .Content {
 	text-align: center;
 	min-height: 800px;
-	/* background-color: beige; */
 }
 
 .Sider {
@@ -9,10 +8,10 @@
 }
 
 .Header {
-	box-shadow: 0 2px 8px #f0f1f2;
-	background-color: #f8f8f8;
+	box-shadow: 0 4px 12px #f0f0f0;
 }
 
 .Footer {
 	background-color: #f0f0f0;
+	text-align: center;
 }

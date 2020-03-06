@@ -10,6 +10,7 @@
 	padding: 0 24px;
 	cursor: pointer;
 	transition: all 0.3s;
+	border-right: 1px solid #f0f0f0;
 }
 
 .Toggle:hover {
@@ -22,6 +23,13 @@
 	box-sizing: border-box;
 	height: 64px;
 	padding: 10px;
+	border-right: 1px solid #f0f0f0;
+	cursor: pointer;
+}
+
+.PageHeader {
+	border-right: 1px solid #f0f0f0;
+	/* border-bottom: 2px solid #1890ff; */
 }
 
 .AlignRight {

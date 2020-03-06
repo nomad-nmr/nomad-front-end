@@ -3,6 +3,7 @@
 	box-sizing: border-box;
 	height: 64px;
 	padding: 10px;
+	cursor: pointer;
 }
 
 img {

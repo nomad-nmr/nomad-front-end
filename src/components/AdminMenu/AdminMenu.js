@@ -1,5 +1,6 @@
 import React from 'react'
 import { Menu } from 'antd'
+import { withRouter } from 'react-router-dom'
 import {
 	DashboardOutlined,
 	TeamOutlined,
@@ -21,64 +22,68 @@ const { SubMenu } = Menu
 const AdminMenu = props => {
 	const logo = props.collapsed ? logoRound : logoWideDark
 
+	const handleClick = e => {
+		props.history.push({ pathname: '/dashboard/' + e.keyPath[0] })
+	}
+
 	return (
 		<nav>
-			<div className={classes.Logo}>
+			<div className={classes.Logo} onClick={() => window.location.reload()}>
 				<img src={logo} alt='NOMAD logo round' />
 			</div>
 
-			<Menu theme='dark' mode='inline' defaultSelectedKeys={['1']}>
-				<Menu.Item key='1'>
+			<Menu onClick={handleClick} theme='dark' mode='inline' defaultSelectedKeys={['1']}>
+				<Menu.Item key='dashboard'>
 					<DashboardOutlined />
 					<span>Dashboard</span>
 				</Menu.Item>
 				<SubMenu
-					key='sub1'
+					key='user management'
 					title={
 						<span>
 							<TeamOutlined />
 							<span>User Management</span>
 						</span>
 					}>
-					<Menu.Item key='2'>
+					<Menu.Item key='users'>
 						<UserOutlined />
-						<span>Users</span>
+						<span>Manage Users</span>
 					</Menu.Item>
-					<Menu.Item key='3'>
+					<Menu.Item key='groups'>
 						<TeamOutlined />
-						<span>Groups</span>
+						<span>Manage Groups</span>
 					</Menu.Item>
 				</SubMenu>
 				<SubMenu
-					key='sub2'
+					key='usage'
 					title={
 						<span>
 							<BarChartOutlined />
 							<span>Usage Statistics</span>
 						</span>
 					}>
-					<Menu.Item key='4'>
+					<Menu.Item key='history'>
 						<HistoryOutlined />
 						<span>History Tables</span>
 					</Menu.Item>
-					<Menu.Item key='5'>
+					<Menu.Item key='accounting'>
 						<PoundOutlined />
 						<span>Accounting</span>
 					</Menu.Item>
 				</SubMenu>
 				<SubMenu
-					key='sub3'
+					key='settings'
 					title={
 						<span>
 							<SettingOutlined />
 							<span>Settings</span>
 						</span>
 					}>
-					<Menu.Item key='6'>
+					<Menu.Item key='instruments'>
 						<DeploymentUnitOutlined />
 						<span>Instruments</span>
 					</Menu.Item>
-					<Menu.Item key='7'>
+					<Menu.Item key='experiments'>
 						<ExperimentOutlined />
 						<span>Experiments</span>
 					</Menu.Item>
@@ -88,4 +93,4 @@ const AdminMenu = props => {
 	)
 }
 
-export default AdminMenu
+export default withRouter(AdminMenu)
