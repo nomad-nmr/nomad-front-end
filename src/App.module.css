@@ -1,0 +1,17 @@
+.Content {
+	text-align: center;
+	min-height: 800px;
+}
+
+.Sider {
+	background-color: #001529;
+}
+
+.Header {
+	box-shadow: 0 4px 12px #f0f0f0;
+}
+
+.Footer {
+	background-color: #f0f0f0;
+	text-align: center;
+}
