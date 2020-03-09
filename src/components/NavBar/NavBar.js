@@ -69,13 +69,7 @@ const NavBar = props => {
 	//Setting Page Header not to show if user is not admin and navigates into admin menu
 	let pageHeaderElement = null
 	if (props.adminAccess || props.location.pathname === '/dashboard') {
-		pageHeaderElement = (
-			<PageHeader
-				className={classes.PageHeader}
-				title={headerTitle}
-				avatar={{ src: avatarSrc }}
-			/>
-		)
+		pageHeaderElement = <PageHeader className={classes.PageHeader} title={headerTitle} avatar={{ src: avatarSrc }} />
 	}
 
 	return (
@@ -84,7 +78,7 @@ const NavBar = props => {
 			{pageHeaderElement}
 
 			<div className={classes.AlignRight}>
-				<Avatar size='large' icon={<UserOutlined />} className={classes.Avatar} />
+				<Avatar size='large' icon={<UserOutlined />} className={classes.Avatar} onClick={props.avatarClicked} />
 			</div>
 		</nav>
 	)
