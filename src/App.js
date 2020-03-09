@@ -54,7 +54,6 @@ export class App extends Component {
 					</Header>
 					<Content className={classes.Content}>
 						<Switch>
-							<Redirect from='/dashboard/dashboard' to='/dashboard' />
 							<Route
 								path='/dashboard/users'
 								render={() => (
@@ -79,6 +78,7 @@ export class App extends Component {
 								component={this.state.adminAccess ? Experiments : Error403}
 							/>
 							<Route exact path='/dashboard' component={Dashboard} />
+							<Redirect from='/dashboard/dashboard' to='/dashboard' />
 							<Redirect exact from='/' to='/dashboard' />
 							<Route component={Error404} />
 						</Switch>
