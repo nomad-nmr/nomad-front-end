@@ -27,7 +27,7 @@ const AdminMenu = props => {
 
 	return (
 		<nav>
-			<div className={classes.Logo} onClick={() => window.location.reload()}>
+			<div className={classes.Logo} onClick={() => props.history.push('/dashboard')}>
 				<img src={logo} alt='NOMAD logo round' />
 			</div>
 
@@ -35,7 +35,7 @@ const AdminMenu = props => {
 				onClick={handleClick}
 				theme='dark'
 				mode='inline'
-				defaultSelectedKeys={['/']}
+				defaultSelectedKeys={['/dashboard']}
 				selectedKeys={[props.location.pathname]}>
 				<Menu.Item key='/dashboard'>
 					<DashboardOutlined />

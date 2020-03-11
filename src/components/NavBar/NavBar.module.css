@@ -38,4 +38,20 @@
 
 .Avatar {
 	cursor: pointer;
+	font-size: large;
+	font-weight: 600;
+}
+
+.User {
+	background-color: #1890ff;
+}
+
+.Admin {
+	background-color: #ff4d4f;
+}
+
+.Popover:hover {
+	color: #096dd9;
+	font-weight: 600;
+	cursor: pointer;
 }
