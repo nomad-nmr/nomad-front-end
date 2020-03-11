@@ -13,6 +13,7 @@ module.exports = override(
 			'@layout-body-background': '#fff',
 			'@layout-header-padding': '0px',
 			'@menu-dark-bg': '#001529'
+			// '@border-radius-base': '4px'
 		}
 	})
 )
