@@ -17,7 +17,8 @@ const LoginModal = props => {
 			visible={props.visible}
 			onOk={() => props.signInClicked(form)}
 			onCancel={props.cancelClicked}>
-			<Form name='basic' form={form} hideRequiredMark initialValues={{ username: 'admin' }}>
+			<Form name='basic' form={form} hideRequiredMark>
+				{/* Initial values of the form can be set as follows initialValues={{ username: 'admin' }}  */}
 				<Form.Item
 					// label='Username'
 					name='username'
@@ -42,7 +43,7 @@ const LoginModal = props => {
 							message: 'Please input your password!'
 						}
 					]}>
-					<Input
+					<Input.Password
 						prefix={<LockOutlined className='site-form-item-icon' />}
 						type='password'
 						placeholder='Password'
