@@ -11,12 +11,19 @@ const InfoCards = props => {
 			dataSource={props.cardsData}
 			renderItem={item => {
 				const cardColor = item.automationStatus === 'Running' ? '#52c41a' : '#ff4d4f'
+				const cardBackgroundColor = item.automationStatus === 'Running' ? '#f6ffed' : '#fff1f0'
 				return (
 					<List.Item>
 						<Card
 							hoverable
+							loading={props.loading}
 							headStyle={{ backgroundColor: cardColor }}
-							bodyStyle={{ border: `2px solid ${cardColor}` }}
+							bodyStyle={{
+								borderBottom: `2px solid ${cardColor}`,
+								borderRadius: '4px',
+								backgroundColor: cardBackgroundColor,
+								padding: '15px'
+							}}
 							title={
 								<div className={classes.CardHead}>
 									<h2>{item.name}</h2>
