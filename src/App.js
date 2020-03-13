@@ -51,7 +51,6 @@ export class App extends Component {
 	}
 
 	signOutHandler = () => {
-		// console.log('test sign out')
 		this.setState({ user: null, adminAccess: false, authModalVisible: false })
 		this.props.history.push({ pathname: '/dashboard' })
 	}
