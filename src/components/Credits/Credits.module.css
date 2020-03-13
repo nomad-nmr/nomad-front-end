@@ -1,0 +1,13 @@
+.Credits {
+	text-align: center;
+	background-color: #000;
+	color: #fafafa;
+	margin: 0px;
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.Credits img {
+	height: 70px;
+	padding: 15px;
+}

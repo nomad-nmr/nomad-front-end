@@ -1,6 +1,6 @@
 .Content {
 	text-align: center;
-	min-height: 800px;
+	min-height: 750px;
 }
 
 .Sider {
@@ -12,6 +12,5 @@
 }
 
 .Footer {
-	background-color: #f0f0f0;
-	text-align: center;
+	padding: 0px;
 }

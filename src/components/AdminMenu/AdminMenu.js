@@ -21,19 +21,23 @@ const { SubMenu } = Menu
 
 const AdminMenu = props => {
 	const logo = props.collapsed ? logoRound : logoWideDark
-
 	const handleClick = e => {
-		props.history.push({ pathname: '/dashboard/' + e.keyPath[0] })
+		props.history.push({ pathname: e.keyPath[0] })
 	}
 
 	return (
 		<nav>
-			<div className={classes.Logo} onClick={() => window.location.reload()}>
+			<div className={classes.Logo} onClick={() => props.history.push('/dashboard')}>
 				<img src={logo} alt='NOMAD logo round' />
 			</div>
 
-			<Menu onClick={handleClick} theme='dark' mode='inline' defaultSelectedKeys={['1']}>
-				<Menu.Item key='dashboard'>
+			<Menu
+				onClick={handleClick}
+				theme='dark'
+				mode='inline'
+				defaultSelectedKeys={['/dashboard']}
+				selectedKeys={[props.location.pathname]}>
+				<Menu.Item key='/dashboard'>
 					<DashboardOutlined />
 					<span>Dashboard</span>
 				</Menu.Item>
@@ -45,11 +49,11 @@ const AdminMenu = props => {
 							<span>User Management</span>
 						</span>
 					}>
-					<Menu.Item key='users'>
+					<Menu.Item key='/dashboard/users'>
 						<UserOutlined />
 						<span>Manage Users</span>
 					</Menu.Item>
-					<Menu.Item key='groups'>
+					<Menu.Item key='/dashboard/groups'>
 						<TeamOutlined />
 						<span>Manage Groups</span>
 					</Menu.Item>
@@ -62,11 +66,11 @@ const AdminMenu = props => {
 							<span>Usage Statistics</span>
 						</span>
 					}>
-					<Menu.Item key='history'>
+					<Menu.Item key='/dashboard/history'>
 						<HistoryOutlined />
 						<span>History Tables</span>
 					</Menu.Item>
-					<Menu.Item key='accounting'>
+					<Menu.Item key='/dashboard/accounting'>
 						<PoundOutlined />
 						<span>Accounting</span>
 					</Menu.Item>
@@ -79,11 +83,11 @@ const AdminMenu = props => {
 							<span>Settings</span>
 						</span>
 					}>
-					<Menu.Item key='instruments'>
+					<Menu.Item key='/dashboard/instruments'>
 						<DeploymentUnitOutlined />
 						<span>Instruments</span>
 					</Menu.Item>
-					<Menu.Item key='experiments'>
+					<Menu.Item key='/dashboard/experiments'>
 						<ExperimentOutlined />
 						<span>Experiments</span>
 					</Menu.Item>
