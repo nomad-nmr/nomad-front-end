@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import InfoCards from '../../components/InfoCards/InfoCards'
+import { Spin, Empty } from 'antd'
 import axios from '../../axios-firebase'
 
 export class Dashboard extends Component {
@@ -16,11 +17,13 @@ export class Dashboard extends Component {
 	}
 
 	render() {
-		return (
-			<div style={{ margin: '40px' }}>
-				<InfoCards cardsData={this.state.statusOverview} loading={this.state.cardsLoading} />
-			</div>
+		const noData = (
+			<>
+				<Empty style={{ margin: '30px' }} />
+				<Spin size='large' />
+			</>
 		)
+		return <>{this.state.cardsLoading ? noData : <InfoCards cardsData={this.state.statusOverview} />}</>
 	}
 }
 
