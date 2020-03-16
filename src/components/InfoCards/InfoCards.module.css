@@ -1,11 +1,10 @@
-.CardHead h2 {
-	color: #fff;
-	text-align: left;
-	margin: 0px;
+.InfoCards {
+	margin: 40px 20px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
 }
 
-.CardHead h4 {
-	color: #fff;
-	text-align: left;
-	margin: 0px;
+.Card {
+	min-width: 400px;
 }

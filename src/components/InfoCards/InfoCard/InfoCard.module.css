@@ -1,0 +1,23 @@
+.InfoCard {
+	min-width: 300px;
+	margin-bottom: 20px;
+	text-align: left;
+}
+
+.CardHead h2 {
+	color: #fff;
+	text-align: left;
+	margin: 0px;
+}
+
+.CardHead h4 {
+	color: #fff;
+	text-align: left;
+	margin: 0px;
+}
+
+.InfoCard ul {
+	list-style: none;
+	padding: 0px;
+	font-size: 1rem;
+}

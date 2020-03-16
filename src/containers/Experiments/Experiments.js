@@ -4,7 +4,7 @@ export class Experiments extends Component {
 	render() {
 		return (
 			<>
-				<h1 style={{ margin: '50px' }}>Experiemnts</h1>
+				<h1 style={{ margin: '50px' }}>Experiements</h1>
 			</>
 		)
 	}
