@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import InfoCards from '../../components/InfoCards/InfoCards'
-import { Spin, Empty } from 'antd'
+import { Spin, Empty, Modal } from 'antd'
 import axios from '../../axios-firebase'
 
 export class Dashboard extends Component {
@@ -10,10 +10,18 @@ export class Dashboard extends Component {
 	}
 
 	componentDidMount() {
-		axios.get('/cards.json').then(res => {
-			console.log(res.data)
-			this.setState({ statusOverview: res.data, cardsLoading: false })
-		})
+		axios
+			.get('/cards.json')
+			.then(res => {
+				console.log(res.data)
+				this.setState({ statusOverview: res.data, cardsLoading: false })
+			})
+			.catch(err =>
+				Modal.error({
+					title: 'Error message',
+					content: `${err} ; Likely Bad HTTP request`
+				})
+			)
 	}
 
 	render() {
@@ -23,7 +31,11 @@ export class Dashboard extends Component {
 				<Spin size='large' />
 			</>
 		)
-		return <>{this.state.cardsLoading ? noData : <InfoCards cardsData={this.state.statusOverview} />}</>
+		return (
+			<>
+				{this.state.cardsLoading ? noData : <InfoCards cardsData={this.state.statusOverview} />}
+			</>
+		)
 	}
 }
 
