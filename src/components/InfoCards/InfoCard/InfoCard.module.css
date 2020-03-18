@@ -1,7 +1,7 @@
 .InfoCard {
-	min-width: 300px;
-	margin-bottom: 20px;
+	min-width: 280px;
 	text-align: left;
+	margin: 0px 5px 20px 5px;
 }
 
 .CardHead h2 {
@@ -20,4 +20,17 @@
 	list-style: none;
 	padding: 0px;
 	font-size: 1rem;
+	margin-left: 5px;
+}
+
+.trafficLights {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	background-color: #f0f0f0;
+	border-radius: 4px;
+	padding: 5px;
+	width: 70%;
+	height: 100%;
 }

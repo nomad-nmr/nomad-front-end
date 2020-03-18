@@ -1,19 +1,38 @@
 import React, { Component } from 'react'
 import InfoCards from '../../components/InfoCards/InfoCards'
-import { Spin, Empty } from 'antd'
+import StatusTabs from '../../components/StatusTabs/StatusTabs'
+import { Spin, Empty, Modal } from 'antd'
 import axios from '../../axios-firebase'
 
 export class Dashboard extends Component {
 	state = {
 		statusOverview: [],
-		cardsLoading: true
+		cardsLoading: true,
+		activeTab: 1
+	}
+
+	getStatusOverview() {
+		axios
+			.get('/cards.json')
+			.then(res => {
+				console.log(res.data)
+				this.setState({ statusOverview: res.data, cardsLoading: false })
+			})
+			.catch(err =>
+				Modal.error({
+					title: 'Error message',
+					content: `${err}`
+				})
+			)
 	}
 
 	componentDidMount() {
-		axios.get('/cards.json').then(res => {
-			console.log(res.data)
-			this.setState({ statusOverview: res.data, cardsLoading: false })
-		})
+		this.getStatusOverview()
+	}
+
+	tabChangeHandler = tabId => {
+		console.log(tabId)
+		this.setState({ activeTab: tabId })
 	}
 
 	render() {
@@ -23,7 +42,20 @@ export class Dashboard extends Component {
 				<Spin size='large' />
 			</>
 		)
-		return <>{this.state.cardsLoading ? noData : <InfoCards cardsData={this.state.statusOverview} />}</>
+		return (
+			<>
+				{this.state.cardsLoading ? (
+					noData
+				) : (
+					<InfoCards cardsData={this.state.statusOverview} clicked={this.tabChangeHandler} />
+				)}
+				<StatusTabs
+					activeTab={this.state.activeTab.toString()}
+					overview={this.state.statusOverview}
+					clicked={this.tabChangeHandler}
+				/>
+			</>
+		)
 	}
 }
 

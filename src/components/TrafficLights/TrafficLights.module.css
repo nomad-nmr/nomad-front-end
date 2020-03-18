@@ -1,0 +1,15 @@
+.Avatar {
+	margin-bottom: 5px;
+}
+
+.Available {
+	background-color: #389e0d;
+}
+
+.Errors {
+	background-color: #cf1322;
+}
+
+.Running {
+	background-color: #096dd9;
+}

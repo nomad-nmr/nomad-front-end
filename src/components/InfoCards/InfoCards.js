@@ -8,7 +8,7 @@ const InfoCards = props => {
 		<div className={classes.InfoCards}>
 			{props.cardsData.map(card => {
 				return (
-					<div key={card.id} className={classes.Card}>
+					<div key={card.id} onClick={() => props.clicked(card.id)}>
 						<InfoCard data={card} />
 					</div>
 				)
