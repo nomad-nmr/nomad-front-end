@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import InfoCards from '../../components/InfoCards/InfoCards'
+import StatusTabs from '../../components/StatusTabs/StatusTabs'
 import { Spin, Empty, Modal } from 'antd'
 import axios from '../../axios-firebase'
 
 export class Dashboard extends Component {
 	state = {
 		statusOverview: [],
-		cardsLoading: true
+		cardsLoading: true,
+		activeTab: 1
 	}
 
-	componentDidMount() {
+	getStatusOverview() {
 		axios
 			.get('/cards.json')
 			.then(res => {
@@ -19,9 +21,18 @@ export class Dashboard extends Component {
 			.catch(err =>
 				Modal.error({
 					title: 'Error message',
-					content: `${err} ; Likely Bad HTTP request`
+					content: `${err}`
 				})
 			)
+	}
+
+	componentDidMount() {
+		this.getStatusOverview()
+	}
+
+	tabChangeHandler = tabId => {
+		console.log(tabId)
+		this.setState({ activeTab: tabId })
 	}
 
 	render() {
@@ -33,7 +44,16 @@ export class Dashboard extends Component {
 		)
 		return (
 			<>
-				{this.state.cardsLoading ? noData : <InfoCards cardsData={this.state.statusOverview} />}
+				{this.state.cardsLoading ? (
+					noData
+				) : (
+					<InfoCards cardsData={this.state.statusOverview} clicked={this.tabChangeHandler} />
+				)}
+				<StatusTabs
+					activeTab={this.state.activeTab.toString()}
+					overview={this.state.statusOverview}
+					clicked={this.tabChangeHandler}
+				/>
 			</>
 		)
 	}
