@@ -11,10 +11,10 @@ const InfoCard = props => {
 		busyUntil,
 		dayExpt,
 		nightExpt,
-		probe,
-		errors,
-		running,
-		availableHolders
+		probe
+		// errors,
+		// running,
+		// availableHolders
 	} = props.data
 
 	const cardColor = automationStatus === 'Running' ? '#52c41a' : '#ff4d4f'
@@ -37,11 +37,7 @@ const InfoCard = props => {
 				<Row>
 					<Col span={6}>
 						<div className={classes.trafficLights}>
-							<TrafficLights
-								errors={errors}
-								running={running}
-								availableHolders={availableHolders}
-							/>
+							<TrafficLights />
 						</div>
 					</Col>
 					<Col span={18}>
@@ -52,33 +48,32 @@ const InfoCard = props => {
 						</div>
 					</Col>
 				</Row>
-			}>
-			<>
-				<ul>
-					<li>
-						<strong>Automation Status: </strong>
-						{automationStatus}
-					</li>
-					<li>
-						<strong>Busy until: </strong>
-						{busyUntil === 'No Jobs' ? (
-							<Tag color='green' style={{ fontWeight: '700' }}>
-								{busyUntil}
-							</Tag>
-						) : (
-							busyUntil
-						)}
-					</li>
-					<li>
-						<strong>Day Experiments: </strong>
-						{dayExpt}
-					</li>
-					<li>
-						<strong>Night Experiments: </strong>
-						{nightExpt}
-					</li>
-				</ul>
-			</>
+			}
+		>
+			<ul>
+				<li>
+					<strong>Automation Status: </strong>
+					{automationStatus}
+				</li>
+				<li>
+					<strong>Busy until: </strong>
+					{busyUntil === 'No Jobs' ? (
+						<Tag color='green' style={{ fontWeight: '700' }}>
+							{busyUntil}
+						</Tag>
+					) : (
+						busyUntil
+					)}
+				</li>
+				<li>
+					<strong>Day Experiments: </strong>
+					{dayExpt}
+				</li>
+				<li>
+					<strong>Night Experiments: </strong>
+					{nightExpt}
+				</li>
+			</ul>
 		</Card>
 	)
 }

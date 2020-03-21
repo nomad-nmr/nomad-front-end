@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ShowCardsContext from '../../context/showCards-context'
 import InfoCards from '../../components/InfoCards/InfoCards'
 import StatusTabs from '../../components/StatusTabs/StatusTabs'
 import { Spin, Empty, Modal } from 'antd'
@@ -8,8 +9,10 @@ export class Dashboard extends Component {
 	state = {
 		statusOverview: [],
 		cardsLoading: true,
-		activeTab: 1
+		activeTab: '1'
 	}
+
+	static contextType = ShowCardsContext
 
 	getStatusOverview() {
 		axios
@@ -31,26 +34,25 @@ export class Dashboard extends Component {
 	}
 
 	tabChangeHandler = tabId => {
-		console.log(tabId)
 		this.setState({ activeTab: tabId })
 	}
 
 	render() {
 		const noData = (
-			<>
+			<div>
 				<Empty style={{ margin: '30px' }} />
 				<Spin size='large' />
-			</>
+			</div>
 		)
 		return (
 			<>
-				{this.state.cardsLoading ? (
+				{!this.context.showCards ? null : this.state.cardsLoading ? (
 					noData
 				) : (
 					<InfoCards cardsData={this.state.statusOverview} clicked={this.tabChangeHandler} />
 				)}
 				<StatusTabs
-					activeTab={this.state.activeTab.toString()}
+					activeTab={this.state.activeTab}
 					overview={this.state.statusOverview}
 					clicked={this.tabChangeHandler}
 				/>

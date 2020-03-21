@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import TrafficLightContext from '../../context/trafficLights-context'
 import { Tooltip, Avatar } from 'antd'
 import classes from './TrafficLights.module.css'
 
 const TrafficLights = props => {
 	const trafficLightsArr = []
-	const { errors, running, availableHolders } = props
+	const { errors, running, availableHolders } = useContext(TrafficLightContext)
 
 	if (errors) {
 		trafficLightsArr.push(
