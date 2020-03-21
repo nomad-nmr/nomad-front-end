@@ -1,4 +1,5 @@
 import React, { Component, Suspense } from 'react'
+import ShowCardsContext from './context/showCards-context'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { Layout, Spin } from 'antd'
 import classes from './App.module.css'
@@ -22,7 +23,8 @@ export class App extends Component {
 		user: null,
 		adminAccess: false,
 		adminMenuCollapsed: true,
-		authModalVisible: false
+		authModalVisible: false,
+		showCards: true
 	}
 
 	toggleAdminMenu = () => {
@@ -59,11 +61,15 @@ export class App extends Component {
 		this.setState({ authModalVisible: false })
 	}
 
+	toggleCardsHandler = () => {
+		this.setState(prevState => {
+			return { showCards: !prevState.showCards }
+		})
+	}
+
 	render() {
 		// Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
-		const Users = this.state.adminAccess
-			? React.lazy(() => import('./containers/Users/Users'))
-			: Error403
+		const Users = this.state.adminAccess ? React.lazy(() => import('./containers/Users/Users')) : Error403
 
 		const { adminAccess, adminMenuCollapsed, authModalVisible, user } = this.state
 
@@ -92,11 +98,7 @@ export class App extends Component {
 		return (
 			<Layout>
 				{adminAccess ? (
-					<Sider
-						trigger={null}
-						className={classes.Sider}
-						collapsible
-						collapsed={this.state.adminMenuCollapsed}>
+					<Sider trigger={null} className={classes.Sider} collapsible collapsed={this.state.adminMenuCollapsed}>
 						<AdminMenu collapsed={adminMenuCollapsed} />
 					</Sider>
 				) : null}
@@ -109,6 +111,7 @@ export class App extends Component {
 							collapsed={adminMenuCollapsed}
 							toggleClicked={this.toggleAdminMenu}
 							avatarClicked={this.openAuthModal}
+							toggleCards={this.toggleCardsHandler}
 						/>
 					</Header>
 					<Content className={classes.Content}>
@@ -116,24 +119,17 @@ export class App extends Component {
 							<Route
 								path='/dashboard/users'
 								render={() => (
-									<Suspense
-										fallback={
-											<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />
-										}>
+									<Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
 										<Users />
 									</Suspense>
 								)}
 							/>
 							<Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
-							<Route
-								path='/dashboard/instruments'
-								component={adminAccess ? Instruments : Error403}
-							/>
-							<Route
-								path='/dashboard/experiments'
-								component={adminAccess ? Experiments : Error403}
-							/>
-							<Route exact path='/dashboard' component={Dashboard} />
+							<Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
+							<Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
+							<ShowCardsContext.Provider value={{ showCards: this.state.showCards }}>
+								<Route exact path='/dashboard' component={Dashboard} />
+							</ShowCardsContext.Provider>
 							<Redirect from='/dashboard/dashboard' to='/dashboard' />
 							<Redirect exact from='/' to='/dashboard' />
 							<Route component={Error404} />

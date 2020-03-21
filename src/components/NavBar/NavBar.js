@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { Avatar, Tooltip, PageHeader, Popover } from 'antd'
+import { Avatar, Tooltip, PageHeader, Popover, Switch } from 'antd'
 import classes from './NavBar.module.css'
 
 import { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
@@ -15,11 +15,18 @@ const NavBar = props => {
 	// Dynamic setting of header according to location
 	let headerTitle = ''
 	let avatarSrc
+	let extra = null
 
 	switch (props.location.pathname) {
 		case '/dashboard':
 			headerTitle = 'Dashboard'
 			avatarSrc = dashIcon
+			extra = (
+				<div className={classes.SwitchElement}>
+					<label>Cards</label>
+					<Switch defaultChecked checkedChildren='ON' unCheckedChildren='OFF' onChange={props.toggleCards} />
+				</div>
+			)
 
 			break
 		case '/dashboard/users':
@@ -48,13 +55,11 @@ const NavBar = props => {
 
 	const toggleButton = props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
 	const navLeft = props.adminAccess ? (
-		<>
-			<Tooltip placement='bottomLeft' title='Admin Menu Toggle'>
-				<div className={classes.Toggle} onClick={props.toggleClicked}>
-					{toggleButton}
-				</div>
-			</Tooltip>
-		</>
+		<Tooltip placement='bottomLeft' title='Admin Menu Toggle'>
+			<div className={classes.Toggle} onClick={props.toggleClicked}>
+				{toggleButton}
+			</div>
+		</Tooltip>
 	) : (
 		<div>
 			<img
@@ -70,22 +75,13 @@ const NavBar = props => {
 	let pageHeaderElement = null
 	if (props.adminAccess || props.location.pathname === '/dashboard') {
 		pageHeaderElement = (
-			<PageHeader
-				className={classes.PageHeader}
-				title={headerTitle}
-				avatar={{ src: avatarSrc }}
-			/>
+			<PageHeader className={classes.PageHeader} title={headerTitle} avatar={{ src: avatarSrc }} extra={extra} />
 		)
 	}
 
 	//Setting avatar  according to currentUser
 	let authAvatar = (
-		<Avatar
-			size='large'
-			icon={<UserOutlined />}
-			className={classes.Avatar}
-			onClick={props.avatarClicked}
-		/>
+		<Avatar size='large' icon={<UserOutlined />} className={classes.Avatar} onClick={props.avatarClicked} />
 	)
 
 	if (props.currentUser) {
@@ -113,11 +109,9 @@ const NavBar = props => {
 					<span className={classes.Popover} onClick={props.avatarClicked}>
 						Sign out
 					</span>
-				}>
-				<Avatar
-					size='large'
-					className={assignedClasses.join(' ')}
-					onClick={props.avatarClicked}>
+				}
+			>
+				<Avatar size='large' className={assignedClasses.join(' ')} onClick={props.avatarClicked}>
 					{avatarText}
 				</Avatar>
 			</Popover>
@@ -128,7 +122,6 @@ const NavBar = props => {
 		<nav className={classes.NavBar}>
 			{navLeft}
 			{pageHeaderElement}
-
 			<div className={classes.AlignRight}>{authAvatar}</div>
 		</nav>
 	)

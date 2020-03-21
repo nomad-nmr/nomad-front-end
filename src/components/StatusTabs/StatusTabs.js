@@ -6,8 +6,9 @@ const { TabPane } = Tabs
 
 const StatusTabs = props => {
 	const TabsArr = props.overview.map(tab => {
+		const fontColor = tab.automationStatus === 'Running' ? '#52c41a' : '#f5222d'
 		return (
-			<TabPane tab={tab.name} key={tab.id}>
+			<TabPane tab={<div style={{ fontSize: '1.2rem', color: fontColor }}>{tab.name}</div>} key={tab.id.toString()}>
 				{tab.name}
 			</TabPane>
 		)
@@ -15,10 +16,13 @@ const StatusTabs = props => {
 
 	return (
 		<Tabs
-			type='card'
 			className={classes.StatusTabs}
+			tabBarGutter={8}
+			type='card'
+			// size='large'
+			animated={true}
 			activeKey={props.activeTab}
-			// onChange={activeKey => console.log(activeKey)}
+			onTabClick={key => props.clicked(key)}
 		>
 			{TabsArr}
 		</Tabs>
