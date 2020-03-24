@@ -1,15 +1,26 @@
+.Horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.Vertical {
+  display: flex;
+  flex-direction: column;
+}
+
 .Avatar {
-	margin-bottom: 5px;
+  margin: 5px;
 }
 
 .Available {
-	background-color: #389e0d;
+  background-color: #389e0d;
 }
 
 .Errors {
-	background-color: #cf1322;
+  background-color: #cf1322;
 }
 
 .Running {
-	background-color: #096dd9;
+  background-color: #096dd9;
 }

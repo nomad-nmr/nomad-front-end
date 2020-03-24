@@ -1,5 +1,4 @@
 import React, { Component, Suspense } from 'react'
-import ShowCardsContext from './context/showCards-context'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { Layout, Spin } from 'antd'
 import classes from './App.module.css'
@@ -19,130 +18,134 @@ import Credits from './components/Credits/Credits'
 const { Header, Sider, Content, Footer } = Layout
 
 export class App extends Component {
-	state = {
-		user: null,
-		adminAccess: false,
-		adminMenuCollapsed: true,
-		authModalVisible: false,
-		showCards: true
-	}
+  state = {
+    user: null,
+    adminAccess: false,
+    adminMenuCollapsed: true,
+    authModalVisible: false,
+    showCards: true
+  }
 
-	toggleAdminMenu = () => {
-		this.setState(prevState => {
-			return { adminMenuCollapsed: !prevState.adminMenuCollapsed }
-		})
-	}
+  toggleAdminMenu = () => {
+    this.setState(prevState => {
+      return { adminMenuCollapsed: !prevState.adminMenuCollapsed }
+    })
+  }
 
-	openAuthModal = () => {
-		this.setState({ authModalVisible: true })
-	}
+  openAuthModal = () => {
+    this.setState({ authModalVisible: true })
+  }
 
-	signInHandler = form => {
-		form
-			.validateFields()
-			.then(values => {
-				this.setState({
-					user: values.username,
-					adminAccess: values.username === 'admin',
-					authModalVisible: false
-				})
-			})
-			.catch(info => {
-				console.log('Validation Failed', info)
-			})
-	}
+  signInHandler = form => {
+    form
+      .validateFields()
+      .then(values => {
+        this.setState({
+          user: values.username,
+          adminAccess: values.username === 'admin',
+          authModalVisible: false
+        })
+      })
+      .catch(info => {
+        console.log('Validation Failed', info)
+      })
+  }
 
-	signOutHandler = () => {
-		this.setState({ user: null, adminAccess: false, authModalVisible: false })
-		this.props.history.push({ pathname: '/dashboard' })
-	}
+  signOutHandler = () => {
+    this.setState({ user: null, adminAccess: false, authModalVisible: false })
+    this.props.history.push({ pathname: '/dashboard' })
+  }
 
-	closeModalHandler = () => {
-		this.setState({ authModalVisible: false })
-	}
+  closeModalHandler = () => {
+    this.setState({ authModalVisible: false })
+  }
 
-	toggleCardsHandler = () => {
-		this.setState(prevState => {
-			return { showCards: !prevState.showCards }
-		})
-	}
+  toggleCardsHandler = () => {
+    this.setState(prevState => {
+      return { showCards: !prevState.showCards }
+    })
+  }
 
-	render() {
-		// Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
-		const Users = this.state.adminAccess ? React.lazy(() => import('./containers/Users/Users')) : Error403
+  render() {
+    // Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
+    const Users = this.state.adminAccess ? React.lazy(() => import('./containers/Users/Users')) : Error403
 
-		const { adminAccess, adminMenuCollapsed, authModalVisible, user } = this.state
+    const { adminAccess, adminMenuCollapsed, authModalVisible, user } = this.state
 
-		//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
-		let authModal = null
-		if (this.state.authModalVisible) {
-			if (user) {
-				authModal = (
-					<LogoutModal
-						visible={authModalVisible}
-						cancelClicked={this.closeModalHandler}
-						okClicked={this.signOutHandler}
-					/>
-				)
-			} else {
-				authModal = (
-					<LoginModal
-						visible={authModalVisible}
-						cancelClicked={this.closeModalHandler}
-						signInClicked={this.signInHandler}
-					/>
-				)
-			}
-		}
+    //Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
+    let authModal = null
+    if (this.state.authModalVisible) {
+      if (user) {
+        authModal = (
+          <LogoutModal
+            visible={authModalVisible}
+            cancelClicked={this.closeModalHandler}
+            okClicked={this.signOutHandler}
+          />
+        )
+      } else {
+        authModal = (
+          <LoginModal
+            visible={authModalVisible}
+            cancelClicked={this.closeModalHandler}
+            signInClicked={this.signInHandler}
+          />
+        )
+      }
+    }
 
-		return (
-			<Layout>
-				{adminAccess ? (
-					<Sider trigger={null} className={classes.Sider} collapsible collapsed={this.state.adminMenuCollapsed}>
-						<AdminMenu collapsed={adminMenuCollapsed} />
-					</Sider>
-				) : null}
+    return (
+      <Layout>
+        {adminAccess ? (
+          <Sider
+            trigger={null}
+            className={classes.Sider}
+            collapsible
+            collapsed={this.state.adminMenuCollapsed}
+          >
+            <AdminMenu collapsed={adminMenuCollapsed} />
+          </Sider>
+        ) : null}
 
-				<Layout>
-					<Header className={classes.Header}>
-						<NavBar
-							currentUser={user}
-							adminAccess={adminAccess}
-							collapsed={adminMenuCollapsed}
-							toggleClicked={this.toggleAdminMenu}
-							avatarClicked={this.openAuthModal}
-							toggleCards={this.toggleCardsHandler}
-						/>
-					</Header>
-					<Content className={classes.Content}>
-						<Switch>
-							<Route
-								path='/dashboard/users'
-								render={() => (
-									<Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
-										<Users />
-									</Suspense>
-								)}
-							/>
-							<Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
-							<Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
-							<Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
-							<ShowCardsContext.Provider value={{ showCards: this.state.showCards }}>
-								<Route exact path='/dashboard' component={Dashboard} />
-							</ShowCardsContext.Provider>
-							<Redirect from='/dashboard/dashboard' to='/dashboard' />
-							<Redirect exact from='/' to='/dashboard' />
-							<Route component={Error404} />
-						</Switch>
-						{authModal}
-					</Content>
-					<Footer className={classes.Footer}>
-						<Credits />
-					</Footer>
-				</Layout>
-			</Layout>
-		)
-	}
+        <Layout>
+          <Header className={classes.Header}>
+            <NavBar
+              currentUser={user}
+              adminAccess={adminAccess}
+              collapsed={adminMenuCollapsed}
+              toggleClicked={this.toggleAdminMenu}
+              avatarClicked={this.openAuthModal}
+              cardSwitchOn={this.state.showCards}
+              toggleCards={this.toggleCardsHandler}
+            />
+          </Header>
+          <Content className={classes.Content}>
+            <Switch>
+              <Route
+                path='/dashboard/users'
+                render={() => (
+                  <Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
+                    <Users />
+                  </Suspense>
+                )}
+              />
+              <Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
+              <Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
+              <Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
+              <Route exact path='/dashboard' render={() => <Dashboard showCards={this.state.showCards} />} />
+              <Redirect from='/dashboard/dashboard' to='/dashboard' />
+              <Redirect exact from='/' to='/dashboard' />
+              <Route component={Error404} />
+            </Switch>
+            {authModal}
+          </Content>
+          <Footer className={classes.Footer}>
+            <Credits />
+          </Footer>
+        </Layout>
+      </Layout>
+    )
+  }
 }
 
 export default withRouter(App)
