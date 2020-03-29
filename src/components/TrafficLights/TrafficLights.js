@@ -7,11 +7,12 @@ const TrafficLights = props => {
   const trafficLightsArr = []
   const { errors, running, availableHolders } = useContext(TrafficLightContext)
   const tooltipPlace = props.type === 'horizontal' ? 'top' : 'right'
+  const assignedStyle = props.type === 'horizontal' ? { marginLeft: '5px' } : { marginTop: '3px' }
 
   if (errors) {
     trafficLightsArr.push(
       <Tooltip key='errors' placement={tooltipPlace} title='Errors'>
-        <Avatar size='small' style={{ margin: '3px' }} className={classes.Errors}>
+        <Avatar size='small' style={assignedStyle} className={classes.Errors}>
           {errors}
         </Avatar>
       </Tooltip>
@@ -21,7 +22,7 @@ const TrafficLights = props => {
   if (running) {
     trafficLightsArr.push(
       <Tooltip key='running' placement={tooltipPlace} title='Running Experiment'>
-        <Avatar size='small' style={{ margin: '3px' }} className={classes.Running} />
+        <Avatar size='small' style={assignedStyle} className={classes.Running} />
       </Tooltip>
     )
   }
@@ -29,7 +30,7 @@ const TrafficLights = props => {
   if (availableHolders) {
     trafficLightsArr.push(
       <Tooltip key='availableHolders' placement={tooltipPlace} title='Available Holders'>
-        <Avatar size='small' style={{ margin: '3px' }} className={classes.Available}>
+        <Avatar size='small' style={assignedStyle} className={classes.Available}>
           {availableHolders}
         </Avatar>
       </Tooltip>

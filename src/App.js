@@ -1,6 +1,6 @@
 import React, { Component, Suspense } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
-import { Layout, Spin } from 'antd'
+import { Layout, Spin, BackTop } from 'antd'
 import classes from './App.module.css'
 
 import AdminMenu from './components/AdminMenu/AdminMenu'
@@ -138,6 +138,7 @@ export class App extends Component {
               <Route component={Error404} />
             </Switch>
             {authModal}
+            <BackTop visibilityHeight={200} />
           </Content>
           <Footer className={classes.Footer}>
             <Credits />

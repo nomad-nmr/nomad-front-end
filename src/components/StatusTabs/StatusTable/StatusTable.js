@@ -1,32 +1,38 @@
 import React from 'react'
-import { Table } from 'antd'
+import { Table, Tag } from 'antd'
+import classes from './StatusTable.module.css'
 
 const StatusTable = props => {
   const columns = [
     {
       title: 'Holder',
       dataIndex: 'Holder',
-      key: 'holder'
+      key: 'holder',
+      align: 'center'
     },
     {
       title: 'User',
       dataIndex: 'Username',
-      key: 'user'
+      key: 'user',
+      align: 'center'
     },
     {
       title: 'Group',
-      dataIndex: 'Group',
-      key: 'group'
+      dataIndex: 'User',
+      key: 'group',
+      align: 'center'
     },
     {
       title: 'Dataset Name',
       dataIndex: 'Name',
-      key: 'name'
+      key: 'name',
+      align: 'center'
     },
     {
       title: 'ExpNo',
       dataIndex: 'ExpNo',
-      key: 'expno'
+      key: 'expno',
+      align: 'center'
     },
     {
       title: 'Experiment',
@@ -41,15 +47,46 @@ const StatusTable = props => {
     {
       title: 'ExpT',
       dataIndex: 'Time',
-      key: 'time'
+      key: 'time',
+      align: 'center'
     },
     {
       title: 'Status',
       dataIndex: 'Status',
-      key: 'status'
+      key: 'status',
+      align: 'center',
+      render: text => {
+        let tagColor = ''
+        switch (text) {
+          case 'Running':
+            tagColor = 'processing'
+            break
+          case 'Submitted':
+            tagColor = 'purple'
+            break
+          case 'Completed':
+            tagColor = 'gold'
+            break
+          case 'Error':
+            tagColor = 'red'
+            break
+          default:
+            tagColor = 'default'
+        }
+        return <Tag color={tagColor}>{text}</Tag>
+      }
     }
   ]
-  return <Table columns={columns} dataSource={props.data} size='middle' />
+  return (
+    <Table
+      columns={columns}
+      dataSource={props.data}
+      loading={props.loading}
+      size='small'
+      pagination={false}
+      rowClassName={record => (record.highlight ? classes.RowHighlight : null)}
+    />
+  )
 }
 
 export default StatusTable

@@ -22,7 +22,7 @@ const StatusTabs = props => {
           <StatusBanner data={tab} />
         </TrafficLightsContext.Provider>
         <div className={classes.StatusTable}>
-          <StatusTable data={props.tableData} />
+          <StatusTable data={props.tableData} loading={props.tableLoading} />
         </div>
       </TabPane>
     )
@@ -32,9 +32,9 @@ const StatusTabs = props => {
     <Tabs
       className={classes.StatusTabs}
       tabBarGutter={15}
-      animated={true}
       activeKey={props.activeTab}
-      onTabClick={key => props.clicked(key)}
+      animated={false}
+      onChange={key => props.clicked(key)}
     >
       {TabsArr}
     </Tabs>

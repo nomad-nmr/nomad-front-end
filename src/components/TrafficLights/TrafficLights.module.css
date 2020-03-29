@@ -7,10 +7,7 @@
 .Vertical {
   display: flex;
   flex-direction: column;
-}
-
-.Avatar {
-  margin: 5px;
+  justify-items: center;
 }
 
 .Available {

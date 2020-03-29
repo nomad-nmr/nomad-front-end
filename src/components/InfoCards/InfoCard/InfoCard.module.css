@@ -1,7 +1,7 @@
 .InfoCard {
-  min-width: 280px;
+  min-width: 240px;
   text-align: left;
-  margin: 0px 5px 20px 5px;
+  margin: 0px 5px 15px 5px;
 }
 
 .CardHead h2 {
@@ -19,8 +19,8 @@
 .InfoCard ul {
   list-style: none;
   padding: 0px;
-  font-size: 1rem;
-  margin-left: 5px;
+  font-size: 14px;
+  /* margin-left: 5px; */
 }
 
 .trafficLights {
@@ -31,5 +31,5 @@
   border-radius: 4px;
   padding: 5px;
   width: 70%;
-  height: 100px;
+  height: 90px;
 }
