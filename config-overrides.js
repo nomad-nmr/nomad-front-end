@@ -15,7 +15,9 @@ module.exports = override(
       '@menu-dark-bg': '#001529',
       '@border-radius-base': '4px',
       '@card-padding-base': '20px',
-      '@table-header-bg': '#f0f0f0'
+      '@table-header-bg': '#f0f0f0',
+      '@layout-sider-background-light': '#001529',
+      '@layout-sider-background': '#001529'
     }
   })
 )

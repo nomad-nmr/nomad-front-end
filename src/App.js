@@ -1,6 +1,7 @@
 import React, { Component, Suspense } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
-import { Layout, Spin, BackTop } from 'antd'
+import { Layout, Spin, BackTop, Affix, Modal } from 'antd'
+import axios from './axios-firebase'
 import classes from './App.module.css'
 
 import AdminMenu from './components/AdminMenu/AdminMenu'
@@ -23,7 +24,22 @@ export class App extends Component {
     adminAccess: false,
     adminMenuCollapsed: true,
     authModalVisible: false,
-    showCards: true
+    showCards: true,
+    statusButtons: []
+  }
+
+  componentDidMount() {
+    axios
+      .get('/buttons.json')
+      .then(res => {
+        this.setState({ statusButtons: res.data })
+      })
+      .catch(err =>
+        Modal.error({
+          title: 'Error message',
+          content: `${err}`
+        })
+      )
   }
 
   toggleAdminMenu = () => {
@@ -97,28 +113,33 @@ export class App extends Component {
     return (
       <Layout>
         {adminAccess ? (
-          <Sider
-            trigger={null}
-            className={classes.Sider}
-            collapsible
-            collapsed={this.state.adminMenuCollapsed}
-          >
-            <AdminMenu collapsed={adminMenuCollapsed} />
-          </Sider>
+          <Affix className={classes.AdminMenu}>
+            <Sider
+              trigger={null}
+              className={classes.Sider}
+              collapsible
+              collapsed={this.state.adminMenuCollapsed}
+            >
+              <AdminMenu collapsed={adminMenuCollapsed} />
+            </Sider>
+          </Affix>
         ) : null}
 
         <Layout>
-          <Header className={classes.Header}>
-            <NavBar
-              currentUser={user}
-              adminAccess={adminAccess}
-              collapsed={adminMenuCollapsed}
-              toggleClicked={this.toggleAdminMenu}
-              avatarClicked={this.openAuthModal}
-              cardSwitchOn={this.state.showCards}
-              toggleCards={this.toggleCardsHandler}
-            />
-          </Header>
+          <Affix>
+            <Header className={classes.Header}>
+              <NavBar
+                currentUser={user}
+                adminAccess={adminAccess}
+                collapsed={adminMenuCollapsed}
+                toggleClicked={this.toggleAdminMenu}
+                avatarClicked={this.openAuthModal}
+                cardSwitchOn={this.state.showCards}
+                toggleCards={this.toggleCardsHandler}
+                statusButtonsData={this.state.statusButtons}
+              />
+            </Header>
+          </Affix>
           <Content className={classes.Content}>
             <Switch>
               <Route

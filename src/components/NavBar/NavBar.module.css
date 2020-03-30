@@ -36,7 +36,19 @@
   margin-left: auto;
 }
 
-.Avatar {
+.ButtonBlock {
+  display: inline-block;
+  padding: 0 10px;
+  margin-right: 40px;
+  border-right: 1px solid #f0f0f0;
+}
+
+.Button {
+  margin: 0 15px;
+  cursor: pointer;
+}
+
+.AuthAvatar {
   cursor: pointer;
   font-size: large;
   font-weight: 600;
