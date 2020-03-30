@@ -7,7 +7,7 @@ import classes from './StatusTabs.module.css'
 
 const { TabPane } = Tabs
 
-const StatusTabs = props => {
+const statusTabs = props => {
   const TabsArr = props.overview.map(tab => {
     const fontColor = tab.automationStatus === 'Running' ? '#52c41a' : '#f5222d'
     const { errors, running, availableHolders } = tab
@@ -41,4 +41,4 @@ const StatusTabs = props => {
   )
 }
 
-export default StatusTabs
+export default statusTabs

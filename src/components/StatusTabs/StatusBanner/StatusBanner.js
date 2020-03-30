@@ -3,7 +3,7 @@ import { Alert, Row, Col, Tag } from 'antd'
 import TrafficLights from '../../TrafficLights/TrafficLights'
 import classes from './StatusBanner.module.css'
 
-const StatusBanner = props => {
+const statusBanner = props => {
   const { automationStatus, busyUntil, dayExpt, nightExpt } = props.data
   const bannerType = automationStatus === 'Running' ? 'success' : 'error'
   return (
@@ -49,4 +49,4 @@ const StatusBanner = props => {
   )
 }
 
-export default StatusBanner
+export default statusBanner

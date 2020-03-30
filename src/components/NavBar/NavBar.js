@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { Avatar, Tooltip, PageHeader, Popover, Switch } from 'antd'
 import classes from './NavBar.module.css'
+import StatusButtons from './StatusButtons/StatusButtons'
 
 import { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import logoWideLight from '../../assets/logo-wide-light.png'
@@ -13,6 +14,8 @@ import experimentIcon from '../../assets/lab.svg'
 
 const NavBar = props => {
   // Dynamic setting of header according to location
+  //After implementing Redux three new lower level components could be made - Header , Auth Avatar , Status Buttons
+
   let headerTitle = ''
   let avatarSrc
   let extra = null
@@ -92,7 +95,12 @@ const NavBar = props => {
 
   //Setting avatar  according to currentUser
   let authAvatar = (
-    <Avatar size='large' icon={<UserOutlined />} className={classes.Avatar} onClick={props.avatarClicked} />
+    <Avatar
+      size='large'
+      icon={<UserOutlined />}
+      className={classes.AuthAvatar}
+      onClick={props.avatarClicked}
+    />
   )
 
   if (props.currentUser) {
@@ -133,7 +141,10 @@ const NavBar = props => {
     <nav className={classes.NavBar}>
       {navLeft}
       {pageHeaderElement}
-      <div className={classes.AlignRight}>{authAvatar}</div>
+      <div className={classes.AlignRight}>
+        <StatusButtons data={props.statusButtonsData} />
+        {authAvatar}
+      </div>
     </nav>
   )
 }

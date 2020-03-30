@@ -2,7 +2,7 @@ import React from 'react'
 import { Table, Tag } from 'antd'
 import classes from './StatusTable.module.css'
 
-const StatusTable = props => {
+const statusTable = props => {
   const columns = [
     {
       title: 'Holder',
@@ -89,4 +89,4 @@ const StatusTable = props => {
   )
 }
 
-export default StatusTable
+export default statusTable
