@@ -89,7 +89,6 @@ export class App extends Component {
 
   openDrawerHandler = id => {
     const newDrawerStatus = { ...this.state.drawerStatus }
-    newDrawerStatus.tableData = []
     newDrawerStatus.visible = true
     newDrawerStatus.id = id
     this.setState({ drawerStatus: newDrawerStatus })
@@ -157,6 +156,7 @@ export class App extends Component {
   closeDrawerHandler = () => {
     const newDrawerStatus = { ...this.state.drawerStatus }
     newDrawerStatus.visible = false
+    newDrawerStatus.tableData = []
     this.setState({ drawerStatus: newDrawerStatus })
   }
 

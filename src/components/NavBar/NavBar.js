@@ -104,7 +104,7 @@ const NavBar = props => {
   )
 
   if (props.currentUser) {
-    const assignedClasses = [classes.Avatar]
+    const assignedClasses = [classes.AuthAvatar]
     let avatarText = ''
 
     if (props.adminAccess) {
