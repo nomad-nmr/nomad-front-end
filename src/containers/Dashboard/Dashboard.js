@@ -4,7 +4,7 @@ import StatusTabs from '../../components/StatusTabs/StatusTabs'
 import { Spin, Empty, Modal } from 'antd'
 import axios from '../../axios-firebase'
 
-export class Dashboard extends Component {
+class Dashboard extends Component {
   state = {
     statusOverview: [],
     statusTable: [],
@@ -28,6 +28,7 @@ export class Dashboard extends Component {
   }
 
   getStatusTable(tab) {
+    this.setState({ statusTable: [] })
     axios
       .get(`/status-tables/${tab}.json`)
       .then(res => {
