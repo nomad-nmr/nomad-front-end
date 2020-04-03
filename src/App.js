@@ -15,6 +15,7 @@ import Experiments from './containers/Experiments/Experiments'
 import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
 import Credits from './components/Credits/Credits'
+import StatusDrawer from './components/StatusDrawer/StatusDrawer'
 
 const { Header, Sider, Content, Footer } = Layout
 
@@ -25,7 +26,13 @@ export class App extends Component {
     adminMenuCollapsed: true,
     authModalVisible: false,
     showCards: true,
-    statusButtons: []
+    statusButtons: [],
+    drawerStatus: {
+      visible: false,
+      id: '',
+      dataLoading: true,
+      tableData: []
+    }
   }
 
   componentDidMount() {
@@ -62,9 +69,7 @@ export class App extends Component {
           authModalVisible: false
         })
       })
-      .catch(info => {
-        console.log('Validation Failed', info)
-      })
+      .catch(info => {})
   }
 
   signOutHandler = () => {
@@ -80,6 +85,79 @@ export class App extends Component {
     this.setState(prevState => {
       return { showCards: !prevState.showCards }
     })
+  }
+
+  openDrawerHandler = id => {
+    const newDrawerStatus = { ...this.state.drawerStatus }
+    newDrawerStatus.tableData = []
+    newDrawerStatus.visible = true
+    newDrawerStatus.id = id
+    this.setState({ drawerStatus: newDrawerStatus })
+
+    axios
+      .get('/drawer-tables/' + id + '.json')
+      .then(res => {
+        const tableDataSource = res.data ? res.data : []
+        const keysArr = [
+          'Holder',
+          'Status',
+          'Name',
+          'ExpNo',
+          'Experiment',
+          'Group',
+          'Time',
+          'Title',
+          'Instrument',
+          'Description'
+        ]
+        const tableData = []
+
+        let highlight = false
+        tableDataSource.forEach((row, index) => {
+          const entries = []
+          row.forEach((col, i) => {
+            entries.push([keysArr[i], col.text])
+          })
+
+          // Adding property into the row object that will be used to highlight rows with the same ExpNo
+          const prevRowObj = [...tableData][index - 1]
+
+          if (prevRowObj) {
+          }
+          const rowObj = Object.fromEntries(entries)
+
+          if (prevRowObj) {
+            if (prevRowObj.Name !== rowObj.Name) {
+              highlight = !highlight
+            }
+          }
+          // Extracting username from dataset name
+          const username = rowObj.Name.split('-')[3]
+
+          // Adding new properties to row object and pushing it to table data array
+          if (rowObj.Status !== 'Available') {
+            tableData.push(
+              Object.assign(rowObj, { key: index.toString(), Username: username, highlight: highlight })
+            )
+          }
+        })
+
+        newDrawerStatus.dataLoading = false
+        newDrawerStatus.tableData = tableData
+        this.setState({ drawerStatus: newDrawerStatus })
+      })
+      .catch(err =>
+        Modal.error({
+          title: 'Error message',
+          content: `${err}`
+        })
+      )
+  }
+
+  closeDrawerHandler = () => {
+    const newDrawerStatus = { ...this.state.drawerStatus }
+    newDrawerStatus.visible = false
+    this.setState({ drawerStatus: newDrawerStatus })
   }
 
   render() {
@@ -137,6 +215,7 @@ export class App extends Component {
                 cardSwitchOn={this.state.showCards}
                 toggleCards={this.toggleCardsHandler}
                 statusButtonsData={this.state.statusButtons}
+                statusButtonClicked={this.openDrawerHandler}
               />
             </Header>
           </Affix>
@@ -158,7 +237,9 @@ export class App extends Component {
               <Redirect exact from='/' to='/dashboard' />
               <Route component={Error404} />
             </Switch>
+
             {authModal}
+            <StatusDrawer status={this.state.drawerStatus} closeClicked={this.closeDrawerHandler} />
             <BackTop visibilityHeight={200} />
           </Content>
           <Footer className={classes.Footer}>

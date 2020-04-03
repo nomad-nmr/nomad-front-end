@@ -7,20 +7,26 @@
 
 .Button {
   margin: 0 15px;
+}
+
+.Active {
   cursor: pointer;
 }
 
 .Running {
   background-color: #bae7ff;
   color: #1890ff;
+  border: 2px solid #1890ff;
 }
 
 .Errors {
   background-color: #ffccc7;
   color: #f5222d;
+  border: 2px solid #f5222d;
 }
 
 .Pending {
-  background-color: #efdbff;
-  color: #722ed1;
+  background-color: #ffffb8;
+  color: #fadb14;
+  border: 2px solid #fadb14;
 }

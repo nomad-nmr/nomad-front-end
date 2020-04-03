@@ -142,7 +142,7 @@ const NavBar = props => {
       {navLeft}
       {pageHeaderElement}
       <div className={classes.AlignRight}>
-        <StatusButtons data={props.statusButtonsData} />
+        <StatusButtons data={props.statusButtonsData} click={props.statusButtonClicked} />
         {authAvatar}
       </div>
     </nav>
