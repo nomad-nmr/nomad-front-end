@@ -1,68 +1,16 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { Tooltip, PageHeader, Switch } from 'antd'
+import { Tooltip } from 'antd'
 import classes from './NavBar.module.css'
+import PageHeader from './PageHeader/PageHeader'
 import StatusButtons from './StatusButtons/StatusButtons'
 import AuthAvatar from './AuthAvatar/AuthAvatar'
 
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import logoWideLight from '../../assets/logo-wide-light.png'
-import dashIcon from '../../assets/dashboard.svg'
-import userIcon from '../../assets/user.svg'
-import groupIcon from '../../assets/group.svg'
-import magnetIcon from '../../assets/magnet.svg'
-import experimentIcon from '../../assets/lab.svg'
 
-const NavBar = props => {
-  // Dynamic setting of header according to location
-  //After implementing Redux three new lower level components could be made - Header , Auth Avatar , Status Buttons
-
-  let headerTitle = ''
-  let avatarSrc
-  let extra = null
-
-  switch (props.location.pathname) {
-    case '/dashboard':
-      headerTitle = 'Dashboard'
-      avatarSrc = dashIcon
-      extra = (
-        <div className={classes.SwitchElement}>
-          <label>Cards</label>
-          <Switch
-            size='small'
-            checked={props.cardSwitchOn}
-            checkedChildren='On'
-            unCheckedChildren='Off'
-            onChange={props.toggleCards}
-          />
-        </div>
-      )
-
-      break
-    case '/dashboard/users':
-      headerTitle = 'Manage Users'
-      avatarSrc = userIcon
-      break
-    case '/dashboard/groups':
-      headerTitle = 'Manage Groups'
-      avatarSrc = groupIcon
-      break
-
-    case '/dashboard/instruments':
-      headerTitle = 'Setting Instruments'
-      avatarSrc = magnetIcon
-      break
-    case '/dashboard/experiments':
-      headerTitle = 'Setting Experiments'
-      avatarSrc = experimentIcon
-      break
-    default:
-      headerTitle = ''
-      avatarSrc = ''
-  }
-
+const NavBar = (props) => {
   // Setting up components for left side of NavBar. Components dynamically change with state of admin sider menu.
-
   const toggleButton = props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
   const navLeft = props.adminAccess ? (
     <Tooltip placement='bottomLeft' title='Admin Menu Toggle'>
@@ -84,14 +32,7 @@ const NavBar = props => {
   //Setting Page Header not to show if user is not admin and navigates into admin menu
   let pageHeaderElement = null
   if (props.adminAccess || props.location.pathname === '/dashboard') {
-    pageHeaderElement = (
-      <PageHeader
-        className={classes.PageHeader}
-        title={headerTitle}
-        avatar={{ src: avatarSrc }}
-        extra={extra}
-      />
-    )
+    pageHeaderElement = <PageHeader />
   }
 
   return (
@@ -99,7 +40,6 @@ const NavBar = props => {
       {navLeft}
       {pageHeaderElement}
       <div className={classes.AlignRight}>
-        <StatusButtons data={props.statusButtonsData} click={props.statusButtonClicked} />
         <AuthAvatar />
       </div>
     </nav>

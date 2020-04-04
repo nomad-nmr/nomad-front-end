@@ -4,7 +4,11 @@ const navBarContext = React.createContext({
   currentUser: null,
   adminAccess: false,
   onSignOut: () => {},
-  authAvatarClicked: () => {}
+  authAvatarClicked: () => {},
+  cardSwitchOn: false,
+  toggleCards: () => {},
+  statusButtonsData: [],
+  statusButtonClicked: () => {},
 })
 
 export default navBarContext
