@@ -1,10 +1,11 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { Avatar, Tooltip, PageHeader, Popover, Switch } from 'antd'
+import { Tooltip, PageHeader, Switch } from 'antd'
 import classes from './NavBar.module.css'
 import StatusButtons from './StatusButtons/StatusButtons'
+import AuthAvatar from './AuthAvatar/AuthAvatar'
 
-import { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import logoWideLight from '../../assets/logo-wide-light.png'
 import dashIcon from '../../assets/dashboard.svg'
 import userIcon from '../../assets/user.svg'
@@ -93,57 +94,13 @@ const NavBar = props => {
     )
   }
 
-  //Setting avatar  according to currentUser
-  let authAvatar = (
-    <Avatar
-      size='large'
-      icon={<UserOutlined />}
-      className={classes.AuthAvatar}
-      onClick={props.avatarClicked}
-    />
-  )
-
-  if (props.currentUser) {
-    const assignedClasses = [classes.AuthAvatar]
-    let avatarText = ''
-
-    if (props.adminAccess) {
-      assignedClasses.push(classes.Admin)
-      avatarText = 'ADMIN'
-    } else {
-      assignedClasses.push(classes.User)
-      avatarText = props.currentUser[0].toUpperCase()
-    }
-
-    authAvatar = (
-      //Popover is just temporary solution. Use Dropdown once there is more function to put in the menu
-      <Popover
-        placement='bottomRight'
-        title={
-          <>
-            Signed in as <strong>{props.currentUser}</strong>
-          </>
-        }
-        content={
-          <span className={classes.Popover} onClick={props.avatarClicked}>
-            Sign out
-          </span>
-        }
-      >
-        <Avatar size='large' className={assignedClasses.join(' ')} onClick={props.avatarClicked}>
-          {avatarText}
-        </Avatar>
-      </Popover>
-    )
-  }
-
   return (
     <nav className={classes.NavBar}>
       {navLeft}
       {pageHeaderElement}
       <div className={classes.AlignRight}>
         <StatusButtons data={props.statusButtonsData} click={props.statusButtonClicked} />
-        {authAvatar}
+        <AuthAvatar />
       </div>
     </nav>
   )

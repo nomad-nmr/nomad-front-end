@@ -2,6 +2,7 @@ import React, { Component, Suspense } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { Layout, Spin, BackTop, Affix, Modal } from 'antd'
 import axios from './axios-firebase'
+import navbarContext from './context/navbar-context'
 import classes from './App.module.css'
 
 import AdminMenu from './components/AdminMenu/AdminMenu'
@@ -206,17 +207,26 @@ export class App extends Component {
         <Layout>
           <Affix>
             <Header className={classes.Header}>
-              <NavBar
-                currentUser={user}
-                adminAccess={adminAccess}
-                collapsed={adminMenuCollapsed}
-                toggleClicked={this.toggleAdminMenu}
-                avatarClicked={this.openAuthModal}
-                cardSwitchOn={this.state.showCards}
-                toggleCards={this.toggleCardsHandler}
-                statusButtonsData={this.state.statusButtons}
-                statusButtonClicked={this.openDrawerHandler}
-              />
+              <navbarContext.Provider
+                value={{
+                  currentUser: this.state.user,
+                  adminAccess: this.state.adminAccess,
+                  authAvatarClicked: this.openAuthModal,
+                  onSignOut: this.signOutHandler
+                }}
+              >
+                <NavBar
+                  currentUser={user}
+                  adminAccess={adminAccess}
+                  collapsed={adminMenuCollapsed}
+                  toggleClicked={this.toggleAdminMenu}
+                  avatarClicked={this.openAuthModal}
+                  cardSwitchOn={this.state.showCards}
+                  toggleCards={this.toggleCardsHandler}
+                  statusButtonsData={this.state.statusButtons}
+                  statusButtonClicked={this.openDrawerHandler}
+                />
+              </navbarContext.Provider>
             </Header>
           </Affix>
           <Content className={classes.Content}>

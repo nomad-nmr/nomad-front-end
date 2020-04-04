@@ -63,8 +63,6 @@ class DrawerTable extends Component {
       }
     ]
 
-    console.log(this.props.data)
-    console.log(this.props.drawerVisible)
     return (
       <Table
         columns={columns}
