@@ -18,14 +18,6 @@ const AuthAvatar = (props) => {
       assignedClasses.push(classes.User)
       avatarText = currentUser[0].toUpperCase()
     }
-  }
-  const avatar = (
-    <Avatar size='large' className={assignedClasses.join(' ')} onClick={authAvatarClicked}>
-      {currentUser ? avatarText : <UserOutlined />}
-    </Avatar>
-  )
-
-  if (currentUser) {
     avatarEl = (
       <Popover
         placement='bottomRight'
@@ -40,11 +32,17 @@ const AuthAvatar = (props) => {
           </span>
         }
       >
-        {avatar}
+        <Avatar size='large' className={assignedClasses.join(' ')} onClick={authAvatarClicked}>
+          {avatarText}
+        </Avatar>
       </Popover>
     )
   } else {
-    avatarEl = avatar
+    avatarEl = (
+      <Avatar size='large' className={assignedClasses.join(' ')} onClick={authAvatarClicked}>
+        {<UserOutlined />}
+      </Avatar>
+    )
   }
 
   return <>{avatarEl}</>
