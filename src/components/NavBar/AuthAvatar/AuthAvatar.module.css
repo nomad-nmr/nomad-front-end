@@ -1,0 +1,19 @@
+.AuthAvatar {
+  cursor: pointer;
+  font-size: large;
+  font-weight: 600;
+}
+
+.User {
+  background-color: #10239e;
+}
+
+.Admin {
+  background-color: #9e1068;
+}
+
+.Popover:hover {
+  color: #096dd9;
+  font-weight: 600;
+  cursor: pointer;
+}

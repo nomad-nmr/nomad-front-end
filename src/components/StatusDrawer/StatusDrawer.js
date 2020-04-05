@@ -45,7 +45,7 @@ const statusDrawer = props => {
       onClose={props.closeClicked}
       headerStyle={headerClass}
     >
-      <DrawerTable id={id} data={tableData} loading={dataLoading} />
+      <DrawerTable id={id} data={tableData} loading={dataLoading} drawerVisible={visible} />
     </Drawer>
   )
 }

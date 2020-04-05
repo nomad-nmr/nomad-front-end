@@ -2,6 +2,7 @@ import React, { Component, Suspense } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { Layout, Spin, BackTop, Affix, Modal } from 'antd'
 import axios from './axios-firebase'
+import navbarContext from './context/navbar-context'
 import classes from './App.module.css'
 
 import AdminMenu from './components/AdminMenu/AdminMenu'
@@ -38,10 +39,10 @@ export class App extends Component {
   componentDidMount() {
     axios
       .get('/buttons.json')
-      .then(res => {
+      .then((res) => {
         this.setState({ statusButtons: res.data })
       })
-      .catch(err =>
+      .catch((err) =>
         Modal.error({
           title: 'Error message',
           content: `${err}`
@@ -50,7 +51,7 @@ export class App extends Component {
   }
 
   toggleAdminMenu = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { adminMenuCollapsed: !prevState.adminMenuCollapsed }
     })
   }
@@ -59,17 +60,17 @@ export class App extends Component {
     this.setState({ authModalVisible: true })
   }
 
-  signInHandler = form => {
+  signInHandler = (form) => {
     form
       .validateFields()
-      .then(values => {
+      .then((values) => {
         this.setState({
           user: values.username,
           adminAccess: values.username === 'admin',
           authModalVisible: false
         })
       })
-      .catch(info => {})
+      .catch((info) => {})
   }
 
   signOutHandler = () => {
@@ -82,21 +83,20 @@ export class App extends Component {
   }
 
   toggleCardsHandler = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { showCards: !prevState.showCards }
     })
   }
 
-  openDrawerHandler = id => {
+  openDrawerHandler = (id) => {
     const newDrawerStatus = { ...this.state.drawerStatus }
-    newDrawerStatus.tableData = []
     newDrawerStatus.visible = true
     newDrawerStatus.id = id
     this.setState({ drawerStatus: newDrawerStatus })
 
     axios
       .get('/drawer-tables/' + id + '.json')
-      .then(res => {
+      .then((res) => {
         const tableDataSource = res.data ? res.data : []
         const keysArr = [
           'Holder',
@@ -146,7 +146,7 @@ export class App extends Component {
         newDrawerStatus.tableData = tableData
         this.setState({ drawerStatus: newDrawerStatus })
       })
-      .catch(err =>
+      .catch((err) =>
         Modal.error({
           title: 'Error message',
           content: `${err}`
@@ -157,6 +157,7 @@ export class App extends Component {
   closeDrawerHandler = () => {
     const newDrawerStatus = { ...this.state.drawerStatus }
     newDrawerStatus.visible = false
+    newDrawerStatus.tableData = []
     this.setState({ drawerStatus: newDrawerStatus })
   }
 
@@ -206,17 +207,26 @@ export class App extends Component {
         <Layout>
           <Affix>
             <Header className={classes.Header}>
-              <NavBar
-                currentUser={user}
-                adminAccess={adminAccess}
-                collapsed={adminMenuCollapsed}
-                toggleClicked={this.toggleAdminMenu}
-                avatarClicked={this.openAuthModal}
-                cardSwitchOn={this.state.showCards}
-                toggleCards={this.toggleCardsHandler}
-                statusButtonsData={this.state.statusButtons}
-                statusButtonClicked={this.openDrawerHandler}
-              />
+              <navbarContext.Provider
+                value={{
+                  currentUser: this.state.user,
+                  adminAccess: this.state.adminAccess,
+                  authAvatarClicked: this.openAuthModal,
+                  onSignOut: this.signOutHandler,
+                  cardSwitchOn: this.state.showCards,
+                  toggleCards: this.toggleCardsHandler,
+                  statusButtonsData: this.state.statusButtons,
+                  statusButtonClicked: this.openDrawerHandler
+                }}
+              >
+                <NavBar
+                  currentUser={user}
+                  adminAccess={adminAccess}
+                  collapsed={adminMenuCollapsed}
+                  toggleClicked={this.toggleAdminMenu}
+                  avatarClicked={this.openAuthModal}
+                />
+              </navbarContext.Provider>
             </Header>
           </Affix>
           <Content className={classes.Content}>
