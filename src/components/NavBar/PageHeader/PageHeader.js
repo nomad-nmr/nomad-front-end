@@ -23,7 +23,7 @@ const PageHeaderEl = (props) => {
       headerTitle = 'Dashboard'
       avatarSrc = dashIcon
       extra = (
-        <div>
+        <div className={classes.ExtraContainer}>
           <div className={classes.SwitchElement}>
             <label>Cards</label>
             <Switch
@@ -34,15 +34,11 @@ const PageHeaderEl = (props) => {
               onChange={toggleCards}
             />
           </div>
-          <StatusButtons
-            data={statusButtonsData}
-            click={statusButtonClicked}
-            style={{ display: 'inlineBlock' }}
-          />
+          <StatusButtons data={statusButtonsData} click={statusButtonClicked} />
         </div>
       )
-
       break
+
     case '/dashboard/users':
       headerTitle = 'Manage Users'
       avatarSrc = userIcon

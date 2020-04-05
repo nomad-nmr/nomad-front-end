@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom'
 import { Tooltip } from 'antd'
 import classes from './NavBar.module.css'
 import PageHeader from './PageHeader/PageHeader'
-import StatusButtons from './StatusButtons/StatusButtons'
 import AuthAvatar from './AuthAvatar/AuthAvatar'
 
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'

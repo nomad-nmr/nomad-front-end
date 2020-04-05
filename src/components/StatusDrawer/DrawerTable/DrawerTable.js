@@ -70,12 +70,14 @@ class DrawerTable extends Component {
         loading={this.props.loading}
         size='small'
         pagination={false}
-        rowClassName={record => (record.highlight ? classes.RowHighlight : null)}
+        rowClassName={(record) => (record.highlight ? classes.RowHighlight : null)}
         expandable={
           this.props.id === 'errors'
             ? {
-                expandedRowRender: record => <p style={{ margin: 0 }}>{record.Description}</p>,
-                rowExpandable: record => record.Description
+                expandedRowRender: (record) => (
+                  <p style={{ margin: 0, backgroundColor: '#fff1f0' }}>{record.Description}</p>
+                ),
+                rowExpandable: (record) => record.Description
               }
             : false
         }
