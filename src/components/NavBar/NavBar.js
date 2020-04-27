@@ -1,5 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Tooltip } from 'antd'
 import classes from './NavBar.module.css'
 import PageHeader from './PageHeader/PageHeader'
@@ -8,7 +9,7 @@ import AuthAvatar from './AuthAvatar/AuthAvatar'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import logoWideLight from '../../assets/logo-wide-light.png'
 
-const NavBar = (props) => {
+const NavBar = props => {
   // Setting up components for left side of NavBar. Components dynamically change with state of admin sider menu.
   const toggleButton = props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
   const navLeft = props.adminAccess ? (
@@ -45,4 +46,10 @@ const NavBar = (props) => {
   )
 }
 
-export default withRouter(NavBar)
+const mapStateToProps = state => {
+  return {
+    adminAccess: state.adminAccess
+  }
+}
+
+export default connect(mapStateToProps)(withRouter(NavBar))

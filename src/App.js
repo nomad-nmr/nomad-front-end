@@ -1,8 +1,8 @@
 import React, { Component, Suspense } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Layout, Spin, BackTop, Affix, Modal } from 'antd'
 import axios from './axios-firebase'
-import navbarContext from './context/navbar-context'
 import classes from './App.module.css'
 
 import AdminMenu from './components/AdminMenu/AdminMenu'
@@ -17,15 +17,13 @@ import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
 import Credits from './components/Credits/Credits'
 import StatusDrawer from './components/StatusDrawer/StatusDrawer'
+import { closeAuthModal, signInHandler, signOutHandler } from './store/actions'
 
 const { Header, Sider, Content, Footer } = Layout
 
 export class App extends Component {
   state = {
-    user: null,
-    adminAccess: false,
     adminMenuCollapsed: true,
-    authModalVisible: false,
     showCards: true,
     statusButtons: [],
     drawerStatus: {
@@ -39,10 +37,10 @@ export class App extends Component {
   componentDidMount() {
     axios
       .get('/buttons.json')
-      .then((res) => {
+      .then(res => {
         this.setState({ statusButtons: res.data })
       })
-      .catch((err) =>
+      .catch(err =>
         Modal.error({
           title: 'Error message',
           content: `${err}`
@@ -51,44 +49,18 @@ export class App extends Component {
   }
 
   toggleAdminMenu = () => {
-    this.setState((prevState) => {
+    this.setState(prevState => {
       return { adminMenuCollapsed: !prevState.adminMenuCollapsed }
     })
   }
 
-  openAuthModal = () => {
-    this.setState({ authModalVisible: true })
-  }
-
-  signInHandler = (form) => {
-    form
-      .validateFields()
-      .then((values) => {
-        this.setState({
-          user: values.username,
-          adminAccess: values.username === 'admin',
-          authModalVisible: false
-        })
-      })
-      .catch((info) => {})
-  }
-
-  signOutHandler = () => {
-    this.setState({ user: null, adminAccess: false, authModalVisible: false })
-    this.props.history.push({ pathname: '/dashboard' })
-  }
-
-  closeModalHandler = () => {
-    this.setState({ authModalVisible: false })
-  }
-
   toggleCardsHandler = () => {
-    this.setState((prevState) => {
+    this.setState(prevState => {
       return { showCards: !prevState.showCards }
     })
   }
 
-  openDrawerHandler = (id) => {
+  openDrawerHandler = id => {
     const newDrawerStatus = { ...this.state.drawerStatus }
     newDrawerStatus.visible = true
     newDrawerStatus.id = id
@@ -96,7 +68,7 @@ export class App extends Component {
 
     axios
       .get('/drawer-tables/' + id + '.json')
-      .then((res) => {
+      .then(res => {
         const tableDataSource = res.data ? res.data : []
         const keysArr = [
           'Holder',
@@ -146,7 +118,7 @@ export class App extends Component {
         newDrawerStatus.tableData = tableData
         this.setState({ drawerStatus: newDrawerStatus })
       })
-      .catch((err) =>
+      .catch(err =>
         Modal.error({
           title: 'Error message',
           content: `${err}`
@@ -162,29 +134,22 @@ export class App extends Component {
   }
 
   render() {
-    // Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
-    const Users = this.state.adminAccess ? React.lazy(() => import('./containers/Users/Users')) : Error403
+    const { adminMenuCollapsed } = this.state
+    const { user, adminAccess, authModalVisible, closeModal, onSignIn, onSignOut } = this.props
 
-    const { adminAccess, adminMenuCollapsed, authModalVisible, user } = this.state
+    // Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
+    const Users = adminAccess ? React.lazy(() => import('./containers/Users/Users')) : Error403
 
     //Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
     let authModal = null
-    if (this.state.authModalVisible) {
+    if (authModalVisible) {
       if (user) {
         authModal = (
-          <LogoutModal
-            visible={authModalVisible}
-            cancelClicked={this.closeModalHandler}
-            okClicked={this.signOutHandler}
-          />
+          <LogoutModal visible={authModalVisible} cancelClicked={closeModal} okClicked={onSignOut} />
         )
       } else {
         authModal = (
-          <LoginModal
-            visible={authModalVisible}
-            cancelClicked={this.closeModalHandler}
-            signInClicked={this.signInHandler}
-          />
+          <LoginModal visible={authModalVisible} cancelClicked={closeModal} signInClicked={onSignIn} />
         )
       }
     }
@@ -193,12 +158,7 @@ export class App extends Component {
       <Layout>
         {adminAccess ? (
           <Affix className={classes.AdminMenu}>
-            <Sider
-              trigger={null}
-              className={classes.Sider}
-              collapsible
-              collapsed={this.state.adminMenuCollapsed}
-            >
+            <Sider trigger={null} className={classes.Sider} collapsible collapsed={adminMenuCollapsed}>
               <AdminMenu collapsed={adminMenuCollapsed} />
             </Sider>
           </Affix>
@@ -207,29 +167,11 @@ export class App extends Component {
         <Layout>
           <Affix>
             <Header className={classes.Header}>
-              <navbarContext.Provider
-                value={{
-                  currentUser: this.state.user,
-                  adminAccess: this.state.adminAccess,
-                  authAvatarClicked: this.openAuthModal,
-                  onSignOut: this.signOutHandler,
-                  cardSwitchOn: this.state.showCards,
-                  toggleCards: this.toggleCardsHandler,
-                  statusButtonsData: this.state.statusButtons,
-                  statusButtonClicked: this.openDrawerHandler
-                }}
-              >
-                <NavBar
-                  currentUser={user}
-                  adminAccess={adminAccess}
-                  collapsed={adminMenuCollapsed}
-                  toggleClicked={this.toggleAdminMenu}
-                  avatarClicked={this.openAuthModal}
-                />
-              </navbarContext.Provider>
+              <NavBar collapsed={adminMenuCollapsed} toggleClicked={this.toggleAdminMenu} />
             </Header>
           </Affix>
           <Content className={classes.Content}>
+            {!user ? <Redirect to='/dashboard' /> : null}
             <Switch>
               <Route
                 path='/dashboard/users'
@@ -261,4 +203,20 @@ export class App extends Component {
   }
 }
 
-export default withRouter(App)
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    adminAccess: state.adminAccess,
+    authModalVisible: state.authModalVisible
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    closeModal: () => dispatch(closeAuthModal()),
+    onSignIn: form => dispatch(signInHandler(form)),
+    signOut: () => dispatch(signOutHandler())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App))

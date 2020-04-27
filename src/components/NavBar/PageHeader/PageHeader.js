@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { PageHeader, Switch } from 'antd'
 import classes from './PageHeader.module.css'
 import NavbarContext from '../../../context/navbar-context'
-import StatusButtons from '../StatusButtons/StatusButtons'
+import StatusButtons from './StatusButtons/StatusButtons'
 
 import dashIcon from '../../../assets/dashboard.svg'
 import userIcon from '../../../assets/user.svg'
