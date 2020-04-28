@@ -50,8 +50,8 @@ const AuthAvatar = props => {
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
-    adminAccess: state.adminAccess
+    user: state.auth.user,
+    adminAccess: state.auth.adminAccess
   }
 }
 

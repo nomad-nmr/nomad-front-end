@@ -1,8 +1,7 @@
 import React, { Component, Suspense } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Layout, Spin, BackTop, Affix, Modal } from 'antd'
-import axios from './axios-firebase'
+import { Layout, Spin, BackTop, Affix } from 'antd'
 import classes from './App.module.css'
 
 import AdminMenu from './components/AdminMenu/AdminMenu'
@@ -17,113 +16,19 @@ import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
 import Credits from './components/Credits/Credits'
 import StatusDrawer from './components/StatusDrawer/StatusDrawer'
-import { closeAuthModal, signInHandler, signOutHandler } from './store/actions'
+import { closeAuthModal, signInHandler, signOutHandler, closeDashDrawer } from './store/actions'
 
 const { Header, Sider, Content, Footer } = Layout
 
 export class App extends Component {
   state = {
-    adminMenuCollapsed: true,
-    showCards: true,
-    statusButtons: [],
-    drawerStatus: {
-      visible: false,
-      id: '',
-      dataLoading: true,
-      tableData: []
-    }
-  }
-
-  componentDidMount() {
-    axios
-      .get('/buttons.json')
-      .then(res => {
-        this.setState({ statusButtons: res.data })
-      })
-      .catch(err =>
-        Modal.error({
-          title: 'Error message',
-          content: `${err}`
-        })
-      )
+    adminMenuCollapsed: true
   }
 
   toggleAdminMenu = () => {
     this.setState(prevState => {
       return { adminMenuCollapsed: !prevState.adminMenuCollapsed }
     })
-  }
-
-  toggleCardsHandler = () => {
-    this.setState(prevState => {
-      return { showCards: !prevState.showCards }
-    })
-  }
-
-  openDrawerHandler = id => {
-    const newDrawerStatus = { ...this.state.drawerStatus }
-    newDrawerStatus.visible = true
-    newDrawerStatus.id = id
-    this.setState({ drawerStatus: newDrawerStatus })
-
-    axios
-      .get('/drawer-tables/' + id + '.json')
-      .then(res => {
-        const tableDataSource = res.data ? res.data : []
-        const keysArr = [
-          'Holder',
-          'Status',
-          'Name',
-          'ExpNo',
-          'Experiment',
-          'Group',
-          'Time',
-          'Title',
-          'Instrument',
-          'Description'
-        ]
-        const tableData = []
-
-        let highlight = false
-        tableDataSource.forEach((row, index) => {
-          const entries = []
-          row.forEach((col, i) => {
-            entries.push([keysArr[i], col.text])
-          })
-
-          // Adding property into the row object that will be used to highlight rows with the same ExpNo
-          const prevRowObj = [...tableData][index - 1]
-
-          if (prevRowObj) {
-          }
-          const rowObj = Object.fromEntries(entries)
-
-          if (prevRowObj) {
-            if (prevRowObj.Name !== rowObj.Name) {
-              highlight = !highlight
-            }
-          }
-          // Extracting username from dataset name
-          const username = rowObj.Name.split('-')[3]
-
-          // Adding new properties to row object and pushing it to table data array
-          if (rowObj.Status !== 'Available') {
-            tableData.push(
-              Object.assign(rowObj, { key: index.toString(), Username: username, highlight: highlight })
-            )
-          }
-        })
-
-        newDrawerStatus.dataLoading = false
-        newDrawerStatus.tableData = tableData
-        this.setState({ drawerStatus: newDrawerStatus })
-      })
-      .catch(err =>
-        Modal.error({
-          title: 'Error message',
-          content: `${err}`
-        })
-      )
   }
 
   closeDrawerHandler = () => {
@@ -184,14 +89,14 @@ export class App extends Component {
               <Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
               <Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
               <Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
-              <Route exact path='/dashboard' render={() => <Dashboard showCards={this.state.showCards} />} />
+              <Route exact path='/dashboard' render={() => <Dashboard />} />
               <Redirect from='/dashboard/dashboard' to='/dashboard' />
               <Redirect exact from='/' to='/dashboard' />
               <Route component={Error404} />
             </Switch>
 
             {authModal}
-            <StatusDrawer status={this.state.drawerStatus} closeClicked={this.closeDrawerHandler} />
+            <StatusDrawer status={this.props.drawerStatus} closeClicked={this.props.onCloseDrawer} />
             <BackTop visibilityHeight={200} />
           </Content>
           <Footer className={classes.Footer}>
@@ -205,9 +110,10 @@ export class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
-    adminAccess: state.adminAccess,
-    authModalVisible: state.authModalVisible
+    user: state.auth.user,
+    adminAccess: state.auth.adminAccess,
+    authModalVisible: state.auth.authModalVisible,
+    drawerStatus: state.dash.drawerStatus
   }
 }
 
@@ -215,7 +121,8 @@ const mapDispatchToProps = dispatch => {
   return {
     closeModal: () => dispatch(closeAuthModal()),
     onSignIn: form => dispatch(signInHandler(form)),
-    signOut: () => dispatch(signOutHandler())
+    onSignOut: () => dispatch(signOutHandler()),
+    onCloseDrawer: () => dispatch(closeDashDrawer())
   }
 }
 

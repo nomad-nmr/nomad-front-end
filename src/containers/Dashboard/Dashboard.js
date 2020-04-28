@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { fetchStatusButtons } from '../../store/actions'
+
 import InfoCards from '../../components/InfoCards/InfoCards'
 import StatusTabs from '../../components/StatusTabs/StatusTabs'
 import { Spin, Empty, Modal } from 'antd'
@@ -76,6 +79,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
+    this.props.fetchButtons()
     this.getStatusOverview()
     this.getStatusTable(1)
   }
@@ -112,4 +116,16 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard
+const mapStateToProps = state => {
+  return {
+    showCards: state.dash.showCards
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchButtons: () => dispatch(fetchStatusButtons())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

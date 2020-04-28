@@ -48,7 +48,7 @@ const NavBar = props => {
 
 const mapStateToProps = state => {
   return {
-    adminAccess: state.adminAccess
+    adminAccess: state.auth.adminAccess
   }
 }
 
