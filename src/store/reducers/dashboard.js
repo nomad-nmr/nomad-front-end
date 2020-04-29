@@ -10,7 +10,9 @@ const initialState = {
     id: '',
     dataLoading: true,
     tableData: []
-  }
+  },
+  statusSummaryData: [],
+  cardsLoading: true
 }
 
 const reducer = (state = initialState, action) => {
@@ -65,6 +67,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         drawerStatus: newStatus
+      }
+
+    case actionTypes.FETCH_STATUS_SUMMARY_SUCCESS:
+      return {
+        ...state,
+        cardsLoading: false,
+        statusSummaryData: action.data
       }
 
     default:

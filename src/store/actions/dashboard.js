@@ -53,7 +53,7 @@ export const openDashDrawer = id => {
         dispatch(openDashDrawerSuccess(res))
       })
       .catch(err => {
-        dispatch(fetchFailed(err + '[fetchDrawerData failed]'))
+        dispatch(fetchFailed(err + ' [fetchDrawerData failed]'))
       })
   }
 }
@@ -61,3 +61,18 @@ export const openDashDrawer = id => {
 export const closeDashDrawer = () => ({
   type: actionTypes.CLOSE_DASH_DRAWER
 })
+
+export const fetchStatusSummarySuccess = payload => ({
+  type: actionTypes.FETCH_STATUS_SUMMARY_SUCCESS,
+  data: payload
+})
+
+export const fetchStatusSummary = () => {
+  
+  return dispatch => {
+    axios
+      .get('/cards.json')
+      .then(res => dispatch(fetchStatusSummarySuccess(res.data)))
+      .catch(err => dispatch(fetchFailed(err + ' [fetchStatusSummary failed]')))
+  }
+}

@@ -39,8 +39,8 @@ const statusBanner = props => {
             </ul>
           </Col>
           <Col span={2}>
-            <div className={classes.TraficLights}>
-              <TrafficLights type='horizontal' />
+            <div className={classes.TrafficLights}>
+              <TrafficLights type='horizontal' data={props.data} />
             </div>
           </Col>
         </Row>

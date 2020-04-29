@@ -1,6 +1,8 @@
 import React, { Component, Suspense } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { closeAuthModal, signInHandler, signOutHandler, closeDashDrawer } from './store/actions'
+
 import { Layout, Spin, BackTop, Affix } from 'antd'
 import classes from './App.module.css'
 
@@ -16,7 +18,6 @@ import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
 import Credits from './components/Credits/Credits'
 import StatusDrawer from './components/StatusDrawer/StatusDrawer'
-import { closeAuthModal, signInHandler, signOutHandler, closeDashDrawer } from './store/actions'
 
 const { Header, Sider, Content, Footer } = Layout
 

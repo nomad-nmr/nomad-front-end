@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchStatusButtons } from '../../store/actions'
+import { fetchStatusButtons, fetchStatusSummary } from '../../store/actions'
 
 import InfoCards from '../../components/InfoCards/InfoCards'
 import StatusTabs from '../../components/StatusTabs/StatusTabs'
@@ -9,25 +9,10 @@ import axios from '../../axios-firebase'
 
 class Dashboard extends Component {
   state = {
-    statusOverview: [],
     statusTable: [],
-    cardsLoading: true,
+
     tableLoading: true,
     activeTab: '1'
-  }
-
-  getStatusOverview() {
-    axios
-      .get('/cards.json')
-      .then(res => {
-        this.setState({ statusOverview: res.data, cardsLoading: false })
-      })
-      .catch(err =>
-        Modal.error({
-          title: 'Error message',
-          content: `${err}`
-        })
-      )
   }
 
   getStatusTable(tab) {
@@ -80,7 +65,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.props.fetchButtons()
-    this.getStatusOverview()
+    this.props.fetchStatusSum()
     this.getStatusTable(1)
   }
 
@@ -102,11 +87,11 @@ class Dashboard extends Component {
         {!this.props.showCards ? null : this.state.cardsLoading ? (
           noData
         ) : (
-          <InfoCards cardsData={this.state.statusOverview} clicked={this.tabChangeHandler} />
+          <InfoCards cardsData={this.props.statusSummary} clicked={this.tabChangeHandler} />
         )}
         <StatusTabs
           activeTab={this.state.activeTab}
-          overview={this.state.statusOverview}
+          summaryData={this.props.statusSummary}
           tableData={this.state.statusTable}
           clicked={this.tabChangeHandler}
           tableLoading={this.state.tableLoading}
@@ -118,13 +103,15 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => {
   return {
-    showCards: state.dash.showCards
+    showCards: state.dash.showCards,
+    statusSummary: state.dash.statusSummaryData
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchButtons: () => dispatch(fetchStatusButtons())
+    fetchButtons: () => dispatch(fetchStatusButtons()),
+    fetchStatusSum: () => dispatch(fetchStatusSummary())
   }
 }
 
