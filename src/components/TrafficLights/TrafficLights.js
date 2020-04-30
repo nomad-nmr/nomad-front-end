@@ -1,11 +1,12 @@
-import React, { useContext } from 'react'
-import TrafficLightContext from '../../context/trafficLights-context'
+import React from 'react'
 import { Tooltip, Avatar } from 'antd'
 import classes from './TrafficLights.module.css'
 
 const TrafficLights = props => {
   const trafficLightsArr = []
-  const { errors, running, availableHolders } = useContext(TrafficLightContext)
+
+  const { errors, running, availableHolders } = props.data
+
   const tooltipPlace = props.type === 'horizontal' ? 'top' : 'right'
   const assignedStyle = props.type === 'horizontal' ? { marginLeft: '5px' } : { marginTop: '3px' }
 

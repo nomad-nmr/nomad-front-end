@@ -5,7 +5,6 @@ import classes from './InfoCard.module.css'
 
 const InfoCard = props => {
   const { automationStatus, name, model, busyUntil, dayExpt, nightExpt, probe } = props.data
-
   const cardColor = automationStatus === 'Running' ? '#52c41a' : '#ff4d4f'
   const cardBackgroundColor = automationStatus === 'Running' ? '#f6ffed' : '#fff1f0'
 
@@ -26,7 +25,7 @@ const InfoCard = props => {
         <Row>
           <Col span={6}>
             <div className={classes.trafficLights}>
-              <TrafficLights />
+              <TrafficLights data={props.data} />
             </div>
           </Col>
           <Col span={18}>

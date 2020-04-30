@@ -1,9 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { toggleCards, openDashDrawer } from '../../../store/actions/index'
+
 import { PageHeader, Switch } from 'antd'
 import classes from './PageHeader.module.css'
-import NavbarContext from '../../../context/navbar-context'
-import StatusButtons from '../StatusButtons/StatusButtons'
+import StatusButtons from './StatusButtons/StatusButtons'
 
 import dashIcon from '../../../assets/dashboard.svg'
 import userIcon from '../../../assets/user.svg'
@@ -11,8 +13,8 @@ import groupIcon from '../../../assets/group.svg'
 import magnetIcon from '../../../assets/magnet.svg'
 import experimentIcon from '../../../assets/lab.svg'
 
-const PageHeaderEl = (props) => {
-  const { toggleCards, cardSwitchOn, statusButtonsData, statusButtonClicked } = useContext(NavbarContext)
+const PageHeaderEl = props => {
+  const { toggleCards, cardSwitchOn, statusButtonsData, statusButtonClicked } = props
 
   let headerTitle = ''
   let avatarSrc
@@ -71,4 +73,18 @@ const PageHeaderEl = (props) => {
   )
 }
 
-export default withRouter(PageHeaderEl)
+const mapStateToProps = state => {
+  return {
+    cardSwitchOn: state.dash.showCards,
+    statusButtonsData: state.dash.statusButtonsData
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleCards: () => dispatch(toggleCards()),
+    statusButtonClicked: id => dispatch(openDashDrawer(id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PageHeaderEl))
