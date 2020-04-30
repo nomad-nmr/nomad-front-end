@@ -2,6 +2,7 @@ import React from 'react'
 import { Divider } from 'antd'
 import reactLogo from '../../assets/react-logo.png'
 import antdLogo from '../../assets/antd-logo.png'
+import reduxLogo from '../../assets/redux-logo.png'
 import classes from './Credits.module.css'
 
 const credits = () => {
@@ -14,6 +15,10 @@ const credits = () => {
       <Divider type='vertical' />
       <a href='https://ant.design/'>
         <img src={antdLogo} alt='Ant Design Logo' />
+      </a>
+      <Divider type='vertical' />
+      <a href='https://redux.js.org/'>
+        <img src={reduxLogo} alt='Redux Logo' />
       </a>
     </div>
   )

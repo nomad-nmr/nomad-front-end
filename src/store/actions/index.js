@@ -5,5 +5,6 @@ export {
   fetchStatusButtons,
   openDashDrawer,
   closeDashDrawer,
-  fetchStatusSummary
+  fetchStatusSummary,
+  fetchStatusTable
 } from './dashboard'

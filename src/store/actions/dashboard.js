@@ -50,7 +50,7 @@ export const openDashDrawer = id => {
     axios
       .get('/drawer-tables/' + id + '.json')
       .then(res => {
-        dispatch(openDashDrawerSuccess(res))
+        dispatch(openDashDrawerSuccess(res.data))
       })
       .catch(err => {
         dispatch(fetchFailed(err + ' [fetchDrawerData failed]'))
@@ -68,11 +68,29 @@ export const fetchStatusSummarySuccess = payload => ({
 })
 
 export const fetchStatusSummary = () => {
-  
   return dispatch => {
     axios
       .get('/cards.json')
       .then(res => dispatch(fetchStatusSummarySuccess(res.data)))
       .catch(err => dispatch(fetchFailed(err + ' [fetchStatusSummary failed]')))
+  }
+}
+
+export const fetchStatusTableStart = () => ({
+  type: actionTypes.FETCH_STATUS_TABLE_START
+})
+
+export const fetchStatusTableSuccess = payload => ({
+  type: actionTypes.FETCH_STATUS_TABLE_SUCCESS,
+  data: payload
+})
+
+export const fetchStatusTable = tab => {
+  return dispatch => {
+    dispatch(fetchStatusTableStart())
+    axios
+      .get(`/status-tables/${tab}.json`)
+      .then(res => dispatch(fetchStatusTableSuccess(res.data)))
+      .catch(err => dispatch(fetchFailed(err + '  [fetchStatusTable failed')))
   }
 }

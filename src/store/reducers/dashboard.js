@@ -12,7 +12,9 @@ const initialState = {
     tableData: []
   },
   statusSummaryData: [],
-  cardsLoading: true
+  cardsLoading: true,
+  statusTableData: [],
+  tableLoading: true
 }
 
 const reducer = (state = initialState, action) => {
@@ -49,10 +51,23 @@ const reducer = (state = initialState, action) => {
       }
 
     case actionTypes.FETCH_DASH_DRAWER_SUCCESS:
+      const tableData = action.data ? action.data : []
+      const keysArr = [
+        'Holder',
+        'Status',
+        'Name',
+        'ExpNo',
+        'Experiment',
+        'Group',
+        'Time',
+        'Title',
+        'Instrument',
+        'Description'
+      ]
       const updatedDrawerStatus = {
         ...state.drawerStatus,
         dataLoading: false,
-        tableData: drawerDataHandler(action.data)
+        tableData: drawerDataHandler(tableData, keysArr, 'drawer')
       }
       return {
         ...state,
@@ -74,6 +89,22 @@ const reducer = (state = initialState, action) => {
         ...state,
         cardsLoading: false,
         statusSummaryData: action.data
+      }
+
+    case actionTypes.FETCH_STATUS_TABLE_START:
+      return {
+        ...state,
+        statusTableData: [],
+        tableLoading: true
+      }
+
+    case actionTypes.FETCH_STATUS_TABLE_SUCCESS:
+      const tableDataSource = action.data.table.tr ? action.data.table.tr : []
+      const keysArray = tableDataSource.splice(0, 1)[0].td.map(entry => entry.text)
+      return {
+        ...state,
+        statusTableData: drawerDataHandler(tableDataSource, keysArray),
+        tableLoading: false
       }
 
     default:

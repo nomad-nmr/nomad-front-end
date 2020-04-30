@@ -1,23 +1,11 @@
-export const drawerDataHandler = res => {
-  const tableDataSource = res.data ? res.data : []
-  const keysArr = [
-    'Holder',
-    'Status',
-    'Name',
-    'ExpNo',
-    'Experiment',
-    'Group',
-    'Time',
-    'Title',
-    'Instrument',
-    'Description'
-  ]
+export const drawerDataHandler = (tableDataSource, keysArr, element) => {
   const tableData = []
-
   let highlight = false
+
   tableDataSource.forEach((row, index) => {
     const entries = []
-    row.forEach((col, i) => {
+    const rowElement = element === 'drawer' ? row : row.td
+    rowElement.forEach((col, i) => {
       entries.push([keysArr[i], col.text])
     })
 
