@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table, Tag } from 'antd'
+import TweenOne from 'rc-tween-one'
 import classes from './StatusTable.module.css'
 
 const statusTable = props => {
@@ -57,9 +58,16 @@ const statusTable = props => {
       align: 'center',
       render: text => {
         let tagColor = ''
+        let animationObj = null
         switch (text) {
           case 'Running':
             tagColor = 'processing'
+            animationObj = {
+              opacity: 0.3,
+              yoyo: true,
+              repeat: -1,
+              duration: 500
+            }
             break
           case 'Submitted':
             tagColor = 'purple'
@@ -73,7 +81,11 @@ const statusTable = props => {
           default:
             tagColor = 'default'
         }
-        return <Tag color={tagColor}>{text}</Tag>
+        return (
+          <TweenOne animation={animationObj}>
+            <Tag color={tagColor}>{text}</Tag>
+          </TweenOne>
+        )
       }
     }
   ]
