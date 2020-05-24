@@ -1,5 +1,6 @@
 import React from 'react'
 import { Menu } from 'antd'
+import Logo from './Logo/Logo'
 import { withRouter } from 'react-router-dom'
 import {
   DashboardOutlined,
@@ -12,24 +13,17 @@ import {
   DeploymentUnitOutlined,
   BarChartOutlined
 } from '@ant-design/icons'
-import logoRound from '../../assets/logo-round-small.png'
-import logoWideDark from '../../assets/logo-wide-dark.png'
-
-import classes from './AdminMenu.module.css'
 
 const { SubMenu } = Menu
 
 const adminMenu = props => {
-  const logo = props.collapsed ? logoRound : logoWideDark
   const handleClick = e => {
     props.history.push({ pathname: e.keyPath[0] })
   }
 
   return (
     <nav>
-      <div className={classes.Logo} onClick={() => props.history.push('/dashboard')}>
-        <img src={logo} alt='NOMAD logo round' />
-      </div>
+      <Logo collapsed={props.collapsed} />
 
       <Menu
         onClick={handleClick}

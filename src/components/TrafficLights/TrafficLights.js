@@ -1,4 +1,5 @@
 import React from 'react'
+import AnimateFlash from './AnimateFlash'
 import { Tooltip, Avatar } from 'antd'
 import classes from './TrafficLights.module.css'
 
@@ -13,9 +14,11 @@ const TrafficLights = props => {
   if (errors) {
     trafficLightsArr.push(
       <Tooltip key='errors' placement={tooltipPlace} title='Errors'>
-        <Avatar size='small' style={assignedStyle} className={classes.Errors}>
-          {errors}
-        </Avatar>
+        <AnimateFlash>
+          <Avatar size='small' style={assignedStyle} className={classes.Errors}>
+            {errors}
+          </Avatar>
+        </AnimateFlash>
       </Tooltip>
     )
   }
@@ -23,7 +26,9 @@ const TrafficLights = props => {
   if (running) {
     trafficLightsArr.push(
       <Tooltip key='running' placement={tooltipPlace} title='Running Experiment'>
-        <Avatar size='small' style={assignedStyle} className={classes.Running} />
+        <AnimateFlash>
+          <Avatar size='small' style={assignedStyle} className={classes.Running} />
+        </AnimateFlash>
       </Tooltip>
     )
   }
