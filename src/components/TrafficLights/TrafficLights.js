@@ -1,4 +1,6 @@
 import React from 'react'
+import TweenOne from 'rc-tween-one'
+// import AnimateFlash from './AnimateFlash'
 import { Tooltip, Avatar } from 'antd'
 import classes from './TrafficLights.module.css'
 
@@ -23,7 +25,18 @@ const TrafficLights = props => {
   if (running) {
     trafficLightsArr.push(
       <Tooltip key='running' placement={tooltipPlace} title='Running Experiment'>
-        <Avatar size='small' style={assignedStyle} className={classes.Running} />
+        <TweenOne
+          animation={{
+            opacity: 1,
+            scale: 1,
+            yoyo: true,
+            repeat: -1,
+            duration: 500
+          }}
+          style={{ opacity: 0.5, transform: 'scale(0.8)' }}
+        >
+          <Avatar size='small' style={assignedStyle} className={classes.Running} />
+        </TweenOne>
       </Tooltip>
     )
   }

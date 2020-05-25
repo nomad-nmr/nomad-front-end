@@ -38,7 +38,7 @@ const statusDrawer = props => {
       closable={true}
       mask={true}
       keyboard
-      height='top'
+      height='auto'
       // getContainer={false}
       visible={visible}
       // style={{ position: 'absolute' }}
