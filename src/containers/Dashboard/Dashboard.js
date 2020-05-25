@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchStatusButtons, fetchStatusSummary, fetchStatusTable } from '../../store/actions'
+import Animate from 'rc-animate'
 
 import InfoCards from '../../components/InfoCards/InfoCards'
 import StatusTabs from '../../components/StatusTabs/StatusTabs'
-import { Spin, Empty } from 'antd'
+// import { Spin, Empty } from 'antd'
+import './Dashboard.css'
 
 class Dashboard extends Component {
   state = {
@@ -23,19 +25,25 @@ class Dashboard extends Component {
   }
 
   render() {
-    const noData = (
-      <div>
-        <Empty style={{ margin: '30px' }} />
-        <Spin size='large' />
-      </div>
-    )
+    // const noData = (
+    //   <div>
+    //     <Empty style={{ margin: '30px' }} />
+    //     <Spin size='large' />
+    //   </div>
+    // )
     return (
       <>
-        {!this.props.showCards ? null : this.state.cardsLoading ? (
+        <Animate transitionName='fade-cards'>
+          {this.props.showCards && !this.state.cardsLoading ? (
+            <InfoCards cardsData={this.props.statusSummary} clicked={this.tabChangeHandler} />
+          ) : null}
+        </Animate>
+        {/*{!this.props.showCards ? null : this.state.cardsLoading ? (
           noData
         ) : (
-          <InfoCards cardsData={this.props.statusSummary} clicked={this.tabChangeHandler} />
-        )}
+          <Info}Cards cardsData={this.props.statusSummary} clicked={this.tabChangeHandler} />
+        // )} */}
+
         <StatusTabs
           activeTab={this.state.activeTab}
           summaryData={this.props.statusSummary}
