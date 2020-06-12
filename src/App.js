@@ -78,7 +78,7 @@ export class App extends Component {
           </Affix>
           <Content className={classes.Content}>
             <Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
-              {/*{!user ? <Redirect to='/dashboard' /> : null*/}
+              {!user && <Redirect to='/dashboard' />}
               <Switch>
                 <Route
                   path='/dashboard/users'
