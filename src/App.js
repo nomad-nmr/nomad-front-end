@@ -44,7 +44,7 @@ export class App extends Component {
     const { user, adminAccess, authModalVisible, closeModal, onSignIn, onSignOut } = this.props
 
     // Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
-    const Users = adminAccess ? React.lazy(() => import('./containers/Users/Users')) : Error403
+    const Users = React.lazy(() => import('./containers/Users/Users'))
 
     //Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
     let authModal = null
@@ -77,25 +77,24 @@ export class App extends Component {
             </Header>
           </Affix>
           <Content className={classes.Content}>
-            {!user ? <Redirect to='/dashboard' /> : null}
-            <Switch>
-              <Route
-                path='/dashboard/users'
-                render={() => (
-                  <Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
-                    <Users />
-                  </Suspense>
-                )}
-              />
-              <Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
-              <Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
-              <Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
-              <Route exact path='/dashboard' render={() => <Dashboard />} />
-              <Redirect from='/dashboard/dashboard' to='/dashboard' />
-              <Redirect exact from='/' to='/dashboard' />
-              <Route component={Error404} />
-            </Switch>
-
+            <Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
+              {!user && <Redirect to='/dashboard' />}
+              <Switch>
+                <Route
+                  path='/dashboard/users'
+                  render={() => {
+                    return adminAccess ? <Users /> : <Error403 />
+                  }}
+                />
+                <Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
+                <Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
+                <Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
+                <Route exact path='/dashboard' render={() => <Dashboard />} />
+                <Redirect from='/dashboard/dashboard' to='/dashboard' />
+                <Redirect exact from='/' to='/dashboard' />
+                <Route component={Error404} />
+              </Switch>
+            </Suspense>
             {authModal}
             <StatusDrawer status={this.props.drawerStatus} closeClicked={this.props.onCloseDrawer} />
             <BackTop visibilityHeight={200} />
