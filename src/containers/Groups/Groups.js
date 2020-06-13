@@ -1,13 +1,11 @@
-import React, { Component } from 'react'
+import React, { Fragment } from 'react'
 
-export class Groups extends Component {
-	render() {
-		return (
-			<>
-				<h1 style={{ margin: '50px' }}>Groups</h1>
-			</>
-		)
-	}
+const groups = () => {
+  return (
+    <Fragment>
+      <h1 style={{ margin: '50px' }}>Groups</h1>
+    </Fragment>
+  )
 }
 
-export default Groups
+export default groups
