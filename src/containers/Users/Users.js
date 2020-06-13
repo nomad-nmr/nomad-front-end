@@ -1,13 +1,11 @@
-import React, { Component } from 'react'
+import React, { Fragment } from 'react'
 
-export class Users extends Component {
-	render() {
-		return (
-			<>
-				<h1 style={{ margin: '50px' }}>Users</h1>
-			</>
-		)
-	}
+const users = () => {
+  return (
+    <Fragment>
+      <h1 style={{ margin: '50px' }}>Users</h1>
+    </Fragment>
+  )
 }
 
-export default Users
+export default users

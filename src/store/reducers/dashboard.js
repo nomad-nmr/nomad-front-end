@@ -12,7 +12,6 @@ const initialState = {
     tableData: []
   },
   statusSummaryData: [],
-  cardsLoading: true,
   statusTableData: [],
   tableLoading: true
 }
@@ -87,7 +86,6 @@ const reducer = (state = initialState, action) => {
     case actionTypes.FETCH_STATUS_SUMMARY_SUCCESS:
       return {
         ...state,
-        cardsLoading: false,
         statusSummaryData: action.data
       }
 

@@ -1,13 +1,11 @@
-import React, { Component } from 'react'
+import React, { Fragment } from 'react'
 
-export class Instruments extends Component {
-	render() {
-		return (
-			<>
-				<h1 style={{ margin: '50px' }}>Setting Instruments</h1>
-			</>
-		)
-	}
+const instruments = () => {
+  return (
+    <Fragment>
+      <h1 style={{ margin: '50px' }}>Setting Instruments</h1>
+    </Fragment>
+  )
 }
 
-export default Instruments
+export default instruments

@@ -101,4 +101,4 @@ const statusTable = props => {
   )
 }
 
-export default statusTable
+export default React.memo(statusTable, (prevProps, nextProps) => prevProps.data === nextProps.data)
