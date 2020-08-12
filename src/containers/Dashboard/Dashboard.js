@@ -35,7 +35,6 @@ const Dashboard = (props) => {
 				tableData={props.statusTable}
 				clicked={tabChangeHandler}
 				tableLoading={props.tableLoading}
-				centered={true}
 			/>
 		</Fragment>
 	)

@@ -28,7 +28,8 @@ const statusTabs = (props) => {
 			tabBarGutter={15}
 			activeKey={props.activeTab}
 			animated={false}
-			onChange={(key) => props.clicked(key)}>
+			onChange={(key) => props.clicked(key)}
+			centered>
 			{TabsArr}
 		</Tabs>
 	)
