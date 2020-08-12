@@ -7,52 +7,54 @@ import InfoCards from '../../components/InfoCards/InfoCards'
 import StatusTabs from '../../components/StatusTabs/StatusTabs'
 import './Dashboard.css'
 
-const Dashboard = props => {
-  const [activeTab, setActiveTab] = useState('1')
-  const { fetchButtons, fetchStatusSum, fetchStatusTable } = props
+const Dashboard = (props) => {
+	const [activeTab, setActiveTab] = useState('1')
+	const { fetchButtons, fetchStatusSum, fetchStatusTable } = props
 
-  useEffect(() => {
-    fetchButtons()
-    fetchStatusSum()
-    fetchStatusTable(1)
-  }, [fetchStatusSum, fetchStatusTable, fetchButtons])
+	useEffect(() => {
+		fetchButtons()
+		fetchStatusSum()
+		fetchStatusTable(1)
+	}, [fetchStatusSum, fetchStatusTable, fetchButtons])
 
-  const tabChangeHandler = tabId => {
-    fetchStatusTable(tabId)
-    setActiveTab(tabId)
-  }
+	const tabChangeHandler = (tabId) => {
+		fetchStatusTable(tabId)
+		setActiveTab(tabId)
+	}
 
-  return (
-    <Fragment>
-      <Animate transitionName='fade-cards'>
-        {props.showCards ? <InfoCards cardsData={props.statusSummary} clicked={tabChangeHandler} /> : null}
-      </Animate>
-      <StatusTabs
-        activeTab={activeTab}
-        summaryData={props.statusSummary}
-        tableData={props.statusTable}
-        clicked={tabChangeHandler}
-        tableLoading={props.tableLoading}
-      />
-    </Fragment>
-  )
+	return (
+		<Fragment>
+			<Animate transitionName='fade-cards'>
+				{props.showCards ? (
+					<InfoCards cardsData={props.statusSummary} clicked={tabChangeHandler} />
+				) : null}
+			</Animate>
+			<StatusTabs
+				activeTab={activeTab}
+				summaryData={props.statusSummary}
+				tableData={props.statusTable}
+				clicked={tabChangeHandler}
+				tableLoading={props.tableLoading}
+			/>
+		</Fragment>
+	)
 }
 
-const mapStateToProps = state => {
-  return {
-    showCards: state.dash.showCards,
-    statusSummary: state.dash.statusSummaryData,
-    statusTable: state.dash.statusTableData,
-    tableLoading: state.dash.tableLoading
-  }
+const mapStateToProps = (state) => {
+	return {
+		showCards: state.dash.showCards,
+		statusSummary: state.dash.statusSummaryData,
+		statusTable: state.dash.statusTableData,
+		tableLoading: state.dash.tableLoading,
+	}
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchButtons: () => dispatch(fetchStatusButtons()),
-    fetchStatusSum: () => dispatch(fetchStatusSummary()),
-    fetchStatusTable: id => dispatch(fetchStatusTable(id))
-  }
+const mapDispatchToProps = (dispatch) => {
+	return {
+		fetchButtons: () => dispatch(fetchStatusButtons()),
+		fetchStatusSum: () => dispatch(fetchStatusSummary()),
+		fetchStatusTable: (id) => dispatch(fetchStatusTable(id)),
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

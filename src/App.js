@@ -21,108 +21,111 @@ import StatusDrawer from './components/StatusDrawer/StatusDrawer'
 
 const { Header, Sider, Content, Footer } = Layout
 
-const App = props => {
-  const [adminMenuCollapsed, setAdminMenuCollapsed] = useState(true)
+const App = (props) => {
+	const [adminMenuCollapsed, setAdminMenuCollapsed] = useState(true)
 
-  const toggleAdminMenu = () => {
-    setAdminMenuCollapsed(!adminMenuCollapsed)
-  }
+	const toggleAdminMenu = () => {
+		setAdminMenuCollapsed(!adminMenuCollapsed)
+	}
 
-  // const closeDrawerHandler = () => {
-  //   const newDrawerStatus = { ...this.state.drawerStatus }
-  //   newDrawerStatus.visible = false
-  //   newDrawerStatus.tableData = []
-  // }
+	// const closeDrawerHandler = () => {
+	//   const newDrawerStatus = { ...this.state.drawerStatus }
+	//   newDrawerStatus.visible = false
+	//   newDrawerStatus.tableData = []
+	// }
 
-  const {
-    user,
-    adminAccess,
-    authModalVisible,
-    closeModal,
-    onSignIn,
-    onSignOut,
-    onCloseDrawer,
-    drawerStatus
-  } = props
+	const {
+		user,
+		adminAccess,
+		authModalVisible,
+		closeModal,
+		onSignIn,
+		onSignOut,
+		onCloseDrawer,
+		drawerStatus,
+	} = props
 
-  // Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
-  const Users = React.lazy(() => import('./containers/Users/Users'))
+	// Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
+	const Users = React.lazy(() => import('./containers/Users/Users'))
 
-  //Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
-  let authModal = null
-  if (authModalVisible) {
-    if (user) {
-      authModal = <LogoutModal visible={authModalVisible} cancelClicked={closeModal} okClicked={onSignOut} />
-    } else {
-      authModal = (
-        <LoginModal visible={authModalVisible} cancelClicked={closeModal} signInClicked={onSignIn} />
-      )
-    }
-  }
+	//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
+	let authModal = null
+	if (authModalVisible) {
+		if (user) {
+			authModal = (
+				<LogoutModal visible={authModalVisible} cancelClicked={closeModal} okClicked={onSignOut} />
+			)
+		} else {
+			authModal = (
+				<LoginModal visible={authModalVisible} cancelClicked={closeModal} signInClicked={onSignIn} />
+			)
+		}
+	}
 
-  return (
-    <Layout>
-      {adminAccess ? (
-        <Affix className={classes.AdminMenu}>
-          <Sider trigger={null} className={classes.Sider} collapsible collapsed={adminMenuCollapsed}>
-            <AdminMenu collapsed={adminMenuCollapsed} />
-          </Sider>
-        </Affix>
-      ) : null}
+	return (
+		<Layout>
+			{adminAccess ? (
+				<Affix className={classes.AdminMenu}>
+					<Sider trigger={null} className={classes.Sider} collapsible collapsed={adminMenuCollapsed}>
+						<AdminMenu collapsed={adminMenuCollapsed} />
+					</Sider>
+				</Affix>
+			) : null}
 
-      <Layout>
-        <Affix>
-          <Header className={classes.Header}>
-            <NavBar collapsed={adminMenuCollapsed} toggleClicked={toggleAdminMenu} />
-          </Header>
-        </Affix>
-        <Content className={classes.Content}>
-          <Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
-            {!user && <Redirect to='/dashboard' />}
-            <Switch>
-              <Route
-                path='/dashboard/users'
-                render={() => {
-                  return adminAccess ? <Users /> : <Error403 />
-                }}
-              />
-              <Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
-              <Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
-              <Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
-              <Route exact path='/dashboard' render={() => <Dashboard />} />
-              <Redirect from='/dashboard/dashboard' to='/dashboard' />
-              <Redirect exact from='/' to='/dashboard' />
-              <Route component={Error404} />
-            </Switch>
-          </Suspense>
-          {authModal}
-          <StatusDrawer status={drawerStatus} closeClicked={onCloseDrawer} />
-          <BackTop visibilityHeight={200} />
-        </Content>
-        <Footer className={classes.Footer}>
-          <Credits />
-        </Footer>
-      </Layout>
-    </Layout>
-  )
+			<Layout>
+				<Affix>
+					<Header className={classes.Header}>
+						<NavBar collapsed={adminMenuCollapsed} toggleClicked={toggleAdminMenu} />
+					</Header>
+				</Affix>
+				<Content className={classes.Content}>
+					<Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
+						{/* TODO: the line below redirects to homepage every time user logs out but also redirects 404 to homepage */}
+						{!user && <Redirect to='/dashboard' />}
+						<Switch>
+							<Route
+								path='/dashboard/users'
+								render={() => {
+									return adminAccess ? <Users /> : <Error403 />
+								}}
+							/>
+							<Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
+							<Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
+							<Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
+							<Route exact path='/dashboard' render={() => <Dashboard />} />
+							<Redirect from='/dashboard/dashboard' to='/dashboard' />
+							<Redirect exact from='/' to='/dashboard' />
+							<Route component={Error404} />
+						</Switch>
+					</Suspense>
+					{authModal}
+					<StatusDrawer status={drawerStatus} closeClicked={onCloseDrawer} />
+					<BackTop visibilityHeight={200} />
+				</Content>
+				<Footer className={classes.Footer}>
+					<Credits />
+				</Footer>
+			</Layout>
+		</Layout>
+	)
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.auth.user,
-    adminAccess: state.auth.adminAccess,
-    authModalVisible: state.auth.authModalVisible,
-    drawerStatus: state.dash.drawerStatus
-  }
+const mapStateToProps = (state) => {
+	return {
+		user: state.auth.user,
+		adminAccess: state.auth.adminAccess,
+		authModalVisible: state.auth.authModalVisible,
+		drawerStatus: state.dash.drawerStatus,
+	}
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    closeModal: () => dispatch(closeAuthModal()),
-    onSignIn: form => dispatch(signInHandler(form)),
-    onSignOut: () => dispatch(signOutHandler()),
-    onCloseDrawer: () => dispatch(closeDashDrawer())
-  }
+const mapDispatchToProps = (dispatch) => {
+	return {
+		closeModal: () => dispatch(closeAuthModal()),
+		onSignIn: (form) => dispatch(signInHandler(form)),
+		onSignOut: () => dispatch(signOutHandler()),
+		onCloseDrawer: () => dispatch(closeDashDrawer()),
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App))
