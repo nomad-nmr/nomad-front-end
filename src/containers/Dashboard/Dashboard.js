@@ -45,7 +45,7 @@ const mapStateToProps = (state) => {
 		showCards: state.dash.showCards,
 		statusSummary: state.dash.statusSummaryData,
 		statusTable: state.dash.statusTableData,
-		tableLoading: state.dash.tableLoading,
+		tableLoading: state.dash.tableLoading
 	}
 }
 
@@ -53,7 +53,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchButtons: () => dispatch(fetchStatusButtons()),
 		fetchStatusSum: () => dispatch(fetchStatusSummary()),
-		fetchStatusTable: (id) => dispatch(fetchStatusTable(id)),
+		fetchStatusTable: (id) => dispatch(fetchStatusTable(id))
 	}
 }
 

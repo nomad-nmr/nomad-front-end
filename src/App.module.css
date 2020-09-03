@@ -1,22 +1,22 @@
 .Content {
-  text-align: center;
-  min-height: 750px;
-  /* position: relative; */
+	text-align: center;
+	min-height: 900px;
+	/* position: relative; */
 }
 
 .Sider {
-  background-color: #001529;
-  height: auto;
+	background-color: #001529;
+	height: auto;
 }
 
 .Header {
-  box-shadow: 0 4px 12px #f0f0f0;
+	box-shadow: 0 4px 12px #f0f0f0;
 }
 
 .Footer {
-  padding: 0px;
+	padding: 0px;
 }
 
 .AdminMenu {
-  background-color: #001529;
+	background-color: #001529;
 }
