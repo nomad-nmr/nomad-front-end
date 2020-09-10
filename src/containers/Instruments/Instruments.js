@@ -1,25 +1,24 @@
-import React, { useState } from 'react'
-import { Table, Space, Switch, Button } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Table, Space, Switch, Button, Popconfirm } from 'antd'
+import axios from '../../axios-local'
+
+import InstrumentsForm from '../../components/InstrumentsForm/InstrumentsForm'
 
 const Instruments = () => {
-	const [instrumentSettings, setInstrumentsSettings] = useState([
-		{
-			key: 1,
-			name: 'Alec',
-			model: 'Bruker AVIII 500',
-			probe: 'Prodigy',
-			capacity: 60,
-			running: true
-		},
-		{
-			key: 2,
-			name: 'Felix',
-			model: 'Bruker AVIII HD 500',
-			probe: 'BBFO+',
-			capacity: 60,
-			running: true
-		}
-	])
+	const [instrumentSettings, setInstrumentsSettings] = useState([])
+
+	useEffect(
+		() =>
+			axios
+				.get('/admin/instruments/get-instruments')
+				.then((res) => {
+					setInstrumentsSettings(res.data)
+				})
+				.catch((err) => {
+					console.log(err)
+				}),
+		[]
+	)
 
 	const runningSwitchHandler = (id) => {
 		const newSettings = [...instrumentSettings]
@@ -32,11 +31,6 @@ const Instruments = () => {
 	}
 
 	const columns = [
-		{
-			title: 'ID',
-			dataIndex: 'key',
-			key: 'id'
-		},
 		{
 			title: 'Name',
 			dataIndex: 'name',
@@ -71,14 +65,17 @@ const Instruments = () => {
 					/>
 					<Button
 						size='small'
+						type='link'
 						onClick={() => {
 							console.log(record.key)
 						}}>
 						Edit
 					</Button>
-					<Button size='small' danger>
-						Delete
-					</Button>
+					<Popconfirm title='Sure to delete?' onConfirm={() => console.log(record.key)}>
+						<Button size='small' type='link' danger>
+							Delete
+						</Button>
+					</Popconfirm>
 				</Space>
 			)
 		}
@@ -86,6 +83,7 @@ const Instruments = () => {
 
 	return (
 		<div style={{ margin: '20px' }}>
+			<InstrumentsForm updateInstruments={setInstrumentsSettings} />
 			<Table columns={columns} dataSource={instrumentSettings} pagination={false} />
 		</div>
 	)

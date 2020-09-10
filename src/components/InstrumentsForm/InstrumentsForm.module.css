@@ -1,0 +1,22 @@
+.Form {
+	width: 30%;
+}
+
+.Form p {
+	text-align: left;
+	margin: 0;
+}
+
+.CapacityFormItem {
+	display: flex;
+}
+
+.hintSpan {
+	margin: 0 30px;
+	color: #1890ff;
+	cursor: pointer;
+}
+
+.Button {
+	margin: 0 15px;
+}
