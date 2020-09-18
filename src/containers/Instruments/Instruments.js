@@ -1,34 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { connect } from 'react-redux'
+import {
+	fetchInstruments,
+	updateInstruments,
+	deleteInstrument,
+	toggleRunningStatus
+} from '../../store/actions/index'
 import { Table, Space, Switch, Button, Popconfirm } from 'antd'
-import axios from '../../axios-local'
-
 import InstrumentsForm from '../../components/InstrumentsForm/InstrumentsForm'
 
-const Instruments = () => {
-	const [instrumentSettings, setInstrumentsSettings] = useState([])
+const Instruments = (props) => {
+	const { fetchInstr } = props
+	const formRef = useRef({})
 
-	useEffect(
-		() =>
-			axios
-				.get('/admin/instruments/get-instruments')
-				.then((res) => {
-					setInstrumentsSettings(res.data)
-				})
-				.catch((err) => {
-					console.log(err)
-				}),
-		[]
-	)
-
-	const runningSwitchHandler = (id) => {
-		const newSettings = [...instrumentSettings]
-		newSettings.forEach((element) => {
-			if (element.key === id) {
-				element.running = !element.running
-			}
-		})
-		setInstrumentsSettings(newSettings)
-	}
+	useEffect(() => {
+		fetchInstr()
+	}, [fetchInstr])
 
 	const columns = [
 		{
@@ -61,17 +48,18 @@ const Instruments = () => {
 						checkedChildren='On'
 						unCheckedChildren='Off'
 						size='small'
-						onChange={() => runningSwitchHandler(record.key)}
+						loading={props.switchIsLoading}
+						onChange={() => props.toggleRunning(record.key)}
 					/>
 					<Button
 						size='small'
 						type='link'
 						onClick={() => {
-							console.log(record.key)
+							formRef.current.setFieldsValue(record)
 						}}>
 						Edit
 					</Button>
-					<Popconfirm title='Sure to delete?' onConfirm={() => console.log(record.key)}>
+					<Popconfirm title='Sure to delete?' onConfirm={() => props.deleteInstrument(record.key)}>
 						<Button size='small' type='link' danger>
 							Delete
 						</Button>
@@ -83,10 +71,36 @@ const Instruments = () => {
 
 	return (
 		<div style={{ margin: '20px' }}>
-			<InstrumentsForm updateInstruments={setInstrumentsSettings} />
-			<Table columns={columns} dataSource={instrumentSettings} pagination={false} />
+			<InstrumentsForm
+				updateInstrumentsHandler={props.updateInstr}
+				formReference={formRef}
+				toggleEditHandler={props.toggleEdit}
+			/>
+			<Table
+				columns={columns}
+				dataSource={props.instrTabData}
+				pagination={false}
+				loading={props.tableLoad}
+			/>
 		</div>
 	)
 }
 
-export default Instruments
+const mapStateToProps = (state) => {
+	return {
+		instrTabData: state.instruments.instrumentsTableData,
+		tableLoad: state.instruments.tableIsLoading,
+		switchIsLoading: state.instruments.runningSwitchIsLoading
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		fetchInstr: () => dispatch(fetchInstruments()),
+		updateInstr: (payload) => dispatch(updateInstruments(payload)),
+		deleteInstrument: (payload) => dispatch(deleteInstrument(payload)),
+		toggleRunning: (payload) => dispatch(toggleRunningStatus(payload))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Instruments)

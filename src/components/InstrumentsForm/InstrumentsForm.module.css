@@ -11,10 +11,9 @@
 	display: flex;
 }
 
-.hintSpan {
+.Hint {
 	margin: 0 30px;
 	color: #1890ff;
-	cursor: pointer;
 }
 
 .Button {

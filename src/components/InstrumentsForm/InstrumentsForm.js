@@ -1,6 +1,7 @@
 import React from 'react'
-import { Form, Input, Button, InputNumber, Tooltip } from 'antd'
-import axios from '../../axios-local'
+import { connect } from 'react-redux'
+import { Form, Input, Button, InputNumber, Tooltip, message } from 'antd'
+import { QuestionCircleOutlined } from '@ant-design/icons'
 
 import classes from './InstrumentsForm.module.css'
 
@@ -24,10 +25,14 @@ const InstrumentsForm = (props) => {
 	const [form] = Form.useForm()
 
 	const onFinish = (values) => {
-		axios.post('/admin/instruments/add-instrument', values).then((res) => {
-			props.updateInstruments(res.data)
-			form.resetFields()
-		})
+		const nameFound = props.instrTabData.find(
+			(instr) => instr.name.toLowerCase() === values.name.toLowerCase()
+		)
+		if (!values.key && nameFound) {
+			return message.error(`Instrument name ${values.name} has been used. Please, use unique name`)
+		}
+		props.updateInstrumentsHandler(values)
+		form.resetFields()
 	}
 
 	const onReset = () => {
@@ -36,8 +41,16 @@ const InstrumentsForm = (props) => {
 
 	return (
 		<div className={classes.Form}>
-			<Form {...layout} form={form} name='instruments-settings' onFinish={onFinish}>
-				<Form.Item name='name' label='Name' rules={[{ required: true }]}>
+			<Form
+				{...layout}
+				form={form}
+				ref={props.formReference}
+				name='instruments-settings'
+				onFinish={onFinish}>
+				<Form.Item hidden name='key'>
+					<Input />
+				</Form.Item>
+				<Form.Item name='name' label='Name' rules={[{ required: true, whitespace: true }]}>
 					<Input />
 				</Form.Item>
 				<Form.Item name='model' label='Model'>
@@ -51,8 +64,11 @@ const InstrumentsForm = (props) => {
 						<InputNumber className={classes.InputNumber} />
 					</Form.Item>
 					<Tooltip title='Number of holder in sample changer'>
-						<span className={classes.hintSpan}>Need help?</span>
+						<QuestionCircleOutlined className={classes.Hint} />
 					</Tooltip>
+				</Form.Item>
+				<Form.Item hidden name='running'>
+					<Input />
 				</Form.Item>
 				<Form.Item {...tailLayout}>
 					<Button className={classes.Button} type='primary' htmlType='submit'>
@@ -67,4 +83,10 @@ const InstrumentsForm = (props) => {
 	)
 }
 
-export default InstrumentsForm
+const mapStateToProps = (state) => {
+	return {
+		instrTabData: state.instruments.instrumentsTableData
+	}
+}
+
+export default connect(mapStateToProps)(InstrumentsForm)
