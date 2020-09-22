@@ -89,3 +89,9 @@ export const toggleRunningStatus = (key) => {
 			})
 	}
 }
+
+export const toggleShowForm = () => {
+	return {
+		type: actionTypes.TOGGLE_INSTRUMENT_FORM
+	}
+}

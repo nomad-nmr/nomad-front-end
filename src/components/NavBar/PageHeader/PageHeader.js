@@ -1,9 +1,9 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { toggleCards, openDashDrawer } from '../../../store/actions/index'
+import { toggleCards, openDashDrawer, toggleShowForm } from '../../../store/actions/index'
 
-import { PageHeader, Switch } from 'antd'
+import { PageHeader, Switch, Button } from 'antd'
 import classes from './PageHeader.module.css'
 import StatusButtons from './StatusButtons/StatusButtons'
 
@@ -53,6 +53,17 @@ const PageHeaderEl = (props) => {
 		case '/dashboard/instruments':
 			headerTitle = 'Instruments Settings'
 			avatarSrc = magnetIcon
+			extra = (
+				<div className={classes.ExtraContainer}>
+					<Button
+						className={classes.Button}
+						type='primary'
+						onClick={props.toggleForm}
+						disabled={props.formVisible}>
+						Add Instrument
+					</Button>
+				</div>
+			)
 			break
 		case '/dashboard/experiments':
 			headerTitle = 'Setting Experiments'
@@ -76,14 +87,16 @@ const PageHeaderEl = (props) => {
 const mapStateToProps = (state) => {
 	return {
 		cardSwitchOn: state.dash.showCards,
-		statusButtonsData: state.dash.statusButtonsData
+		statusButtonsData: state.dash.statusButtonsData,
+		formVisible: state.instruments.showForm
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		toggleCards: () => dispatch(toggleCards()),
-		statusButtonClicked: (id) => dispatch(openDashDrawer(id))
+		statusButtonClicked: (id) => dispatch(openDashDrawer(id)),
+		toggleForm: () => dispatch(toggleShowForm())
 	}
 }
 

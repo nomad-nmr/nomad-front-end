@@ -4,7 +4,8 @@ import { Modal } from 'antd'
 const initialState = {
 	instrumentsTableData: [],
 	tableIsLoading: false,
-	runningSwitchIsLoading: false
+	runningSwitchIsLoading: false,
+	showForm: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -41,6 +42,12 @@ const reducer = (state = initialState, action) => {
 				content: `${action.error}`
 			})
 			return state
+
+		case actionTypes.TOGGLE_INSTRUMENT_FORM:
+			return {
+				...state,
+				showForm: !state.showForm
+			}
 
 		default:
 			return state

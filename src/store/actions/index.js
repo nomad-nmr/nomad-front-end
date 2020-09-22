@@ -9,4 +9,10 @@ export {
 	fetchStatusTable
 } from './dashboard'
 
-export { fetchInstruments, updateInstruments, deleteInstrument, toggleRunningStatus } from './instruments'
+export {
+	fetchInstruments,
+	updateInstruments,
+	deleteInstrument,
+	toggleRunningStatus,
+	toggleShowForm
+} from './instruments'
