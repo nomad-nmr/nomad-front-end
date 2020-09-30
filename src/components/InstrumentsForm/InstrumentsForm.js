@@ -25,13 +25,14 @@ const InstrumentsForm = (props) => {
 	const [form] = Form.useForm()
 
 	const onFinish = (values) => {
+		//Validation of unique name
 		const nameFound = props.instrTabData.find(
 			(instr) => instr.name.toLowerCase() === values.name.toLowerCase()
 		)
 		if (!values.key && nameFound) {
 			return message.error(`Instrument name ${values.name} has been used. Please, use unique name!`)
 		}
-
+		//Validation of capacity being integer number 
 		if (!Number.isInteger(values.capacity)) {
 			return message.error('Capacity has to be integer number')
 		}
