@@ -12,7 +12,6 @@ import LoginModal from './components/Modals/LoginModal/LoginModal'
 import LogoutModal from './components/Modals/LogoutModal/LogoutModal'
 import Dashboard from './containers/Dashboard/Dashboard'
 import Groups from './containers/Groups/Groups'
-import Instruments from './containers/Instruments/Instruments'
 import Experiments from './containers/Experiments/Experiments'
 import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
@@ -42,11 +41,12 @@ const App = (props) => {
 		onSignIn,
 		onSignOut,
 		onCloseDrawer,
-		drawerStatus,
+		drawerStatus
 	} = props
 
 	// Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
 	const Users = React.lazy(() => import('./containers/Users/Users'))
+	const Instruments = React.lazy(() => import('./containers/Instruments/Instruments'))
 
 	//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
 	let authModal = null
@@ -90,7 +90,12 @@ const App = (props) => {
 								}}
 							/>
 							<Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
-							<Route path='/dashboard/instruments' component={adminAccess ? Instruments : Error403} />
+							<Route
+								path='/dashboard/instruments'
+								render={() => {
+									return adminAccess ? <Instruments /> : <Error403 />
+								}}
+							/>
 							<Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
 							<Route exact path='/dashboard' render={() => <Dashboard />} />
 							<Redirect from='/dashboard/dashboard' to='/dashboard' />
@@ -100,7 +105,7 @@ const App = (props) => {
 					</Suspense>
 					{authModal}
 					<StatusDrawer status={drawerStatus} closeClicked={onCloseDrawer} />
-					<BackTop visibilityHeight={200} />
+					<BackTop visibilityHeight={200} style={{ marginBottom: '25px' }} />
 				</Content>
 				<Footer className={classes.Footer}>
 					<Credits />
@@ -115,7 +120,7 @@ const mapStateToProps = (state) => {
 		user: state.auth.user,
 		adminAccess: state.auth.adminAccess,
 		authModalVisible: state.auth.authModalVisible,
-		drawerStatus: state.dash.drawerStatus,
+		drawerStatus: state.dash.drawerStatus
 	}
 }
 
@@ -124,7 +129,7 @@ const mapDispatchToProps = (dispatch) => {
 		closeModal: () => dispatch(closeAuthModal()),
 		onSignIn: (form) => dispatch(signInHandler(form)),
 		onSignOut: () => dispatch(signOutHandler()),
-		onCloseDrawer: () => dispatch(closeDashDrawer()),
+		onCloseDrawer: () => dispatch(closeDashDrawer())
 	}
 }
 
