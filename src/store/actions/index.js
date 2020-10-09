@@ -11,8 +11,9 @@ export {
 
 export {
 	fetchInstruments,
+	addInstrument,
 	updateInstruments,
 	deleteInstrument,
-	toggleRunningStatus,
+	toggleAvailableStatus,
 	toggleShowForm
 } from './instruments'

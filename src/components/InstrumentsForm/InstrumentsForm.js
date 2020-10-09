@@ -21,23 +21,28 @@ const tailLayout = {
 	}
 }
 
-const InstrumentsForm = (props) => {
+const InstrumentsForm = props => {
 	const [form] = Form.useForm()
 
-	const onFinish = (values) => {
-		//Validation of unique name
-		const nameFound = props.instrTabData.find(
-			(instr) => instr.name.toLowerCase() === values.name.toLowerCase()
-		)
-		if (!values.key && nameFound) {
-			return message.error(`Instrument name ${values.name} has been used. Please, use unique name!`)
-		}
-		//Validation of capacity being integer number 
+	const onFinish = values => {
+		//Validation of capacity being integer number
 		if (!Number.isInteger(values.capacity)) {
 			return message.error('Capacity has to be integer number')
 		}
+		// Checking whether to update or add
+		if (values._id) {
+			props.updateInstrumentsHandler(values)
+		} else {
+			// Validation of unique name
+			const nameFound = props.instrTabData.find(
+				instr => instr.name.toLowerCase() === values.name.toLowerCase()
+			)
+			if (!values.key && nameFound) {
+				return message.error(`Instrument name ${values.name} has been used. Please, use unique name!`)
+			}
+			props.addInstrumentHandler(values)
+		}
 
-		props.updateInstrumentsHandler(values)
 		form.resetFields()
 		props.toggleFormHandler()
 	}
@@ -78,6 +83,9 @@ const InstrumentsForm = (props) => {
 				<Form.Item hidden name='running'>
 					<Input />
 				</Form.Item>
+				<Form.Item hidden name='_id'>
+					<Input />
+				</Form.Item>
 				<Form.Item {...tailLayout}>
 					<Button className={classes.Button} type='primary' htmlType='submit'>
 						Submit
@@ -91,7 +99,7 @@ const InstrumentsForm = (props) => {
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		instrTabData: state.instruments.instrumentsTableData
 	}

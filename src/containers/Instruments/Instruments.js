@@ -4,8 +4,9 @@ import {
 	fetchInstruments,
 	updateInstruments,
 	deleteInstrument,
-	toggleRunningStatus,
-	toggleShowForm
+	toggleAvailableStatus,
+	toggleShowForm,
+	addInstrument
 } from '../../store/actions/index'
 import { Table, Space, Switch, Button, Popconfirm } from 'antd'
 import Animate from 'rc-animate'
@@ -13,7 +14,7 @@ import InstrumentsForm from '../../components/InstrumentsForm/InstrumentsForm'
 
 import './Instruments.css'
 
-const Instruments = (props) => {
+const Instruments = props => {
 	const { fetchInstr } = props
 	const formRef = useRef({})
 
@@ -45,15 +46,15 @@ const Instruments = (props) => {
 		{
 			title: 'Action',
 			key: 'action',
-			render: (record) => (
+			render: record => (
 				<Space size='middle'>
 					<Switch
-						checked={record.running}
+						checked={record.available}
 						checkedChildren='On'
 						unCheckedChildren='Off'
 						size='small'
 						loading={props.switchIsLoading}
-						onChange={() => props.toggleRunning(record.key)}
+						onChange={() => props.toggleAvailable(record._id)}
 					/>
 					<Button
 						size='small'
@@ -66,7 +67,7 @@ const Instruments = (props) => {
 						}}>
 						Edit
 					</Button>
-					<Popconfirm title='Sure to delete?' onConfirm={() => props.deleteInstrument(record.key)}>
+					<Popconfirm title='Sure to delete?' onConfirm={() => props.deleteInstrument(record._id)}>
 						<Button size='small' type='link' danger>
 							Delete
 						</Button>
@@ -79,6 +80,7 @@ const Instruments = (props) => {
 	const form = (
 		<InstrumentsForm
 			updateInstrumentsHandler={props.updateInstr}
+			addInstrumentHandler={props.addInstr}
 			formReference={formRef}
 			toggleEditHandler={props.toggleEdit}
 			toggleFormHandler={props.toggleForm}
@@ -98,21 +100,22 @@ const Instruments = (props) => {
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		instrTabData: state.instruments.instrumentsTableData,
 		tableLoad: state.instruments.tableIsLoading,
-		switchIsLoading: state.instruments.runningSwitchIsLoading,
+		switchIsLoading: state.instruments.availableSwitchIsLoading,
 		formVisible: state.instruments.showForm
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
 	return {
 		fetchInstr: () => dispatch(fetchInstruments()),
-		updateInstr: (payload) => dispatch(updateInstruments(payload)),
-		deleteInstrument: (payload) => dispatch(deleteInstrument(payload)),
-		toggleRunning: (payload) => dispatch(toggleRunningStatus(payload)),
+		addInstr: payload => dispatch(addInstrument(payload)),
+		updateInstr: payload => dispatch(updateInstruments(payload)),
+		deleteInstrument: payload => dispatch(deleteInstrument(payload)),
+		toggleAvailable: payload => dispatch(toggleAvailableStatus(payload)),
 		toggleForm: () => dispatch(toggleShowForm())
 	}
 }

@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-local'
 
-export const fetchFailed = (err) => {
+export const fetchFailed = err => {
 	return {
 		type: actionTypes.FETCH_FAILED,
 		error: err
@@ -14,7 +14,8 @@ export const fetchInstrumentsStart = () => {
 	}
 }
 
-export const fetchInstrumentsSuccess = (payload) => {
+//This function is called every time a request to server is successful. Server returns array of table data and whole table gets re-rendered
+export const fetchInstrumentsSuccess = payload => {
 	return {
 		type: actionTypes.FETCH_INSTRUMENTS_TABLE_SUCCESS,
 		data: payload
@@ -22,69 +23,83 @@ export const fetchInstrumentsSuccess = (payload) => {
 }
 
 export const fetchInstruments = () => {
-	return (dispatch) => {
+	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.get('/admin/instruments/get-instruments')
-			.then((res) => {
+			.get('/admin/instruments/')
+			.then(res => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
-			.catch((err) => {
+			.catch(err => {
 				dispatch(fetchFailed(err))
 			})
 	}
 }
 
-export const updateInstruments = (formData) => {
-	return (dispatch) => {
+export const addInstrument = formData => {
+	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.post('/admin/instruments/update-instruments', formData)
-			.then((res) => {
+			.post('/admin/instruments/', formData)
+			.then(res => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
-			.catch((err) => {
+			.catch(err => {
 				dispatch(fetchFailed(err))
 			})
 	}
 }
 
-export const deleteInstrument = (key) => {
-	return (dispatch) => {
+export const updateInstruments = formData => {
+	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.post('/admin/instruments/delete-instrument', { id: key })
-			.then((res) => {
+			.put('/admin/instruments/', formData)
+			.then(res => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
-			.catch((err) => {
+			.catch(err => {
 				dispatch(fetchFailed(err))
 			})
 	}
 }
 
-export const toggleRunningSwitchStart = () => {
+export const deleteInstrument = id => {
+	return dispatch => {
+		dispatch(fetchInstrumentsStart())
+		axios
+			.delete(`/admin/instruments/${id}`)
+			.then(res => {
+				dispatch(fetchInstrumentsSuccess(res.data))
+			})
+			.catch(err => {
+				dispatch(fetchFailed(err))
+			})
+	}
+}
+
+export const toggleAvailableSwitchStart = () => {
 	return {
-		type: actionTypes.TOGGLE_RUNNING_SWITCH_START
+		type: actionTypes.TOGGLE_AVAILABLE_SWITCH_START
 	}
 }
 
-export const toggleRunningSwitchSuccess = (payload) => {
+export const toggleAvailableSwitchSuccess = payload => {
 	return {
-		type: actionTypes.TOGGLE_RUNNING_SWITCH_SUCCESS,
+		type: actionTypes.TOGGLE_AVAILABLE_SWITCH_SUCCESS,
 		data: payload
 	}
 }
 
-export const toggleRunningStatus = (key) => {
-	return (dispatch) => {
-		dispatch(toggleRunningSwitchStart())
+export const toggleAvailableStatus = id => {
+	return dispatch => {
+		dispatch(toggleAvailableSwitchStart())
 		axios
-			.post('/admin/instruments/toggle-running', { id: key })
-			.then((res) => {
-				dispatch(toggleRunningSwitchSuccess(res.data))
+			.patch(`/admin/instruments/toggle-available/${id}`)
+			.then(res => {
+				dispatch(toggleAvailableSwitchSuccess(res.data))
 			})
-			.catch((err) => {
+			.catch(err => {
 				dispatch(fetchFailed(err))
 			})
 	}
