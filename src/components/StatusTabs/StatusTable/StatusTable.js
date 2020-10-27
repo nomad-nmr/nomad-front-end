@@ -3,7 +3,7 @@ import { Table, Tag } from 'antd'
 import TweenOne from 'rc-tween-one'
 import classes from './StatusTable.module.css'
 
-const statusTable = (props) => {
+const statusTable = props => {
 	const columns = [
 		{
 			title: 'Holder',
@@ -56,7 +56,7 @@ const statusTable = (props) => {
 			dataIndex: 'Status',
 			key: 'status',
 			align: 'center',
-			render: (text) => {
+			render: text => {
 				let tagColor = ''
 				let animationObj = null
 				switch (text) {
@@ -96,7 +96,7 @@ const statusTable = (props) => {
 			loading={props.loading}
 			size='small'
 			pagination={false}
-			rowClassName={(record) => record.highlight || classes.RowHighlight}
+			rowClassName={record => record.highlight || classes.RowHighlight}
 		/>
 	)
 }

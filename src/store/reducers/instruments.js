@@ -1,5 +1,6 @@
 import * as actionTypes from '../actions/actionTypes'
 import { Modal } from 'antd'
+import addKey from '../../utils/addKey'
 
 const initialState = {
 	instrumentsTableData: [],
@@ -19,7 +20,7 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.FETCH_INSTRUMENTS_TABLE_SUCCESS:
 			return {
 				...state,
-				instrumentsTableData: action.data,
+				instrumentsTableData: addKey(action.data),
 				tableIsLoading: false
 			}
 

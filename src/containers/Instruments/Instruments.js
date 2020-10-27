@@ -8,9 +8,11 @@ import {
 	toggleShowForm,
 	addInstrument
 } from '../../store/actions/index'
-import { Table, Space, Switch, Button, Popconfirm } from 'antd'
+import { Table, Space, Switch, Button, Popconfirm, Tooltip, message } from 'antd'
 import Animate from 'rc-animate'
 import InstrumentsForm from '../../components/InstrumentsForm/InstrumentsForm'
+import { CopyTwoTone } from '@ant-design/icons'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import './Instruments.css'
 
@@ -95,6 +97,21 @@ const Instruments = props => {
 				dataSource={props.instrTabData}
 				pagination={false}
 				loading={props.tableLoad}
+				expandable={{
+					expandedRowRender: record => (
+						<p style={{ margin: 0 }}>
+							<span style={{ fontWeight: 'bold', marginRight: '5px' }}>Instrument ID:</span>
+							{record._id}
+							<Tooltip title='Copy to Clipboard'>
+								<CopyToClipboard
+									text={record._id}
+									onCopy={() => message.success('Instrument ID copied to clipboard')}>
+									<CopyTwoTone style={{ marginLeft: '5px', fontSize: '15px' }} />
+								</CopyToClipboard>
+							</Tooltip>
+						</p>
+					)
+				}}
 			/>
 		</div>
 	)
