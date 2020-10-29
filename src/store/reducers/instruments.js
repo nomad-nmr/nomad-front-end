@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/actionTypes'
 import { Modal } from 'antd'
-import addKey from '../../utils/addKey'
+import { addKey } from '../../utils/tableUtils'
 
 const initialState = {
 	instrumentsTableData: [],

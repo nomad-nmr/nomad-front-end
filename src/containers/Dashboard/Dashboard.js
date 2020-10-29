@@ -7,19 +7,19 @@ import InfoCards from '../../components/InfoCards/InfoCards'
 import StatusTabs from '../../components/StatusTabs/StatusTabs'
 import './Dashboard.css'
 
-const Dashboard = (props) => {
-	const [activeTab, setActiveTab] = useState('1')
+const Dashboard = props => {
+	const [activeTab, setActiveTab] = useState('0')
 	const { fetchButtons, fetchStatusSum, fetchStatusTable } = props
 
 	useEffect(() => {
 		fetchButtons()
 		fetchStatusSum()
-		fetchStatusTable(1)
-	}, [fetchStatusSum, fetchStatusTable, fetchButtons])
+		fetchStatusTable('0')
+	}, [fetchButtons, fetchStatusSum, fetchStatusTable])
 
-	const tabChangeHandler = (tabId) => {
-		fetchStatusTable(tabId)
-		setActiveTab(tabId)
+	const tabChangeHandler = key => {
+		fetchStatusTable(key)
+		setActiveTab(key)
 	}
 
 	return (
@@ -29,18 +29,20 @@ const Dashboard = (props) => {
 					<InfoCards cardsData={props.statusSummary} clicked={tabChangeHandler} />
 				) : null}
 			</Animate>
-			<StatusTabs
-				activeTab={activeTab}
-				summaryData={props.statusSummary}
-				tableData={props.statusTable}
-				clicked={tabChangeHandler}
-				tableLoading={props.tableLoading}
-			/>
+			<div style={{ marginBottom: '120px' }}>
+				<StatusTabs
+					activeTab={activeTab}
+					summaryData={props.statusSummary}
+					tableData={props.statusTable}
+					clicked={tabChangeHandler}
+					tableLoading={props.tableLoading}
+				/>
+			</div>
 		</Fragment>
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		showCards: state.dash.showCards,
 		statusSummary: state.dash.statusSummaryData,
@@ -49,11 +51,11 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
 	return {
 		fetchButtons: () => dispatch(fetchStatusButtons()),
 		fetchStatusSum: () => dispatch(fetchStatusSummary()),
-		fetchStatusTable: (id) => dispatch(fetchStatusTable(id))
+		fetchStatusTable: key => dispatch(fetchStatusTable(key))
 	}
 }
 

@@ -6,14 +6,13 @@ import classes from './StatusTabs.module.css'
 
 const { TabPane } = Tabs
 
-const statusTabs = (props) => {
-	const TabsArr = props.summaryData.map((tab) => {
-		const fontColor = tab.automationStatus === 'Running' ? '#52c41a' : '#f5222d'
-
+const statusTabs = props => {
+	const TabsArr = props.summaryData.map(tab => {
+		const fontColor = tab.available ? '#52c41a' : '#f5222d'
 		return (
 			<TabPane
 				tab={<div style={{ fontSize: '1.2rem', color: fontColor, padding: '0px 5px' }}>{tab.name}</div>}
-				key={tab.id.toString()}>
+				key={tab.key}>
 				<StatusBanner data={tab} />
 				<div className={classes.StatusTable}>
 					<StatusTable data={props.tableData} loading={props.tableLoading} />
@@ -28,7 +27,7 @@ const statusTabs = (props) => {
 			tabBarGutter={15}
 			activeKey={props.activeTab}
 			animated={false}
-			onChange={(key) => props.clicked(key)}
+			onChange={key => props.clicked(key)}
 			centered>
 			{TabsArr}
 		</Tabs>

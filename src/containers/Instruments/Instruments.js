@@ -46,18 +46,24 @@ const Instruments = props => {
 			key: 'capacity'
 		},
 		{
+			title: 'Available',
+			key: 'available',
+			render: record => (
+				<Switch
+					checked={record.available}
+					checkedChildren='On'
+					unCheckedChildren='Off'
+					size='small'
+					loading={props.switchIsLoading}
+					onChange={() => props.toggleAvailable(record._id)}
+				/>
+			)
+		},
+		{
 			title: 'Action',
 			key: 'action',
 			render: record => (
 				<Space size='middle'>
-					<Switch
-						checked={record.available}
-						checkedChildren='On'
-						unCheckedChildren='Off'
-						size='small'
-						loading={props.switchIsLoading}
-						onChange={() => props.toggleAvailable(record._id)}
-					/>
 					<Button
 						size='small'
 						type='link'
