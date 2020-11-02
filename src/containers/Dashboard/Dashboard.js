@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { fetchStatusButtons, fetchStatusSummary, fetchStatusTable } from '../../store/actions'
+import { fetchStatusSummary, fetchStatusTable } from '../../store/actions'
 import Animate from 'rc-animate'
 
 import InfoCards from '../../components/InfoCards/InfoCards'
@@ -12,7 +12,6 @@ const Dashboard = props => {
 	const { fetchButtons, fetchStatusSum, fetchStatusTable } = props
 
 	useEffect(() => {
-		fetchButtons()
 		fetchStatusSum()
 		fetchStatusTable('0')
 	}, [fetchButtons, fetchStatusSum, fetchStatusTable])
@@ -53,7 +52,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetchButtons: () => dispatch(fetchStatusButtons()),
 		fetchStatusSum: () => dispatch(fetchStatusSummary()),
 		fetchStatusTable: key => dispatch(fetchStatusTable(key))
 	}

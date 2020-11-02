@@ -25,12 +25,6 @@ const reducer = (state = initialState, action) => {
 				showCards: newShowCards
 			}
 
-		case actionTypes.FETCH_STATUS_BUTTONS_SUCCESS:
-			return {
-				...state,
-				statusButtonsData: action.data
-			}
-
 		case actionTypes.FETCH_FAILED:
 			Modal.error({
 				title: 'Error message',
@@ -49,29 +43,17 @@ const reducer = (state = initialState, action) => {
 				drawerStatus: newDrawerStatus
 			}
 
-		// case actionTypes.FETCH_DASH_DRAWER_SUCCESS:
-		// 	const tableData = action.data ? action.data : []
-		// 	const keysArr = [
-		// 		'Holder',
-		// 		'Status',
-		// 		'Name',
-		// 		'ExpNo',
-		// 		'Experiment',
-		// 		'Group',
-		// 		'Time',
-		// 		'Title',
-		// 		'Instrument',
-		// 		'Description'
-		// 	]
-		// 	const updatedDrawerStatus = {
-		// 		...state.drawerStatus,
-		// 		dataLoading: false,
-		// 		tableData: drawerDataHandler(tableData, keysArr, 'drawer')
-		// 	}
-		// 	return {
-		// 		...state,
-		// 		drawerStatus: updatedDrawerStatus
-		// 	}
+		case actionTypes.FETCH_DASH_DRAWER_SUCCESS:
+			const tableData = action.data ? action.data : []
+			const updatedDrawerStatus = {
+				...state.drawerStatus,
+				dataLoading: false,
+				tableData: addKey(tableData)
+			}
+			return {
+				...state,
+				drawerStatus: updatedDrawerStatus
+			}
 
 		case actionTypes.CLOSE_DASH_DRAWER:
 			const newStatus = {
@@ -85,9 +67,26 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.FETCH_STATUS_SUMMARY_SUCCESS:
+			const statusButtonsObj = action.data.reduce(
+				(obj, i) => {
+					const { running = false, errorCount = 0, pendingCount = 0 } = i.status.summary
+					if (running) {
+						obj.running++
+					}
+					obj.errors += errorCount
+					obj.pending += pendingCount
+					return obj
+				},
+				{
+					running: 0,
+					errors: 0,
+					pending: 0
+				}
+			)
 			return {
 				...state,
-				statusSummaryData: addKey(action.data)
+				statusSummaryData: addKey(action.data),
+				statusButtonsData: Object.entries(statusButtonsObj)
 			}
 
 		case actionTypes.FETCH_STATUS_TABLE_START:

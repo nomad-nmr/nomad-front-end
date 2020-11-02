@@ -11,6 +11,10 @@
 	width: 100%;
 }
 
+.Text {
+	margin-right: 30px;
+}
+
 .Credits img {
 	height: 70px;
 	padding: 15px;

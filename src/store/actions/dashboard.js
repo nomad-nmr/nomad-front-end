@@ -14,26 +14,6 @@ export const fetchFailed = err => {
 	}
 }
 
-export const fetchStatusButtonsSuccess = payload => {
-	return {
-		type: actionTypes.FETCH_STATUS_BUTTONS_SUCCESS,
-		data: payload
-	}
-}
-
-export const fetchStatusButtons = () => {
-	return dispatch => {
-		axios
-			.get('https://nmr-control-dash.firebaseio.com/buttons.json')
-			.then(res => {
-				dispatch(fetchStatusButtonsSuccess(res.data))
-			})
-			.catch(err => {
-				dispatch(fetchFailed(err))
-			})
-	}
-}
-
 export const openDashDrawerStart = payload => ({
 	type: actionTypes.OPEN_DASH_DRAWER_START,
 	id: payload
@@ -48,7 +28,7 @@ export const openDashDrawer = id => {
 	return dispatch => {
 		dispatch(openDashDrawerStart(id))
 		axios
-			.get('https://nmr-control-dash.firebaseio.com/drawer-tables/' + id + '.json')
+			.get('http://localhost:3003/dash/drawer-table/' + id)
 			.then(res => {
 				dispatch(openDashDrawerSuccess(res.data))
 			})

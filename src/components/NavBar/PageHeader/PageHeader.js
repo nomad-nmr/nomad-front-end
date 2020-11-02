@@ -36,7 +36,7 @@ const PageHeaderEl = props => {
 							onChange={toggleCards}
 						/>
 					</div>
-					{/* <StatusButtons data={statusButtonsData} click={statusButtonClicked} /> */}
+					<StatusButtons data={statusButtonsData} click={statusButtonClicked} />
 				</div>
 			)
 			break

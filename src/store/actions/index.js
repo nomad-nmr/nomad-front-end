@@ -2,7 +2,6 @@ export { openAuthModal, closeAuthModal, signInHandler, signOutHandler } from './
 
 export {
 	toggleCards,
-	fetchStatusButtons,
 	openDashDrawer,
 	closeDashDrawer,
 	fetchStatusSummary,
