@@ -2,7 +2,6 @@ export { openAuthModal, closeAuthModal, signInHandler, signOutHandler } from './
 
 export {
 	toggleCards,
-	fetchStatusButtons,
 	openDashDrawer,
 	closeDashDrawer,
 	fetchStatusSummary,
@@ -11,8 +10,9 @@ export {
 
 export {
 	fetchInstruments,
+	addInstrument,
 	updateInstruments,
 	deleteInstrument,
-	toggleRunningStatus,
+	toggleAvailableStatus,
 	toggleShowForm
 } from './instruments'

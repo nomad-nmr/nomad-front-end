@@ -13,7 +13,7 @@ import groupIcon from '../../../assets/group.svg'
 import magnetIcon from '../../../assets/magnet.svg'
 import experimentIcon from '../../../assets/lab.svg'
 
-const PageHeaderEl = (props) => {
+const PageHeaderEl = props => {
 	const { toggleCards, cardSwitchOn, statusButtonsData, statusButtonClicked } = props
 
 	let headerTitle = ''
@@ -84,7 +84,7 @@ const PageHeaderEl = (props) => {
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		cardSwitchOn: state.dash.showCards,
 		statusButtonsData: state.dash.statusButtonsData,
@@ -92,10 +92,10 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
 	return {
 		toggleCards: () => dispatch(toggleCards()),
-		statusButtonClicked: (id) => dispatch(openDashDrawer(id)),
+		statusButtonClicked: id => dispatch(openDashDrawer(id)),
 		toggleForm: () => dispatch(toggleShowForm())
 	}
 }

@@ -1,10 +1,11 @@
 import * as actionTypes from '../actions/actionTypes'
 import { Modal } from 'antd'
+import { addKey } from '../../utils/tableUtils'
 
 const initialState = {
 	instrumentsTableData: [],
 	tableIsLoading: false,
-	runningSwitchIsLoading: false,
+	availableSwitchIsLoading: false,
 	showForm: false
 }
 
@@ -19,21 +20,28 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.FETCH_INSTRUMENTS_TABLE_SUCCESS:
 			return {
 				...state,
-				instrumentsTableData: action.data,
+				instrumentsTableData: addKey(action.data),
 				tableIsLoading: false
 			}
 
-		case actionTypes.TOGGLE_RUNNING_SWITCH_START:
+		case actionTypes.TOGGLE_AVAILABLE_SWITCH_START:
 			return {
 				...state,
-				runningSwitchIsLoading: true
+				availableSwitchIsLoading: true
 			}
 
-		case actionTypes.TOGGLE_RUNNING_SWITCH_SUCCESS:
+		case actionTypes.TOGGLE_AVAILABLE_SWITCH_SUCCESS:
+			const newTableData = state.instrumentsTableData.map(i => {
+				if (i._id.toString() === action.data._id.toString()) {
+					return { ...i, available: action.data.available }
+				} else {
+					return i
+				}
+			})
 			return {
 				...state,
-				instrumentsTableData: action.data,
-				runningSwitchIsLoading: false
+				instrumentsTableData: newTableData,
+				availableSwitchIsLoading: false
 			}
 
 		case actionTypes.FETCH_FAILED:
