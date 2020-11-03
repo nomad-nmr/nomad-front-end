@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes'
-import axios from 'axios'
+import axios from '../../axios-local'
 
 export const toggleCards = () => {
 	return {
@@ -28,7 +28,7 @@ export const openDashDrawer = id => {
 	return dispatch => {
 		dispatch(openDashDrawerStart(id))
 		axios
-			.get('http://localhost:3003/dash/drawer-table/' + id)
+			.get('/dash/drawer-table/' + id)
 			.then(res => {
 				dispatch(openDashDrawerSuccess(res.data))
 			})
@@ -50,7 +50,7 @@ export const fetchStatusSummarySuccess = payload => ({
 export const fetchStatusSummary = () => {
 	return dispatch => {
 		axios
-			.get('http://localhost:3003/dash/status-summary')
+			.get('/dash/status-summary')
 			.then(res => dispatch(fetchStatusSummarySuccess(res.data)))
 			.catch(err => dispatch(fetchFailed(err + ' [fetchStatusSummary failed]')))
 	}
@@ -69,7 +69,7 @@ export const fetchStatusTable = tab => {
 	return dispatch => {
 		dispatch(fetchStatusTableStart())
 		axios
-			.get('http://localhost:3003/dash/status-table/' + tab)
+			.get('/dash/status-table/' + tab)
 			.then(res => dispatch(fetchStatusTableSuccess(res.data)))
 			.catch(err => dispatch(fetchFailed(err + '  [fetchStatusTable failed')))
 	}
