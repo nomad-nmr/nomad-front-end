@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-	baseURL: 'http://127.0.0.1:3000/'
+	baseURL: 'http://chpc-tl12-3.st-andrews.ac.uk/api'
 })
 
 export default instance
