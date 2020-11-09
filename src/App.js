@@ -20,18 +20,12 @@ import StatusDrawer from './components/StatusDrawer/StatusDrawer'
 
 const { Header, Sider, Content, Footer } = Layout
 
-const App = (props) => {
+const App = props => {
 	const [adminMenuCollapsed, setAdminMenuCollapsed] = useState(true)
 
 	const toggleAdminMenu = () => {
 		setAdminMenuCollapsed(!adminMenuCollapsed)
 	}
-
-	// const closeDrawerHandler = () => {
-	//   const newDrawerStatus = { ...this.state.drawerStatus }
-	//   newDrawerStatus.visible = false
-	//   newDrawerStatus.tableData = []
-	// }
 
 	const {
 		user,
@@ -115,7 +109,7 @@ const App = (props) => {
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		user: state.auth.user,
 		adminAccess: state.auth.adminAccess,
@@ -124,10 +118,10 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
 	return {
 		closeModal: () => dispatch(closeAuthModal()),
-		onSignIn: (form) => dispatch(signInHandler(form)),
+		onSignIn: form => dispatch(signInHandler(form)),
 		onSignOut: () => dispatch(signOutHandler()),
 		onCloseDrawer: () => dispatch(closeDashDrawer())
 	}
