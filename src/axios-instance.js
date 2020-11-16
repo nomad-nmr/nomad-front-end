@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 const instance = axios.create({
-	baseURL: 'http://chpc-tl12-3.st-andrews.ac.uk/api'
+	baseURL: process.env.REACT_APP_API_URL
 })
+
+console.log(process.env.REACT_APP_API_URL)
 
 export default instance

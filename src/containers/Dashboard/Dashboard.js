@@ -19,6 +19,7 @@ const Dashboard = props => {
 	const tabChangeHandler = key => {
 		fetchStatusTable(key)
 		setActiveTab(key)
+		fetchStatusSum()
 	}
 
 	return (
