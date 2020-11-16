@@ -1,9 +1,9 @@
 .Credits {
 	text-align: center;
-	background-color: #000;
+	background-color: #001529;
 	color: #fafafa;
 	margin: 0px;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	font-weight: 600;
 	position: fixed;
 	bottom: 0;
@@ -16,6 +16,6 @@
 }
 
 .Credits img {
-	height: 70px;
+	height: 50px;
 	padding: 15px;
 }
