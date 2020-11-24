@@ -17,12 +17,12 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import './Instruments.css'
 
 const Instruments = props => {
-	const { fetchInstr } = props
+	const { fetchInstr, authToken } = props
 	const formRef = useRef({})
 
 	useEffect(() => {
-		fetchInstr()
-	}, [fetchInstr])
+		fetchInstr(authToken)
+	}, [fetchInstr, authToken])
 
 	const columns = [
 		{
@@ -55,7 +55,7 @@ const Instruments = props => {
 					unCheckedChildren='Off'
 					size='small'
 					loading={props.switchIsLoading}
-					onChange={() => props.toggleAvailable(record._id)}
+					onChange={() => props.toggleAvailable(record._id, props.authToken)}
 				/>
 			)
 		},
@@ -75,7 +75,9 @@ const Instruments = props => {
 						}}>
 						Edit
 					</Button>
-					<Popconfirm title='Sure to delete?' onConfirm={() => props.deleteInstrument(record._id)}>
+					<Popconfirm
+						title='Sure to delete?'
+						onConfirm={() => props.deleteInstrument(record._id, props.authToken)}>
 						<Button size='small' type='link' danger>
 							Delete
 						</Button>
@@ -128,17 +130,18 @@ const mapStateToProps = state => {
 		instrTabData: state.instruments.instrumentsTableData,
 		tableLoad: state.instruments.tableIsLoading,
 		switchIsLoading: state.instruments.availableSwitchIsLoading,
-		formVisible: state.instruments.showForm
+		formVisible: state.instruments.showForm,
+		authToken: state.auth.token
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetchInstr: () => dispatch(fetchInstruments()),
-		addInstr: payload => dispatch(addInstrument(payload)),
-		updateInstr: payload => dispatch(updateInstruments(payload)),
-		deleteInstrument: payload => dispatch(deleteInstrument(payload)),
-		toggleAvailable: payload => dispatch(toggleAvailableStatus(payload)),
+		fetchInstr: token => dispatch(fetchInstruments(token)),
+		addInstr: (payload, token) => dispatch(addInstrument(payload, token)),
+		updateInstr: (payload, token) => dispatch(updateInstruments(payload, token)),
+		deleteInstrument: (payload, token) => dispatch(deleteInstrument(payload, token)),
+		toggleAvailable: (payload, token) => dispatch(toggleAvailableStatus(payload, token)),
 		toggleForm: () => dispatch(toggleShowForm())
 	}
 }

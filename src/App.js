@@ -1,7 +1,13 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useEffect } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { closeAuthModal, signInHandler, signOutHandler, closeDashDrawer } from './store/actions'
+import {
+	closeAuthModal,
+	signInHandler,
+	signOutHandler,
+	closeDashDrawer,
+	authCheckState
+} from './store/actions'
 
 import { Layout, Spin, BackTop, Affix } from 'antd'
 import classes from './App.module.css'
@@ -35,8 +41,13 @@ const App = props => {
 		onSignIn,
 		onSignOut,
 		onCloseDrawer,
-		drawerStatus
+		drawerStatus,
+		onTryAutoSignIn
 	} = props
+
+	useEffect(() => {
+		onTryAutoSignIn()
+	}, [onTryAutoSignIn])
 
 	// Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
 	const Users = React.lazy(() => import('./containers/Users/Users'))
@@ -47,11 +58,21 @@ const App = props => {
 	if (authModalVisible) {
 		if (user) {
 			authModal = (
-				<LogoutModal visible={authModalVisible} cancelClicked={closeModal} okClicked={onSignOut} />
+				<LogoutModal
+					visible={authModalVisible}
+					cancelClicked={closeModal}
+					okClicked={onSignOut}
+					token={props.authToken}
+				/>
 			)
 		} else {
 			authModal = (
-				<LoginModal visible={authModalVisible} cancelClicked={closeModal} signInClicked={onSignIn} />
+				<LoginModal
+					visible={authModalVisible}
+					cancelClicked={closeModal}
+					signInClicked={onSignIn}
+					loading={props.authSpin}
+				/>
 			)
 		}
 	}
@@ -112,18 +133,21 @@ const App = props => {
 const mapStateToProps = state => {
 	return {
 		user: state.auth.user,
+		authToken: state.auth.token,
 		adminAccess: state.auth.adminAccess,
 		authModalVisible: state.auth.authModalVisible,
-		drawerStatus: state.dash.drawerStatus
+		drawerStatus: state.dash.drawerStatus,
+		authSpin: state.auth.loading
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
 		closeModal: () => dispatch(closeAuthModal()),
-		onSignIn: form => dispatch(signInHandler(form)),
-		onSignOut: () => dispatch(signOutHandler()),
-		onCloseDrawer: () => dispatch(closeDashDrawer())
+		onSignIn: formData => dispatch(signInHandler(formData)),
+		onSignOut: token => dispatch(signOutHandler(token)),
+		onCloseDrawer: () => dispatch(closeDashDrawer()),
+		onTryAutoSignIn: () => dispatch(authCheckState())
 	}
 }
 

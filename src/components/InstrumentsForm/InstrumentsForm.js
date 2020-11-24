@@ -31,7 +31,7 @@ const InstrumentsForm = props => {
 		}
 		// Checking whether to update or add
 		if (values._id) {
-			props.updateInstrumentsHandler(values)
+			props.updateInstrumentsHandler(values, props.authToken)
 		} else {
 			// Validation of unique name
 			const nameFound = props.instrTabData.find(
@@ -40,7 +40,7 @@ const InstrumentsForm = props => {
 			if (!values.key && nameFound) {
 				return message.error(`Instrument name ${values.name} has been used. Please, use unique name!`)
 			}
-			props.addInstrumentHandler(values)
+			props.addInstrumentHandler(values, props.authToken)
 		}
 
 		form.resetFields()
@@ -101,7 +101,8 @@ const InstrumentsForm = props => {
 
 const mapStateToProps = state => {
 	return {
-		instrTabData: state.instruments.instrumentsTableData
+		instrTabData: state.instruments.instrumentsTableData,
+		authToken: state.auth.token
 	}
 }
 
