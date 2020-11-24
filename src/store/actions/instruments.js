@@ -22,11 +22,11 @@ export const fetchInstrumentsSuccess = payload => {
 	}
 }
 
-export const fetchInstruments = () => {
+export const fetchInstruments = token => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.get('/admin/instruments/')
+			.get('/admin/instruments/?auth=' + token)
 			.then(res => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
@@ -36,11 +36,11 @@ export const fetchInstruments = () => {
 	}
 }
 
-export const addInstrument = formData => {
+export const addInstrument = (formData, token) => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.post('/admin/instruments/', formData)
+			.post('/admin/instruments/?auth=' + token, formData)
 			.then(res => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
@@ -50,11 +50,11 @@ export const addInstrument = formData => {
 	}
 }
 
-export const updateInstruments = formData => {
+export const updateInstruments = (formData, token) => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.put('/admin/instruments/', formData)
+			.put('/admin/instruments/?auth=' + token, formData)
 			.then(res => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
@@ -64,11 +64,11 @@ export const updateInstruments = formData => {
 	}
 }
 
-export const deleteInstrument = id => {
+export const deleteInstrument = (id, token) => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.delete(`/admin/instruments/${id}`)
+			.delete(`/admin/instruments/${id}/?auth=` + token)
 			.then(res => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
@@ -91,11 +91,11 @@ export const toggleAvailableSwitchSuccess = payload => {
 	}
 }
 
-export const toggleAvailableStatus = id => {
+export const toggleAvailableStatus = (id, token) => {
 	return dispatch => {
 		dispatch(toggleAvailableSwitchStart())
 		axios
-			.patch(`/admin/instruments/toggle-available/${id}`)
+			.patch(`/admin/instruments/toggle-available/${id}/?auth=` + token)
 			.then(res => {
 				dispatch(toggleAvailableSwitchSuccess(res.data))
 			})
