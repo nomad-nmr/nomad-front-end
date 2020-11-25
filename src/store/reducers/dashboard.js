@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/actionTypes'
-import { Modal } from 'antd'
 import { addKey, highlightRows } from '../../utils/tableUtils'
+import { Modal } from 'antd'
 
 const initialState = {
 	showCards: true,
@@ -28,7 +28,7 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.FETCH_FAILED:
 			Modal.error({
 				title: 'Error message',
-				content: `${action.error}`
+				content: action.error.toString()
 			})
 			return state
 
@@ -67,6 +67,7 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.FETCH_STATUS_SUMMARY_SUCCESS:
+			//Calculation of count of entries with running, pending and error status
 			const statusButtonsObj = action.data.reduce(
 				(obj, i) => {
 					const { running = false, errorCount = 0, pendingCount = 0 } = i.status.summary

@@ -1,12 +1,7 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
-
-export const fetchFailed = err => {
-	return {
-		type: actionTypes.FETCH_FAILED,
-		error: err
-	}
-}
+//Import of generic function that calls error modal if fetching data fails
+import { fetchFailed } from './dashboard'
 
 export const fetchInstrumentsStart = () => {
 	return {

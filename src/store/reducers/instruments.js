@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/actionTypes'
-import { Modal } from 'antd'
 import { addKey } from '../../utils/tableUtils'
 
 const initialState = {
@@ -43,13 +42,6 @@ const reducer = (state = initialState, action) => {
 				instrumentsTableData: newTableData,
 				availableSwitchIsLoading: false
 			}
-
-		case actionTypes.FETCH_FAILED:
-			Modal.error({
-				title: 'Error message',
-				content: `${action.error}`
-			})
-			return state
 
 		case actionTypes.TOGGLE_INSTRUMENT_FORM:
 			return {
