@@ -2,8 +2,8 @@ import * as actionTypes from '../actions/actionTypes'
 import { message } from 'antd'
 
 const initialState = {
-	user: null,
-	adminAccess: false,
+	username: null,
+	accessLevel: null,
 	token: null,
 	authModalVisible: false,
 	loading: false
@@ -32,27 +32,36 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.SIGN_IN_SUCCESS:
 			return {
 				...state,
-				user: action.payload.username,
+				username: action.payload.username,
 				token: action.payload.token,
-				adminAccess: action.payload.username === 'admin',
+				accessLevel: action.payload.accessLevel,
 				authModalVisible: false,
 				loading: false
 			}
 
 		case actionTypes.SIGN_IN_FAILED:
-			message.error({ content: 'Signing in failed', style: { color: 'red' } })
+			message.error({ content: 'Signing in failed. Wrong username or password.', style: { color: 'red' } })
 			return {
 				...state,
 				loading: false
 			}
 
+		case actionTypes.SIGN_OUT_FAILED:
+			return {
+				...state,
+				username: null,
+				token: null,
+				accessLevel: false,
+				authModalVisible: false
+			}
+
 		case actionTypes.SIGN_OUT_SUCCESS:
 			return {
 				...state,
-				user: null,
+				username: null,
 				userId: null,
 				token: null,
-				adminAccess: false,
+				accessLevel: false,
 				authModalVisible: false
 			}
 

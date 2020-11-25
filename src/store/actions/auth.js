@@ -38,6 +38,13 @@ export const signOutSuccess = () => {
 	}
 }
 
+export const signOutFail = () => {
+	localStorage.removeItem('user')
+	return {
+		type: actionTypes.SIGN_OUT_FAILED
+	}
+}
+
 export const signOutHandler = token => {
 	return dispatch => {
 		axios
@@ -48,6 +55,7 @@ export const signOutHandler = token => {
 			})
 			.catch(error => {
 				console.log(error)
+				dispatch(signOutFail())
 			})
 	}
 }
@@ -71,6 +79,7 @@ export const signInHandler = formData => {
 				const expirationDate = new Date(new Date().getTime() + resp.data.expiresIn * 1000)
 				const user = {
 					username: resp.data.username,
+					accessLevel: resp.data.accessLevel,
 					token: resp.data.token,
 					expirationDate
 				}
@@ -89,12 +98,12 @@ export const authCheckState = () => {
 	return dispatch => {
 		const user = JSON.parse(localStorage.getItem('user'))
 		if (user) {
-			const { username, token, expirationDate } = user
+			const { username, token, accessLevel, expirationDate } = user
 			const expDateTime = Date.parse(expirationDate)
 			if (expDateTime <= new Date().getTime()) {
 				dispatch(signOutHandler())
 			} else {
-				dispatch(signInSuccess({ token, username }))
+				dispatch(signInSuccess({ token, username, accessLevel }))
 				const expiresIn = (expDateTime - new Date().getTime()) / 1000
 				dispatch(checkAuthTimeout(expiresIn))
 			}

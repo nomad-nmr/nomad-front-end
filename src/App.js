@@ -34,8 +34,8 @@ const App = props => {
 	}
 
 	const {
-		user,
-		adminAccess,
+		username,
+		accessLevel,
 		authModalVisible,
 		closeModal,
 		onSignIn,
@@ -56,7 +56,7 @@ const App = props => {
 	//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
 	let authModal = null
 	if (authModalVisible) {
-		if (user) {
+		if (username) {
 			authModal = (
 				<LogoutModal
 					visible={authModalVisible}
@@ -79,7 +79,7 @@ const App = props => {
 
 	return (
 		<Layout>
-			{adminAccess ? (
+			{accessLevel === 'admin' ? (
 				<Affix className={classes.AdminMenu}>
 					<Sider trigger={null} className={classes.Sider} collapsible collapsed={adminMenuCollapsed}>
 						<AdminMenu collapsed={adminMenuCollapsed} />
@@ -95,23 +95,27 @@ const App = props => {
 				</Affix>
 				<Content className={classes.Content}>
 					<Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
-						{/* TODO: the line below redirects to homepage every time user logs out but also redirects 404 to homepage */}
-						{!user && <Redirect to='/dashboard' />}
 						<Switch>
 							<Route
 								path='/dashboard/users'
 								render={() => {
-									return adminAccess ? <Users /> : <Error403 />
+									return accessLevel === 'admin' ? <Users /> : <Error403 />
 								}}
 							/>
-							<Route path='/dashboard/groups' component={adminAccess ? Groups : Error403} />
+							<Route
+								path='/dashboard/groups'
+								component={accessLevel === 'admin' ? Groups : Error403}
+							/>
 							<Route
 								path='/dashboard/instruments'
 								render={() => {
-									return adminAccess ? <Instruments /> : <Error403 />
+									return accessLevel === 'admin' ? <Instruments /> : <Error403 />
 								}}
 							/>
-							<Route path='/dashboard/experiments' component={adminAccess ? Experiments : Error403} />
+							<Route
+								path='/dashboard/experiments'
+								component={accessLevel === 'admin' ? Experiments : Error403}
+							/>
 							<Route exact path='/dashboard' render={() => <Dashboard />} />
 							<Redirect from='/dashboard/dashboard' to='/dashboard' />
 							<Redirect exact from='/' to='/dashboard' />
@@ -132,9 +136,9 @@ const App = props => {
 
 const mapStateToProps = state => {
 	return {
-		user: state.auth.user,
+		username: state.auth.username,
 		authToken: state.auth.token,
-		adminAccess: state.auth.adminAccess,
+		accessLevel: state.auth.accessLevel,
 		authModalVisible: state.auth.authModalVisible,
 		drawerStatus: state.dash.drawerStatus,
 		authSpin: state.auth.loading

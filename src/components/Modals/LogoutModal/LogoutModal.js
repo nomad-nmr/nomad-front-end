@@ -1,10 +1,13 @@
 import React from 'react'
 import { Modal, Typography } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { useHistory } from 'react-router-dom'
 
 const { Text } = Typography
-const logoutModal = props => {
+
+const LogoutModal = props => {
 	const { visible, token, okClicked, cancelClicked } = props
+	const history = useHistory()
 	return (
 		<Modal
 			width='300px'
@@ -15,11 +18,14 @@ const logoutModal = props => {
 			}
 			okText='Sign out'
 			visible={visible}
-			onOk={() => okClicked(token)}
+			onOk={() => {
+				history.push('/')
+				okClicked(token)
+			}}
 			onCancel={cancelClicked}>
 			<Text strong>Do you want to sign out?</Text>
 		</Modal>
 	)
 }
 
-export default logoutModal
+export default LogoutModal
