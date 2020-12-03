@@ -19,6 +19,7 @@ import LogoutModal from './components/Modals/LogoutModal/LogoutModal'
 import Dashboard from './containers/Dashboard/Dashboard'
 import Groups from './containers/Groups/Groups'
 import Experiments from './containers/Experiments/Experiments'
+import Error500 from './components/Errors/Error500'
 import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
 import Credits from './components/Credits/Credits'
@@ -117,6 +118,9 @@ const App = props => {
 								component={accessLevel === 'admin' ? Experiments : Error403}
 							/>
 							<Route exact path='/dashboard' render={() => <Dashboard />} />
+							<Route path='/500' component={Error500} />
+							<Route path='/404' component={Error404} />
+							<Route path='/403' component={Error403} />
 							<Redirect from='/dashboard/dashboard' to='/dashboard' />
 							<Redirect exact from='/' to='/dashboard' />
 							<Route component={Error404} />

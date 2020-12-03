@@ -92,7 +92,7 @@ export const signInHandler = formData => {
 				dispatch(signInFailed())
 			})
 	}
-}
+}				
 
 export const authCheckState = () => {
 	return dispatch => {

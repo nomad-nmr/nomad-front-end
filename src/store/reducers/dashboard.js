@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes'
 import { addKey, highlightRows } from '../../utils/tableUtils'
 import { Modal } from 'antd'
 
+
 const initialState = {
 	showCards: true,
 	statusButtonsData: [],

@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, Button, InputNumber, Tooltip, message } from 'antd'
+import { Form, Input, Button, InputNumber, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 
 import classes from './InstrumentsForm.module.css'
@@ -24,27 +24,17 @@ const tailLayout = {
 const InstrumentsForm = props => {
 	const [form] = Form.useForm()
 
+	useEffect(() => {
+		form.resetFields()
+	})
+
 	const onFinish = values => {
-		//Validation of capacity being integer number
-		if (!Number.isInteger(values.capacity)) {
-			return message.error('Capacity has to be integer number')
-		}
 		// Checking whether to update or add
 		if (values._id) {
 			props.updateInstrumentsHandler(values, props.authToken)
 		} else {
-			// Validation of unique name
-			const nameFound = props.instrTabData.find(
-				instr => instr.name.toLowerCase() === values.name.toLowerCase()
-			)
-			if (!values.key && nameFound) {
-				return message.error(`Instrument name ${values.name} has been used. Please, use unique name!`)
-			}
 			props.addInstrumentHandler(values, props.authToken)
 		}
-
-		form.resetFields()
-		props.toggleFormHandler()
 	}
 
 	const onReset = () => {
@@ -73,7 +63,7 @@ const InstrumentsForm = props => {
 					<Input />
 				</Form.Item>
 				<Form.Item label='Capacity' required>
-					<Form.Item name='capacity' noStyle rules={[{ type: 'number', required: true }]}>
+					<Form.Item name='capacity' noStyle rules={[{ type: 'integer', required: true }]}>
 						<InputNumber className={classes.InputNumber} min={0} />
 					</Form.Item>
 					<Tooltip title='Number of holder in sample changer'>
@@ -102,7 +92,8 @@ const InstrumentsForm = props => {
 const mapStateToProps = state => {
 	return {
 		instrTabData: state.instruments.instrumentsTableData,
-		authToken: state.auth.token
+		authToken: state.auth.token,
+		errors: state.instruments.errors
 	}
 }
 

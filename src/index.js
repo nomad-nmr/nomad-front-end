@@ -9,6 +9,7 @@ import thunk from 'redux-thunk'
 import authReducer from './store/reducers/auth'
 import dashReducer from './store/reducers/dashboard'
 import instrumentsReducer from './store/reducers/instruments'
+// import errorHandlerReducer from './store/reducers/errorHandler'
 import './index.css'
 import App from './App'
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
 	auth: authReducer,
 	dash: dashReducer,
 	instruments: instrumentsReducer
+	// errors: errorHandlerReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))

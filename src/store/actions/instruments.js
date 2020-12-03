@@ -17,6 +17,13 @@ export const fetchInstrumentsSuccess = payload => {
 	}
 }
 
+export const addInstrumentFailed = payload => {
+	return {
+		type: actionTypes.ADD_INSTRUMENT_FAILED,
+		data: payload
+	}
+}
+
 export const fetchInstruments = token => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
@@ -40,6 +47,9 @@ export const addInstrument = (formData, token) => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
+				if (err.response) {
+					return dispatch(addInstrumentFailed(err.response.data))
+				}
 				dispatch(fetchFailed(err))
 			})
 	}
@@ -54,6 +64,9 @@ export const updateInstruments = (formData, token) => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
+				if (err.response) {
+					return dispatch(addInstrumentFailed(err.response.data))
+				}
 				dispatch(fetchFailed(err))
 			})
 	}

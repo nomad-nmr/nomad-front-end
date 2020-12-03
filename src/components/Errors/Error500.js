@@ -2,11 +2,11 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { Result, Button } from 'antd'
 
-const error403 = props => (
+const error500 = props => (
 	<Result
-		status='403'
-		title='403'
-		subTitle='Sorry, you are not authorized to access this resource.'
+		status='500'
+		title='500'
+		subTitle='Sorry, something went wrong on the server.'
 		extra={
 			<Button type='primary' onClick={() => props.history.push({ pathname: '/' })}>
 				Back Home
@@ -15,4 +15,4 @@ const error403 = props => (
 	/>
 )
 
-export default withRouter(error403)
+export default withRouter(error500)
