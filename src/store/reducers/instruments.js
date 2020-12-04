@@ -54,7 +54,8 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.TOGGLE_INSTRUMENT_FORM:
 			return {
 				...state,
-				showForm: !state.showForm
+				showForm: !state.showForm,
+				tableIsLoading: false
 			}
 
 		default:

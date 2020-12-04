@@ -1,5 +1,11 @@
 import * as actionTypes from './actionTypes'
 
+const execute400Handler = error => {
+	return {
+		type: actionTypes.HTTP_400_ERROR,
+		error
+	}
+}
 const execute403Handler = () => {
 	return {
 		type: actionTypes.HTTP_403_ERROR
@@ -18,9 +24,10 @@ const execute422Handler = error => {
 	}
 }
 
-const execute500Handler = () => {
+const execute500Handler = props => {
 	return {
-		type: actionTypes.HTTP_500_ERROR
+		type: actionTypes.HTTP_500_ERROR,
+		props: props
 	}
 }
 
@@ -32,10 +39,14 @@ const executeOtherErrorHandler = error => {
 }
 
 const handleHTTPError = error => {
+	console.log(error)
 	if (!error.response) {
-		console.log(error)
+		return executeOtherErrorHandler(error)
 	}
 	switch (error.response.status) {
+		case 400:
+			return execute400Handler(error)
+
 		case 403:
 			return execute403Handler()
 

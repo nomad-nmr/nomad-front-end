@@ -1,5 +1,5 @@
 //ERROR HANDLER
-export const FETCH_FAILED = 'FETCH_FAILED'
+export const HTTP_400_ERROR = 'HTTP_400_ERROR'
 export const HTTP_403_ERROR = 'HTTP_403_ERROR'
 export const HTTP_404_ERROR = 'HTTP_404_ERROR'
 export const HTTP_422_ERROR = 'HTTP_422_ERROR'

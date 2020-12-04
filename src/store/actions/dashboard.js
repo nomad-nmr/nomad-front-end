@@ -3,12 +3,12 @@ import axios from '../../axios-instance'
 import errorHandler from './errorHandler'
 
 //Generic action that calls reducer that opens error modal if data fetching fails
-export const fetchFailed = err => {
-	return {
-		type: actionTypes.FETCH_FAILED,
-		error: err
-	}
-}
+// export const fetchFailed = err => {
+// 	return {
+// 		type: actionTypes.FETCH_FAILED,
+// 		error: err
+// 	}
+// }
 
 export const toggleCards = () => {
 	return {
@@ -35,7 +35,7 @@ export const openDashDrawer = id => {
 				dispatch(openDashDrawerSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err + ' [fetchDrawerData failed]'))
+				dispatch(errorHandler(err))
 			})
 	}
 }

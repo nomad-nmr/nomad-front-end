@@ -1,7 +1,5 @@
 import * as actionTypes from '../actions/actionTypes'
 import { addKey, highlightRows } from '../../utils/tableUtils'
-import { Modal } from 'antd'
-
 
 const initialState = {
 	showCards: true,
@@ -25,13 +23,6 @@ const reducer = (state = initialState, action) => {
 				...state,
 				showCards: newShowCards
 			}
-
-		case actionTypes.FETCH_FAILED:
-			Modal.error({
-				title: 'Error message',
-				content: action.error.toString()
-			})
-			return state
 
 		case actionTypes.OPEN_DASH_DRAWER_START:
 			const newDrawerStatus = {

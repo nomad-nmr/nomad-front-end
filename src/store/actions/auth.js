@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
+import errorHandler from './errorHandler'
 
 export const openAuthModal = () => {
 	return {
@@ -26,12 +27,6 @@ export const signInSuccess = data => {
 	}
 }
 
-export const signInFailed = () => {
-	return {
-		type: actionTypes.SIGN_IN_FAILED
-	}
-}
-
 export const signOutSuccess = () => {
 	return {
 		type: actionTypes.SIGN_OUT_SUCCESS
@@ -45,6 +40,12 @@ export const signOutFail = () => {
 	}
 }
 
+export const signInFail = () => {
+	return {
+		type: actionTypes.SIGN_IN_FAILED
+	}
+}
+
 export const signOutHandler = token => {
 	return dispatch => {
 		axios
@@ -54,7 +55,8 @@ export const signOutHandler = token => {
 				dispatch(signOutSuccess())
 			})
 			.catch(error => {
-				console.log(error)
+				localStorage.removeItem('user')
+				dispatch(errorHandler(error))
 				dispatch(signOutFail())
 			})
 	}
@@ -88,11 +90,11 @@ export const signInHandler = formData => {
 				dispatch(checkAuthTimeout(resp.data.expiresIn))
 			})
 			.catch(error => {
-				console.log(error)
-				dispatch(signInFailed())
+				dispatch(errorHandler(error))
+				dispatch(signInFail())
 			})
 	}
-}				
+}
 
 export const authCheckState = () => {
 	return dispatch => {

@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/actionTypes'
-import { message } from 'antd'
 
 const initialState = {
 	username: null,
@@ -40,7 +39,6 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.SIGN_IN_FAILED:
-			message.error({ content: 'Signing in failed. Wrong username or password.', style: { color: 'red' } })
 			return {
 				...state,
 				loading: false

@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
-//Import of generic function that calls error modal if fetching data fails
-import { fetchFailed } from './dashboard'
+import errorHandler from './errorHandler'
 
 export const fetchInstrumentsStart = () => {
 	return {
@@ -33,7 +32,7 @@ export const fetchInstruments = token => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -47,10 +46,7 @@ export const addInstrument = (formData, token) => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
-				if (err.response) {
-					return dispatch(addInstrumentFailed(err.response.data))
-				}
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -64,10 +60,7 @@ export const updateInstruments = (formData, token) => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
-				if (err.response) {
-					return dispatch(addInstrumentFailed(err.response.data))
-				}
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -81,7 +74,7 @@ export const deleteInstrument = (id, token) => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -108,7 +101,7 @@ export const toggleAvailableStatus = (id, token) => {
 				dispatch(toggleAvailableSwitchSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }

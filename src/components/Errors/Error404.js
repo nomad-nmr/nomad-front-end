@@ -6,7 +6,7 @@ const error404 = props => (
 	<Result
 		status='404'
 		title='404'
-		subTitle='Sorry, the page you visited does not exist.'
+		subTitle='Sorry, the resource that you have tried to access does not exist.'
 		extra={
 			<Button type='primary' onClick={() => props.history.push({ pathname: '/' })}>
 				Back Home
