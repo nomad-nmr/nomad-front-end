@@ -52,6 +52,7 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.TOGGLE_INSTRUMENT_FORM:
+			window.scrollTo(0, 0)
 			return {
 				...state,
 				showForm: !state.showForm,

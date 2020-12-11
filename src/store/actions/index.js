@@ -16,3 +16,5 @@ export {
 	toggleAvailableStatus,
 	toggleShowForm
 } from './instruments'
+
+export { fetchUsers, toggleUserForm, addUser, updateUser, toggleActive } from './users'

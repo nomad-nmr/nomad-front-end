@@ -1,7 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { toggleCards, openDashDrawer, toggleShowForm } from '../../../store/actions/index'
+import { toggleCards, openDashDrawer, toggleShowForm, toggleUserForm } from '../../../store/actions/index'
 
 import { PageHeader, Switch, Button } from 'antd'
 import classes from './PageHeader.module.css'
@@ -44,6 +44,19 @@ const PageHeaderEl = props => {
 		case '/dashboard/users':
 			headerTitle = 'Manage Users'
 			avatarSrc = userIcon
+			extra = (
+				<div className={classes.ExtraContainer}>
+					<Button
+						className={classes.Button}
+						type='primary'
+						onClick={() => {
+							props.toggleUsrDrawer(false)
+						}}
+						disabled={props.formVisible}>
+						Add User
+					</Button>
+				</div>
+			)
 			break
 		case '/dashboard/groups':
 			headerTitle = 'Manage Groups'
@@ -58,8 +71,8 @@ const PageHeaderEl = props => {
 					<Button
 						className={classes.Button}
 						type='primary'
-						onClick={props.toggleForm}
-						disabled={props.formVisible}>
+						onClick={() => props.toggleInstForm()}
+						disabled={props.instFormVisible}>
 						Add Instrument
 					</Button>
 				</div>
@@ -88,7 +101,7 @@ const mapStateToProps = state => {
 	return {
 		cardSwitchOn: state.dash.showCards,
 		statusButtonsData: state.dash.statusButtonsData,
-		formVisible: state.instruments.showForm
+		instFormVisible: state.instruments.showForm
 	}
 }
 
@@ -96,7 +109,8 @@ const mapDispatchToProps = dispatch => {
 	return {
 		toggleCards: () => dispatch(toggleCards()),
 		statusButtonClicked: id => dispatch(openDashDrawer(id)),
-		toggleForm: () => dispatch(toggleShowForm())
+		toggleInstForm: () => dispatch(toggleShowForm()),
+		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing))
 	}
 }
 

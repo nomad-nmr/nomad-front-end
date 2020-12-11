@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
 import errorHandler from './errorHandler'
+import { message } from 'antd'
 
 export const fetchInstrumentsStart = () => {
 	return {
@@ -43,6 +44,7 @@ export const addInstrument = (formData, token) => {
 		axios
 			.post('/admin/instruments/?auth=' + token, formData)
 			.then(res => {
+				message.success('Instrument was successfully added to database')
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
@@ -57,6 +59,7 @@ export const updateInstruments = (formData, token) => {
 		axios
 			.put('/admin/instruments/?auth=' + token, formData)
 			.then(res => {
+				message.success('Instrument was successfully updated in database')
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {

@@ -1,13 +1,7 @@
 import React, { useState, Suspense, useEffect } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import {
-	closeAuthModal,
-	signInHandler,
-	signOutHandler,
-	closeDashDrawer,
-	authCheckState
-} from './store/actions'
+import { closeAuthModal, signInHandler, signOutHandler, authCheckState } from './store/actions'
 
 import { Layout, Spin, BackTop, Affix } from 'antd'
 import classes from './App.module.css'
@@ -23,7 +17,6 @@ import Error500 from './components/Errors/Error500'
 import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
 import Credits from './components/Credits/Credits'
-import StatusDrawer from './components/StatusDrawer/StatusDrawer'
 
 const { Header, Sider, Content, Footer } = Layout
 
@@ -34,17 +27,7 @@ const App = props => {
 		setAdminMenuCollapsed(!adminMenuCollapsed)
 	}
 
-	const {
-		username,
-		accessLevel,
-		authModalVisible,
-		closeModal,
-		onSignIn,
-		onSignOut,
-		onCloseDrawer,
-		drawerStatus,
-		onTryAutoSignIn
-	} = props
+	const { username, accessLevel, authModalVisible, closeModal, onSignIn, onSignOut, onTryAutoSignIn } = props
 
 	useEffect(() => {
 		onTryAutoSignIn()
@@ -127,7 +110,6 @@ const App = props => {
 						</Switch>
 					</Suspense>
 					{authModal}
-					<StatusDrawer status={drawerStatus} closeClicked={onCloseDrawer} />
 					<BackTop visibilityHeight={200} style={{ marginBottom: '25px' }} />
 				</Content>
 				<Footer className={classes.Footer}>
@@ -144,7 +126,6 @@ const mapStateToProps = state => {
 		authToken: state.auth.token,
 		accessLevel: state.auth.accessLevel,
 		authModalVisible: state.auth.authModalVisible,
-		drawerStatus: state.dash.drawerStatus,
 		authSpin: state.auth.loading
 	}
 }
@@ -154,7 +135,6 @@ const mapDispatchToProps = dispatch => {
 		closeModal: () => dispatch(closeAuthModal()),
 		onSignIn: formData => dispatch(signInHandler(formData)),
 		onSignOut: token => dispatch(signOutHandler(token)),
-		onCloseDrawer: () => dispatch(closeDashDrawer()),
 		onTryAutoSignIn: () => dispatch(authCheckState())
 	}
 }

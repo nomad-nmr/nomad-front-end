@@ -1,18 +1,9 @@
 import React from 'react'
-import { Modal, Form, Input, Spin } from 'antd'
+import { Modal, Form, Input, Spin, Button, Space } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
 const loginModal = props => {
 	const [form] = Form.useForm()
-
-	const validateForm = form => {
-		form
-			.validateFields()
-			.then(data => {
-				props.signInClicked(data)
-			})
-			.catch(err => console.log(err))
-	}
 
 	return (
 		<Modal
@@ -24,13 +15,17 @@ const loginModal = props => {
 				</div>
 			}
 			visible={props.visible}
-			onOk={() => validateForm(form)}
-			onCancel={props.cancelClicked}>
+			keyboard
+			onCancel={props.cancelClicked}
+			footer={null}>
 			<Spin tip='Loading ...' spinning={props.loading}>
-				<Form name='basic' form={form} hideRequiredMark>
-					{/* Initial values of the form can be set as follows initialValues={{ username: 'admin' }}  */}
+				<Form
+					id='loginForm'
+					name='basic'
+					form={form}
+					onFinish={values => props.signInClicked(values)}
+					hideRequiredMark>
 					<Form.Item
-						// label='Username'
 						name='username'
 						rules={[
 							{
@@ -42,7 +37,6 @@ const loginModal = props => {
 					</Form.Item>
 
 					<Form.Item
-						// label='Password'
 						name='password'
 						rules={[
 							{
@@ -56,7 +50,18 @@ const loginModal = props => {
 							placeholder='Password'
 						/>
 					</Form.Item>
+					<Form.Item style={{ textAlign: 'center' }}>
+						<Space size='large'>
+							<Button type='primary' htmlType='submit'>
+								Submit
+							</Button>
+							<Button htmlType='button' onClick={props.cancelClicked}>
+								Cancel
+							</Button>
+						</Space>
+					</Form.Item>
 				</Form>
+				{/* <p>Reset</p> */}
 			</Spin>
 		</Modal>
 	)

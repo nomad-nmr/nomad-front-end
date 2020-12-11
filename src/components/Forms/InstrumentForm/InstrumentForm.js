@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
 import { Form, Input, Button, InputNumber, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 
-import classes from './InstrumentsForm.module.css'
+import classes from '../Form.module.css'
 
 const layout = {
 	labelCol: {
@@ -53,7 +52,10 @@ const InstrumentsForm = props => {
 				<Form.Item hidden name='key'>
 					<Input />
 				</Form.Item>
-				<Form.Item name='name' label='Name' rules={[{ required: true, whitespace: true }]}>
+				<Form.Item
+					name='name'
+					label='Name'
+					rules={[{ required: true, whitespace: true, message: 'Instrument name is required' }]}>
 					<Input />
 				</Form.Item>
 				<Form.Item name='model' label='Model'>
@@ -63,7 +65,12 @@ const InstrumentsForm = props => {
 					<Input />
 				</Form.Item>
 				<Form.Item label='Capacity' required>
-					<Form.Item name='capacity' noStyle rules={[{ type: 'integer', required: true }]}>
+					<Form.Item
+						name='capacity'
+						noStyle
+						rules={[
+							{ type: 'integer', required: true, message: ' Capacity of sample changer is required' }
+						]}>
 						<InputNumber className={classes.InputNumber} min={0} />
 					</Form.Item>
 					<Tooltip title='Number of holder in sample changer'>
@@ -89,12 +96,5 @@ const InstrumentsForm = props => {
 	)
 }
 
-const mapStateToProps = state => {
-	return {
-		instrTabData: state.instruments.instrumentsTableData,
-		authToken: state.auth.token,
-		errors: state.instruments.errors
-	}
-}
 
-export default connect(mapStateToProps)(InstrumentsForm)
+export default InstrumentsForm
