@@ -1,10 +1,16 @@
+import { Modal } from 'antd'
 import * as actionTypes from '../actions/actionTypes'
+import history from '../../utils/history'
+
 const initialState = {
 	username: null,
 	accessLevel: null,
 	token: null,
 	authModalVisible: false,
-	loading: false
+	loading: false,
+	resetUsername: null,
+	resetFullName: null,
+	resetToken: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -59,6 +65,46 @@ const reducer = (state = initialState, action) => {
 				userId: null,
 				token: null,
 				accessLevel: false,
+				authModalVisible: false
+			}
+
+		case actionTypes.POST_PASSWORD_RESET_SUCCESS:
+			Modal.info({
+				title: 'Password reset',
+				content: `E-mail with the reset link for user ${action.data.username} was sent to email address ${action.data.email}`
+			})
+			return {
+				...state,
+				loading: false,
+				authModalVisible: false
+			}
+
+		case actionTypes.GET_PASSWORD_RESET_SUCCESS:
+			const { username, fullName, token } = action.data
+			return {
+				...state,
+				resetUsername: username,
+				resetFullName: fullName,
+				resetToken: token,
+				loading: false
+			}
+
+		case actionTypes.POST_NEW_PASSWORD_SUCCESS:
+			Modal.info({
+				title: action.data.resetting ? 'Password reset' : 'New user registered',
+				content: action.data.resetting
+					? `The new password for user ${action.data.username} was reset`
+					: `The account of ${action.data.username} was updated`,
+				onOk() {
+					console.log('Test')
+					history.push('/')
+					window.location.reload()
+				}
+			})
+
+			return {
+				...state,
+				loading: false,
 				authModalVisible: false
 			}
 

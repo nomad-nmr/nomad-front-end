@@ -41,7 +41,7 @@ const PageHeaderEl = props => {
 			)
 			break
 
-		case '/dashboard/users':
+		case '/admin/users':
 			headerTitle = 'Manage Users'
 			avatarSrc = userIcon
 			extra = (
@@ -58,12 +58,12 @@ const PageHeaderEl = props => {
 				</div>
 			)
 			break
-		case '/dashboard/groups':
+		case '/admin/groups':
 			headerTitle = 'Manage Groups'
 			avatarSrc = groupIcon
 			break
 
-		case '/dashboard/instruments':
+		case '/admin/instruments':
 			headerTitle = 'Instruments Settings'
 			avatarSrc = magnetIcon
 			extra = (
@@ -78,7 +78,7 @@ const PageHeaderEl = props => {
 				</div>
 			)
 			break
-		case '/dashboard/experiments':
+		case '/admin/experiments':
 			headerTitle = 'Setting Experiments'
 			avatarSrc = experimentIcon
 			break

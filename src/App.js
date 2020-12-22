@@ -1,7 +1,13 @@
 import React, { useState, Suspense, useEffect } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { closeAuthModal, signInHandler, signOutHandler, authCheckState } from './store/actions'
+import {
+	closeAuthModal,
+	signInHandler,
+	signOutHandler,
+	authCheckState,
+	postPasswdReset
+} from './store/actions'
 
 import { Layout, Spin, BackTop, Affix } from 'antd'
 import classes from './App.module.css'
@@ -17,6 +23,7 @@ import Error500 from './components/Errors/Error500'
 import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
 import Credits from './components/Credits/Credits'
+import Reset from './containers/Reset/Reset'
 
 const { Header, Sider, Content, Footer } = Layout
 
@@ -54,7 +61,8 @@ const App = props => {
 				<LoginModal
 					visible={authModalVisible}
 					cancelClicked={closeModal}
-					signInClicked={onSignIn}
+					signInHandler={onSignIn}
+					passwdResetHandler={props.onPasswdReset}
 					loading={props.authSpin}
 				/>
 			)
@@ -81,30 +89,28 @@ const App = props => {
 					<Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
 						<Switch>
 							<Route
-								path='/dashboard/users'
+								path='/admin/users'
 								render={() => {
 									return accessLevel === 'admin' ? <Users /> : <Error403 />
 								}}
 							/>
+							<Route path='/admin/groups' component={accessLevel === 'admin' ? Groups : Error403} />
 							<Route
-								path='/dashboard/groups'
-								component={accessLevel === 'admin' ? Groups : Error403}
-							/>
-							<Route
-								path='/dashboard/instruments'
+								path='/admin/instruments'
 								render={() => {
 									return accessLevel === 'admin' ? <Instruments /> : <Error403 />
 								}}
 							/>
 							<Route
-								path='/dashboard/experiments'
+								path='/admin/experiments'
 								component={accessLevel === 'admin' ? Experiments : Error403}
 							/>
 							<Route exact path='/dashboard' render={() => <Dashboard />} />
+							<Route exact path='/reset/:token' component={Reset} />
 							<Route path='/500' component={Error500} />
 							<Route path='/404' component={Error404} />
 							<Route path='/403' component={Error403} />
-							<Redirect from='/dashboard/dashboard' to='/dashboard' />
+							<Redirect from='/admin/dashboard' to='/dashboard' />
 							<Redirect exact from='/' to='/dashboard' />
 							<Route component={Error404} />
 						</Switch>
@@ -135,7 +141,8 @@ const mapDispatchToProps = dispatch => {
 		closeModal: () => dispatch(closeAuthModal()),
 		onSignIn: formData => dispatch(signInHandler(formData)),
 		onSignOut: token => dispatch(signOutHandler(token)),
-		onTryAutoSignIn: () => dispatch(authCheckState())
+		onTryAutoSignIn: () => dispatch(authCheckState()),
+		onPasswdReset: formData => dispatch(postPasswdReset(formData))
 	}
 }
 

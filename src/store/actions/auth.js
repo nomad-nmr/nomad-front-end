@@ -112,3 +112,72 @@ export const authCheckState = () => {
 		}
 	}
 }
+
+export const postPasswdResetSuccess = payload => {
+	return {
+		type: actionTypes.POST_PASSWORD_RESET_SUCCESS,
+		data: payload
+	}
+}
+
+export const postPasswdReset = payload => {
+	return dispatch => {
+		dispatch(signInStart())
+		axios
+			.post('/auth/password-reset', payload)
+			.then(resp => {
+				console.log(resp.data)
+				dispatch(postPasswdResetSuccess(resp.data))
+			})
+			.catch(error => {
+				dispatch(errorHandler(error))
+				dispatch(signInFail())
+			})
+	}
+}
+
+export const getPasswdResetSuccess = payload => {
+	return {
+		type: actionTypes.GET_PASSWORD_RESET_SUCCESS,
+		data: payload
+	}
+}
+
+export const getPasswdReset = token => {
+	return dispatch => {
+		dispatch(signInStart())
+		axios
+			.get('/auth/password-reset/' + token)
+			.then(resp => {
+				dispatch(getPasswdResetSuccess(resp.data))
+			})
+			.catch(error => {
+				console.log('Error:', error)
+				dispatch(errorHandler(error))
+				dispatch(signInFail())
+			})
+	}
+}
+
+export const postNewPassSuccess = payload => {
+	return {
+		type: actionTypes.POST_NEW_PASSWORD_SUCCESS,
+		data: payload
+	}
+}
+
+export const postNewPasswd = formData => {
+	return dispatch => {
+		dispatch(signInStart())
+		axios
+			.post('/auth/new-password', formData)
+			.then(resp => {
+				dispatch(postNewPassSuccess(resp.data))
+			})
+			.catch(error => {
+				console.log('Error:', error)
+				dispatch(errorHandler(error))
+				dispatch(signInFail())
+			})
+	}
+}

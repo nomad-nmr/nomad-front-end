@@ -1,9 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Modal, Form, Input, Spin, Button, Space } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
-const loginModal = props => {
+const LoginModal = props => {
 	const [form] = Form.useForm()
+
+	const [resetting, setResetting] = useState(false)
+
+	const onFinish = values => {
+		if (resetting) {
+			props.passwdResetHandler(values)
+		} else {
+			props.signInHandler(values)
+		}
+	}
+
+	const passwordFormItem = (
+		<Form.Item
+			name='password'
+			rules={[
+				{
+					required: true,
+					message: 'Please input your password!'
+				}
+			]}>
+			<Input.Password
+				prefix={<LockOutlined className='site-form-item-icon' />}
+				type='password'
+				placeholder='Password'
+			/>
+		</Form.Item>
+	)
 
 	return (
 		<Modal
@@ -11,7 +38,10 @@ const loginModal = props => {
 			okText='Sign in'
 			title={
 				<div style={{ color: '#096dd9' }}>
-					<UserOutlined /> <span style={{ marginLeft: '10px' }}>Sign in</span>{' '}
+					<UserOutlined />
+					<span style={{ marginLeft: '10px' }}>
+						{resetting ? 'Register or Reset Password' : 'Sign In'}
+					</span>
 				</div>
 			}
 			visible={props.visible}
@@ -19,12 +49,7 @@ const loginModal = props => {
 			onCancel={props.cancelClicked}
 			footer={null}>
 			<Spin tip='Loading ...' spinning={props.loading}>
-				<Form
-					id='loginForm'
-					name='basic'
-					form={form}
-					onFinish={values => props.signInClicked(values)}
-					hideRequiredMark>
+				<Form form={form} onFinish={values => onFinish(values)} hideRequiredMark>
 					<Form.Item
 						name='username'
 						rules={[
@@ -36,35 +61,25 @@ const loginModal = props => {
 						<Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder='Username' />
 					</Form.Item>
 
-					<Form.Item
-						name='password'
-						rules={[
-							{
-								required: true,
-								message: 'Please input your password!'
-							}
-						]}>
-						<Input.Password
-							prefix={<LockOutlined className='site-form-item-icon' />}
-							type='password'
-							placeholder='Password'
-						/>
-					</Form.Item>
+					{!resetting && passwordFormItem}
+
 					<Form.Item style={{ textAlign: 'center' }}>
 						<Space size='large'>
 							<Button type='primary' htmlType='submit'>
 								Submit
 							</Button>
-							<Button htmlType='button' onClick={props.cancelClicked}>
-								Cancel
-							</Button>
+							<Button onClick={props.cancelClicked}>Cancel</Button>
 						</Space>
 					</Form.Item>
+					<div style={{ textAlign: 'center' }}>
+						<Button type='link' onClick={() => setResetting(!resetting)}>
+							{resetting ? 'Sign in' : 'Register or reset password'}
+						</Button>
+					</div>
 				</Form>
-				{/* <p>Reset</p> */}
 			</Spin>
 		</Modal>
 	)
 }
 
-export default loginModal
+export default LoginModal

@@ -1,5 +1,13 @@
 import React from 'react'
-import { Table, Badge } from 'antd'
+import { Table, Badge, Tag } from 'antd'
+import TweenOne from 'rc-tween-one'
+import {
+	CheckCircleOutlined,
+	SyncOutlined,
+	CloseCircleOutlined,
+	ClockCircleOutlined
+} from '@ant-design/icons'
+
 import classes from './StatusTable.module.css'
 
 const statusTable = props => {
@@ -59,19 +67,39 @@ const statusTable = props => {
 				switch (text) {
 					case 'Running':
 						return (
-							<span style={{ color: '#1890ff' }}>
-								<Badge status='processing' text={text} />
-							</span>
+							<Tag icon={<SyncOutlined spin />} color='processing'>
+								{text}
+							</Tag>
 						)
 
 					case 'Submitted':
-						return <Badge status='warning' text={text} />
+						return (
+							<Tag icon={<ClockCircleOutlined />} color='default'>
+								{text}
+							</Tag>
+						)
 
 					case 'Completed':
-						return <Badge status='success' text={text} />
-
+						return (
+							<Tag icon={<CheckCircleOutlined />} color='success'>
+								{text}
+							</Tag>
+						)
 					case 'Error':
-						return <Badge status='error' text='Error' />
+						return (
+							<TweenOne
+								animation={{
+									opacity: 1,
+									scale: 1,
+									yoyo: true,
+									repeat: -1,
+									duration: 500
+								}}>
+								<Tag icon={<CloseCircleOutlined />} color='error'>
+									{text}
+								</Tag>
+							</TweenOne>
+						)
 
 					default:
 						return <Badge status='default' text={text} />

@@ -1,6 +1,5 @@
 import React from 'react'
 import TweenOne from 'rc-tween-one'
-// import AnimateFlash from './AnimateFlash'
 import { Tooltip, Avatar } from 'antd'
 import classes from './TrafficLights.module.css'
 

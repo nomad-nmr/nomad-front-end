@@ -1,4 +1,13 @@
-export { openAuthModal, closeAuthModal, signInHandler, signOutHandler, authCheckState } from './auth'
+export {
+	openAuthModal,
+	closeAuthModal,
+	signInHandler,
+	signOutHandler,
+	authCheckState,
+	postPasswdReset,
+	getPasswdReset,
+	postNewPasswd
+} from './auth'
 
 export {
 	toggleCards,
