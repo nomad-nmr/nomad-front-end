@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
+import errorHandler from './errorHandler'
 
 export const openAuthModal = () => {
 	return {
@@ -26,12 +27,6 @@ export const signInSuccess = data => {
 	}
 }
 
-export const signInFailed = () => {
-	return {
-		type: actionTypes.SIGN_IN_FAILED
-	}
-}
-
 export const signOutSuccess = () => {
 	return {
 		type: actionTypes.SIGN_OUT_SUCCESS
@@ -45,6 +40,12 @@ export const signOutFail = () => {
 	}
 }
 
+export const signInFail = () => {
+	return {
+		type: actionTypes.SIGN_IN_FAILED
+	}
+}
+
 export const signOutHandler = token => {
 	return dispatch => {
 		axios
@@ -54,7 +55,8 @@ export const signOutHandler = token => {
 				dispatch(signOutSuccess())
 			})
 			.catch(error => {
-				console.log(error)
+				localStorage.removeItem('user')
+				dispatch(errorHandler(error))
 				dispatch(signOutFail())
 			})
 	}
@@ -88,8 +90,8 @@ export const signInHandler = formData => {
 				dispatch(checkAuthTimeout(resp.data.expiresIn))
 			})
 			.catch(error => {
-				console.log(error)
-				dispatch(signInFailed())
+				dispatch(errorHandler(error))
+				dispatch(signInFail())
 			})
 	}
 }
@@ -108,5 +110,74 @@ export const authCheckState = () => {
 				dispatch(checkAuthTimeout(expiresIn))
 			}
 		}
+	}
+}
+
+export const postPasswdResetSuccess = payload => {
+	return {
+		type: actionTypes.POST_PASSWORD_RESET_SUCCESS,
+		data: payload
+	}
+}
+
+export const postPasswdReset = payload => {
+	return dispatch => {
+		dispatch(signInStart())
+		axios
+			.post('/auth/password-reset', payload)
+			.then(resp => {
+				console.log(resp.data)
+				dispatch(postPasswdResetSuccess(resp.data))
+			})
+			.catch(error => {
+				dispatch(errorHandler(error))
+				dispatch(signInFail())
+			})
+	}
+}
+
+export const getPasswdResetSuccess = payload => {
+	return {
+		type: actionTypes.GET_PASSWORD_RESET_SUCCESS,
+		data: payload
+	}
+}
+
+export const getPasswdReset = token => {
+	return dispatch => {
+		dispatch(signInStart())
+		axios
+			.get('/auth/password-reset/' + token)
+			.then(resp => {
+				dispatch(getPasswdResetSuccess(resp.data))
+			})
+			.catch(error => {
+				console.log('Error:', error)
+				dispatch(errorHandler(error))
+				dispatch(signInFail())
+			})
+	}
+}
+
+export const postNewPassSuccess = payload => {
+	return {
+		type: actionTypes.POST_NEW_PASSWORD_SUCCESS,
+		data: payload
+	}
+}
+
+export const postNewPasswd = formData => {
+	return dispatch => {
+		dispatch(signInStart())
+		axios
+			.post('/auth/new-password', formData)
+			.then(resp => {
+				dispatch(postNewPassSuccess(resp.data))
+			})
+			.catch(error => {
+				console.log('Error:', error)
+				dispatch(errorHandler(error))
+				dispatch(signInFail())
+			})
 	}
 }

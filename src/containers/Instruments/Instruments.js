@@ -10,7 +10,7 @@ import {
 } from '../../store/actions/index'
 import { Table, Space, Switch, Button, Popconfirm, Tooltip, message } from 'antd'
 import Animate from 'rc-animate'
-import InstrumentsForm from '../../components/InstrumentsForm/InstrumentsForm'
+import InstrumentForm from '../../components/Forms/InstrumentForm/InstrumentForm'
 import { CopyTwoTone } from '@ant-design/icons'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
@@ -88,12 +88,13 @@ const Instruments = props => {
 	]
 
 	const form = (
-		<InstrumentsForm
+		<InstrumentForm
 			updateInstrumentsHandler={props.updateInstr}
 			addInstrumentHandler={props.addInstr}
 			formReference={formRef}
 			toggleEditHandler={props.toggleEdit}
 			toggleFormHandler={props.toggleForm}
+			authToken={props.authToken}
 		/>
 	)
 

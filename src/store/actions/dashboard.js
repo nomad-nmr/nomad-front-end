@@ -1,17 +1,10 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
-// import { Modal } from 'antd'
+import errorHandler from './errorHandler'
 
 export const toggleCards = () => {
 	return {
 		type: actionTypes.TOGGLE_CARDS
-	}
-}
-
-export const fetchFailed = err => {
-	return {
-		type: actionTypes.FETCH_FAILED,
-		error: err
 	}
 }
 
@@ -34,7 +27,7 @@ export const openDashDrawer = id => {
 				dispatch(openDashDrawerSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err + ' [fetchDrawerData failed]'))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -53,7 +46,7 @@ export const fetchStatusSummary = () => {
 		axios
 			.get('/dash/status-summary')
 			.then(res => dispatch(fetchStatusSummarySuccess(res.data)))
-			.catch(err => dispatch(fetchFailed(err + ' [fetchStatusSummary failed]')))
+			.catch(err => dispatch(errorHandler(err)))
 	}
 }
 
@@ -72,6 +65,8 @@ export const fetchStatusTable = tab => {
 		axios
 			.get('/dash/status-table/' + tab)
 			.then(res => dispatch(fetchStatusTableSuccess(res.data)))
-			.catch(err => dispatch(fetchFailed(err + '  [fetchStatusTable failed')))
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
 	}
 }

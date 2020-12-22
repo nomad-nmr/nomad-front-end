@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
-//Import of generic function that calls error modal if fetching data fails
-import { fetchFailed } from './dashboard'
+import errorHandler from './errorHandler'
+import { message } from 'antd'
 
 export const fetchInstrumentsStart = () => {
 	return {
@@ -17,6 +17,13 @@ export const fetchInstrumentsSuccess = payload => {
 	}
 }
 
+export const addInstrumentFailed = payload => {
+	return {
+		type: actionTypes.ADD_INSTRUMENT_FAILED,
+		data: payload
+	}
+}
+
 export const fetchInstruments = token => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
@@ -26,7 +33,7 @@ export const fetchInstruments = token => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -37,10 +44,11 @@ export const addInstrument = (formData, token) => {
 		axios
 			.post('/admin/instruments/?auth=' + token, formData)
 			.then(res => {
+				message.success('Instrument was successfully added to database')
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -51,10 +59,11 @@ export const updateInstruments = (formData, token) => {
 		axios
 			.put('/admin/instruments/?auth=' + token, formData)
 			.then(res => {
+				message.success('Instrument was successfully updated in database')
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -68,7 +77,7 @@ export const deleteInstrument = (id, token) => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -95,7 +104,7 @@ export const toggleAvailableStatus = (id, token) => {
 				dispatch(toggleAvailableSwitchSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(fetchFailed(err))
+				dispatch(errorHandler(err))
 			})
 	}
 }

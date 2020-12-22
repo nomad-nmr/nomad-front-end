@@ -1,4 +1,13 @@
-export { openAuthModal, closeAuthModal, signInHandler, signOutHandler, authCheckState } from './auth'
+export {
+	openAuthModal,
+	closeAuthModal,
+	signInHandler,
+	signOutHandler,
+	authCheckState,
+	postPasswdReset,
+	getPasswdReset,
+	postNewPasswd
+} from './auth'
 
 export {
 	toggleCards,
@@ -16,3 +25,5 @@ export {
 	toggleAvailableStatus,
 	toggleShowForm
 } from './instruments'
+
+export { fetchUsers, toggleUserForm, addUser, updateUser, toggleActive } from './users'

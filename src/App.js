@@ -5,8 +5,8 @@ import {
 	closeAuthModal,
 	signInHandler,
 	signOutHandler,
-	closeDashDrawer,
-	authCheckState
+	authCheckState,
+	postPasswdReset
 } from './store/actions'
 
 import { Layout, Spin, BackTop, Affix } from 'antd'
@@ -19,10 +19,11 @@ import LogoutModal from './components/Modals/LogoutModal/LogoutModal'
 import Dashboard from './containers/Dashboard/Dashboard'
 import Groups from './containers/Groups/Groups'
 import Experiments from './containers/Experiments/Experiments'
+import Error500 from './components/Errors/Error500'
 import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
 import Credits from './components/Credits/Credits'
-import StatusDrawer from './components/StatusDrawer/StatusDrawer'
+import Reset from './containers/Reset/Reset'
 
 const { Header, Sider, Content, Footer } = Layout
 
@@ -33,17 +34,7 @@ const App = props => {
 		setAdminMenuCollapsed(!adminMenuCollapsed)
 	}
 
-	const {
-		username,
-		accessLevel,
-		authModalVisible,
-		closeModal,
-		onSignIn,
-		onSignOut,
-		onCloseDrawer,
-		drawerStatus,
-		onTryAutoSignIn
-	} = props
+	const { username, accessLevel, authModalVisible, closeModal, onSignIn, onSignOut, onTryAutoSignIn } = props
 
 	useEffect(() => {
 		onTryAutoSignIn()
@@ -70,7 +61,8 @@ const App = props => {
 				<LoginModal
 					visible={authModalVisible}
 					cancelClicked={closeModal}
-					signInClicked={onSignIn}
+					signInHandler={onSignIn}
+					passwdResetHandler={props.onPasswdReset}
 					loading={props.authSpin}
 				/>
 			)
@@ -97,33 +89,33 @@ const App = props => {
 					<Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
 						<Switch>
 							<Route
-								path='/dashboard/users'
+								path='/admin/users'
 								render={() => {
 									return accessLevel === 'admin' ? <Users /> : <Error403 />
 								}}
 							/>
+							<Route path='/admin/groups' component={accessLevel === 'admin' ? Groups : Error403} />
 							<Route
-								path='/dashboard/groups'
-								component={accessLevel === 'admin' ? Groups : Error403}
-							/>
-							<Route
-								path='/dashboard/instruments'
+								path='/admin/instruments'
 								render={() => {
 									return accessLevel === 'admin' ? <Instruments /> : <Error403 />
 								}}
 							/>
 							<Route
-								path='/dashboard/experiments'
+								path='/admin/experiments'
 								component={accessLevel === 'admin' ? Experiments : Error403}
 							/>
 							<Route exact path='/dashboard' render={() => <Dashboard />} />
-							<Redirect from='/dashboard/dashboard' to='/dashboard' />
+							<Route exact path='/reset/:token' component={Reset} />
+							<Route path='/500' component={Error500} />
+							<Route path='/404' component={Error404} />
+							<Route path='/403' component={Error403} />
+							<Redirect from='/admin/dashboard' to='/dashboard' />
 							<Redirect exact from='/' to='/dashboard' />
 							<Route component={Error404} />
 						</Switch>
 					</Suspense>
 					{authModal}
-					<StatusDrawer status={drawerStatus} closeClicked={onCloseDrawer} />
 					<BackTop visibilityHeight={200} style={{ marginBottom: '25px' }} />
 				</Content>
 				<Footer className={classes.Footer}>
@@ -140,7 +132,6 @@ const mapStateToProps = state => {
 		authToken: state.auth.token,
 		accessLevel: state.auth.accessLevel,
 		authModalVisible: state.auth.authModalVisible,
-		drawerStatus: state.dash.drawerStatus,
 		authSpin: state.auth.loading
 	}
 }
@@ -150,8 +141,8 @@ const mapDispatchToProps = dispatch => {
 		closeModal: () => dispatch(closeAuthModal()),
 		onSignIn: formData => dispatch(signInHandler(formData)),
 		onSignOut: token => dispatch(signOutHandler(token)),
-		onCloseDrawer: () => dispatch(closeDashDrawer()),
-		onTryAutoSignIn: () => dispatch(authCheckState())
+		onTryAutoSignIn: () => dispatch(authCheckState()),
+		onPasswdReset: formData => dispatch(postPasswdReset(formData))
 	}
 }
 

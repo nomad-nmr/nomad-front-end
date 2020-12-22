@@ -1,10 +1,11 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { fetchStatusSummary, fetchStatusTable } from '../../store/actions'
+import { fetchStatusSummary, fetchStatusTable, closeDashDrawer } from '../../store/actions'
 import Animate from 'rc-animate'
 
 import InfoCards from '../../components/InfoCards/InfoCards'
 import StatusTabs from '../../components/StatusTabs/StatusTabs'
+import StatusDrawer from '../../components/StatusDrawer/StatusDrawer'
 import './Dashboard.css'
 
 const Dashboard = props => {
@@ -38,6 +39,7 @@ const Dashboard = props => {
 					tableLoading={props.tableLoading}
 				/>
 			</div>
+			<StatusDrawer status={props.drawerStatus} closeClicked={props.onCloseDrawer} />
 		</Fragment>
 	)
 }
@@ -47,13 +49,15 @@ const mapStateToProps = state => {
 		showCards: state.dash.showCards,
 		statusSummary: state.dash.statusSummaryData,
 		statusTable: state.dash.statusTableData,
-		tableLoading: state.dash.tableLoading
+		tableLoading: state.dash.tableLoading,
+		drawerStatus: state.dash.drawerStatus
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
 		fetchStatusSum: () => dispatch(fetchStatusSummary()),
+		onCloseDrawer: () => dispatch(closeDashDrawer()),
 		fetchStatusTable: key => dispatch(fetchStatusTable(key))
 	}
 }

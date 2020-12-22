@@ -9,6 +9,9 @@ import thunk from 'redux-thunk'
 import authReducer from './store/reducers/auth'
 import dashReducer from './store/reducers/dashboard'
 import instrumentsReducer from './store/reducers/instruments'
+import errorHandlerReducer from './store/reducers/errorHandler'
+import usersReducer from './store/reducers/users'
+
 import './index.css'
 import App from './App'
 
@@ -22,7 +25,9 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 const rootReducer = combineReducers({
 	auth: authReducer,
 	dash: dashReducer,
-	instruments: instrumentsReducer
+	instruments: instrumentsReducer,
+	errors: errorHandlerReducer,
+	users: usersReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
