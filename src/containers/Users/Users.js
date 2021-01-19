@@ -8,13 +8,13 @@ import { addUser, updateUser, fetchUsers, toggleUserForm, toggleActive } from '.
 const { CheckableTag } = Tag
 
 const Users = props => {
-	const { fetchUsers, authToken } = props
+	const { fetchUsers, authToken, showInactive } = props
 
 	const formRef = useRef({})
 
 	useEffect(() => {
-		fetchUsers(authToken)
-	}, [fetchUsers, authToken])
+		fetchUsers(authToken, showInactive)
+	}, [fetchUsers, authToken, showInactive])
 
 	const columns = [
 		{
@@ -127,13 +127,14 @@ const mapStateToProps = state => {
 		tabLoading: state.users.tableIsLoading,
 		authToken: state.auth.token,
 		usrDrawerVisible: state.users.showForm,
-		formEditing: state.users.editing
+		formEditing: state.users.editing,
+		showInactive: state.users.showInactive
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetchUsers: token => dispatch(fetchUsers(token)),
+		fetchUsers: (token, showInactive) => dispatch(fetchUsers(token, showInactive)),
 		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing)),
 		addUsrHandler: (formData, token) => dispatch(addUser(formData, token)),
 		updateUsrHandler: (formData, token) => dispatch(updateUser(formData, token)),

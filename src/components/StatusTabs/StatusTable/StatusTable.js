@@ -87,55 +87,28 @@ const statusTable = props => {
 						)
 					case 'Error':
 						return (
-							<TweenOne
-								animation={{
-									opacity: 1,
-									scale: 1,
-									yoyo: true,
-									repeat: -1,
-									duration: 500
-								}}>
-								<Tag icon={<CloseCircleOutlined />} color='error'>
-									{text}
-								</Tag>
-							</TweenOne>
+							<Tag
+								icon={
+									<TweenOne
+										animation={{
+											opacity: 1,
+											scale: 1,
+											yoyo: true,
+											repeat: -1,
+											duration: 500
+										}}>
+										<CloseCircleOutlined />
+									</TweenOne>
+								}
+								color='error'>
+								{text}
+							</Tag>
 						)
 
 					default:
 						return <Badge status='default' text={text} />
 				}
 			}
-			// {
-			// 	let tagColor = ''
-			// 	let animationObj = null
-			// 	switch (text) {
-			// 		case 'Running':
-			// 			tagColor = 'processing'
-			// 			animationObj = {
-			// 				opacity: 0.3,
-			// 				yoyo: true,
-			// 				repeat: -1,
-			// 				duration: 500
-			// 			}
-			// 			break
-			// 		case 'Submitted':
-			// 			tagColor = 'purple'
-			// 			break
-			// 		case 'Completed':
-			// 			tagColor = 'gold'
-			// 			break
-			// 		case 'Error':
-			// 			tagColor = 'red'
-			// 			break
-			// 		default:
-			// 			tagColor = 'default'
-			// 	}
-			// 	return (
-			// 		<TweenOne animation={animationObj}>
-			// 			<Tag color={tagColor}>{text}</Tag>
-			// 		</TweenOne>
-			// 	)
-			// }
 		}
 	]
 	return (

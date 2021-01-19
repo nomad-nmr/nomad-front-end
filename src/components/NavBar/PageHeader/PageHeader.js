@@ -1,7 +1,13 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { toggleCards, openDashDrawer, toggleShowForm, toggleUserForm } from '../../../store/actions/index'
+import {
+	toggleCards,
+	openDashDrawer,
+	toggleShowForm,
+	toggleUserForm,
+	toggleShowInactive
+} from '../../../store/actions/index'
 
 import { PageHeader, Switch, Button } from 'antd'
 import classes from './PageHeader.module.css'
@@ -14,7 +20,14 @@ import magnetIcon from '../../../assets/magnet.svg'
 import experimentIcon from '../../../assets/lab.svg'
 
 const PageHeaderEl = props => {
-	const { toggleCards, cardSwitchOn, statusButtonsData, statusButtonClicked } = props
+	const {
+		toggleCards,
+		cardSwitchOn,
+		statusButtonsData,
+		statusButtonClicked,
+		showInactive,
+		switchShowInactive
+	} = props
 
 	let headerTitle = ''
 	let avatarSrc
@@ -55,6 +68,16 @@ const PageHeaderEl = props => {
 						disabled={props.formVisible}>
 						Add User
 					</Button>
+					<div className={classes.SwitchElement}>
+						<label>Show Inactive</label>
+						<Switch
+							size='small'
+							checked={showInactive}
+							checkedChildren='On'
+							unCheckedChildren='Off'
+							onChange={switchShowInactive}
+						/>
+					</div>
 				</div>
 			)
 			break
@@ -101,7 +124,8 @@ const mapStateToProps = state => {
 	return {
 		cardSwitchOn: state.dash.showCards,
 		statusButtonsData: state.dash.statusButtonsData,
-		instFormVisible: state.instruments.showForm
+		instFormVisible: state.instruments.showForm,
+		showInactive: state.users.showInactive
 	}
 }
 
@@ -110,7 +134,8 @@ const mapDispatchToProps = dispatch => {
 		toggleCards: () => dispatch(toggleCards()),
 		statusButtonClicked: id => dispatch(openDashDrawer(id)),
 		toggleInstForm: () => dispatch(toggleShowForm()),
-		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing))
+		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing)),
+		switchShowInactive: () => dispatch(toggleShowInactive())
 	}
 }
 

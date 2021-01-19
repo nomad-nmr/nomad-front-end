@@ -16,11 +16,11 @@ export const fetchUsersSuccess = payload => {
 	}
 }
 
-export const fetchUsers = token => {
+export const fetchUsers = (token, showInactive) => {
 	return dispatch => {
 		dispatch(fetchUsersStart())
 		axios
-			.get('/admin/users/?auth=' + token)
+			.get('/admin/users/?auth=' + token + '&showInactive=' + showInactive)
 			.then(res => {
 				dispatch(fetchUsersSuccess(res.data))
 			})
@@ -92,3 +92,7 @@ export const toggleActive = (id, token) => {
 			})
 	}
 }
+
+export const toggleShowInactive = () => ({
+	type: actionTypes.TOGGLE_SHOW_INACTIVE
+})

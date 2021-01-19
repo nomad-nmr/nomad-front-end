@@ -5,7 +5,8 @@ const initialState = {
 	usersTableData: [],
 	tableIsLoading: false,
 	showForm: false,
-	editing: false
+	editing: false,
+	showInactive: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -53,6 +54,12 @@ const reducer = (state = initialState, action) => {
 				...state,
 				usersTableData: newUsersData,
 				tableIsLoading: false
+			}
+
+		case actionTypes.TOGGLE_SHOW_INACTIVE:
+			return {
+				...state,
+				showInactive: !state.showInactive
 			}
 
 		default:
