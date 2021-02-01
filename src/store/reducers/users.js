@@ -1,11 +1,13 @@
-import { addKey } from '../../utils/tableUtils'
+import { addKey, updatedTableSwitch } from '../../utils/tableUtils'
 import * as actionTypes from '../actions/actionTypes'
+import { message } from 'antd'
 
 const initialState = {
 	usersTableData: [],
 	tableIsLoading: false,
 	showForm: false,
-	editing: false
+	editing: false,
+	showInactive: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -36,23 +38,50 @@ const reducer = (state = initialState, action) => {
 				editing: action.data
 			}
 
+		case actionTypes.ADD_USER_SUCCESS:
+			const updatedUsersTable = state.usersTableData.concat([action.data])
+			message.success('User was successfully adde to database')
+			return {
+				...state,
+				usersTableData: addKey(updatedUsersTable),
+				tableIsLoading: false,
+				showForm: false
+			}
+
 		case actionTypes.ADD_USER_FAILED:
 			return {
 				...state,
 				tableIsLoading: false
 			}
 
-		case actionTypes.TOGGLE_ACTIVE_SUCCESS:
-			const newUsersData = state.usersTableData.map(usr => {
-				if (usr._id.toString() === action.data._id.toString()) {
-					usr.isActive = action.data.isActive
-				}
-				return usr
-			})
+		case actionTypes.UPDATE_USER_SUCCESS:
+			const newUsersTable = [...state.usersTableData]
+			const userIndex = newUsersTable.findIndex(usr => usr._id.toString() === action.data._id.toString())
+			newUsersTable[userIndex] = action.data
+			message.success('User database was successfully updated')
+
 			return {
 				...state,
-				usersTableData: newUsersData,
+				usersTableData: addKey(newUsersTable),
+				tableIsLoading: false,
+				showForm: false
+			}
+
+		case actionTypes.TOGGLE_ACTIVE_SUCCESS:
+			let updatedTableData = updatedTableSwitch(state.usersTableData, 'isActive', action.data._id)
+			if (!state.showInactive) {
+				updatedTableData = updatedTableData.filter(i => i.isActive === true)
+			}
+			return {
+				...state,
+				usersTableData: addKey(updatedTableData),
 				tableIsLoading: false
+			}
+
+		case actionTypes.TOGGLE_SHOW_INACTIVE:
+			return {
+				...state,
+				showInactive: !state.showInactive
 			}
 
 		default:

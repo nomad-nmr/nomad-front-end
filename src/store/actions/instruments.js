@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
 import errorHandler from './errorHandler'
-import { message } from 'antd'
 
 export const fetchInstrumentsStart = () => {
 	return {
@@ -9,7 +8,6 @@ export const fetchInstrumentsStart = () => {
 	}
 }
 
-//This function is called every time a request to server is successful. Server returns array of table data and whole table gets re-rendered
 export const fetchInstrumentsSuccess = payload => {
 	return {
 		type: actionTypes.FETCH_INSTRUMENTS_TABLE_SUCCESS,
@@ -17,18 +15,26 @@ export const fetchInstrumentsSuccess = payload => {
 	}
 }
 
-export const addInstrumentFailed = payload => {
+export const addInstrumentSuccess = payload => {
 	return {
-		type: actionTypes.ADD_INSTRUMENT_FAILED,
+		type: actionTypes.ADD_INSTRUMENT_SUCCESS,
+		data: payload
+	}
+}
+export const updateInstrumentSuccess = payload => {
+	return {
+		type: actionTypes.UPDATE_INSTRUMENT_SUCCESS,
 		data: payload
 	}
 }
 
-export const fetchInstruments = token => {
+export const fetchInstruments = (token, showInactive) => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.get('/admin/instruments/?auth=' + token)
+			.get('/admin/instruments/?showInactive=' + showInactive, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
 			.then(res => {
 				dispatch(fetchInstrumentsSuccess(res.data))
 			})
@@ -42,10 +48,9 @@ export const addInstrument = (formData, token) => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.post('/admin/instruments/?auth=' + token, formData)
+			.post('/admin/instruments', formData, { headers: { Authorization: 'Bearer ' + token } })
 			.then(res => {
-				message.success('Instrument was successfully added to database')
-				dispatch(fetchInstrumentsSuccess(res.data))
+				dispatch(addInstrumentSuccess(res.data))
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))
@@ -57,34 +62,13 @@ export const updateInstruments = (formData, token) => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios
-			.put('/admin/instruments/?auth=' + token, formData)
+			.put('/admin/instruments', formData, { headers: { Authorization: 'Bearer ' + token } })
 			.then(res => {
-				message.success('Instrument was successfully updated in database')
-				dispatch(fetchInstrumentsSuccess(res.data))
+				dispatch(updateInstrumentSuccess(res.data))
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))
 			})
-	}
-}
-
-export const deleteInstrument = (id, token) => {
-	return dispatch => {
-		dispatch(fetchInstrumentsStart())
-		axios
-			.delete(`/admin/instruments/${id}/?auth=` + token)
-			.then(res => {
-				dispatch(fetchInstrumentsSuccess(res.data))
-			})
-			.catch(err => {
-				dispatch(errorHandler(err))
-			})
-	}
-}
-
-export const toggleAvailableSwitchStart = () => {
-	return {
-		type: actionTypes.TOGGLE_AVAILABLE_SWITCH_START
 	}
 }
 
@@ -97,9 +81,11 @@ export const toggleAvailableSwitchSuccess = payload => {
 
 export const toggleAvailableStatus = (id, token) => {
 	return dispatch => {
-		dispatch(toggleAvailableSwitchStart())
+		dispatch(fetchInstrumentsStart())
 		axios
-			.patch(`/admin/instruments/toggle-available/${id}/?auth=` + token)
+			.patch(`/admin/instruments/toggle-available/${id}`, null, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
 			.then(res => {
 				dispatch(toggleAvailableSwitchSuccess(res.data))
 			})
@@ -112,5 +98,34 @@ export const toggleAvailableStatus = (id, token) => {
 export const toggleShowForm = () => {
 	return {
 		type: actionTypes.TOGGLE_INSTRUMENT_FORM
+	}
+}
+
+export const toggleActiveSuccess = payload => {
+	return {
+		type: actionTypes.TOGGLE_ACTIVE_INSTRUMENTS_SUCCESS,
+		data: payload
+	}
+}
+
+export const toggleActiveInstr = (id, token) => {
+	return dispatch => {
+		dispatch(fetchInstrumentsStart())
+		axios
+			.patch(`/admin/instruments/toggle-active/${id}`, null, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
+			.then(res => {
+				dispatch(toggleActiveSuccess(res.data))
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}
+
+export const toggleShowInactiveInstruments = () => {
+	return {
+		type: actionTypes.TOGGLE_SHOW_INACTIVE_INSTRUMENTS
 	}
 }

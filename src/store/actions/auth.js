@@ -49,7 +49,7 @@ export const signInFail = () => {
 export const signOutHandler = token => {
 	return dispatch => {
 		axios
-			.post('/auth/logout/?auth=' + token)
+			.post('/auth/logout', null, { headers: { Authorization: 'Bearer ' + token } })
 			.then(() => {
 				localStorage.removeItem('user')
 				dispatch(signOutSuccess())

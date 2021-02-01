@@ -18,3 +18,11 @@ export const highlightRows = tableData => {
 	})
 	return newTableData
 }
+
+//Helper function for use in reducer to update boolean property (switch) in data tables
+export const updatedTableSwitch = (tableData, key, id) => {
+	const updatedTableData = [...tableData]
+	const index = updatedTableData.findIndex(i => i._id.toString() === id.toString())
+	updatedTableData[index][key] = !updatedTableData[index][key]
+	return updatedTableData
+}

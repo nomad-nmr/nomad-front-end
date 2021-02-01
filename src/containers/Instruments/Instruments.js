@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 import {
 	fetchInstruments,
 	updateInstruments,
-	deleteInstrument,
+	toggleActiveInstr,
 	toggleAvailableStatus,
 	toggleShowForm,
 	addInstrument
 } from '../../store/actions/index'
-import { Table, Space, Switch, Button, Popconfirm, Tooltip, message } from 'antd'
+import { Table, Space, Switch, Button, Tag, Tooltip, message } from 'antd'
 import Animate from 'rc-animate'
 import InstrumentForm from '../../components/Forms/InstrumentForm/InstrumentForm'
 import { CopyTwoTone } from '@ant-design/icons'
@@ -16,13 +16,15 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import './Instruments.css'
 
+const { CheckableTag } = Tag
+
 const Instruments = props => {
-	const { fetchInstr, authToken } = props
+	const { fetchInstr, authToken, showInactive } = props
 	const formRef = useRef({})
 
 	useEffect(() => {
-		fetchInstr(authToken)
-	}, [fetchInstr, authToken])
+		fetchInstr(authToken, showInactive)
+	}, [fetchInstr, authToken, showInactive])
 
 	const columns = [
 		{
@@ -75,13 +77,14 @@ const Instruments = props => {
 						}}>
 						Edit
 					</Button>
-					<Popconfirm
-						title='Sure to delete?'
-						onConfirm={() => props.deleteInstrument(record._id, props.authToken)}>
-						<Button size='small' type='link' danger>
-							Delete
-						</Button>
-					</Popconfirm>
+					<CheckableTag
+						key={record.key}
+						checked={record.isActive}
+						onChange={() => {
+							props.toggleActive(record._id, props.authToken)
+						}}>
+						{record.isActive ? 'Active' : 'Inactive'}
+					</CheckableTag>
 				</Space>
 			)
 		}
@@ -132,17 +135,18 @@ const mapStateToProps = state => {
 		tableLoad: state.instruments.tableIsLoading,
 		switchIsLoading: state.instruments.availableSwitchIsLoading,
 		formVisible: state.instruments.showForm,
-		authToken: state.auth.token
+		authToken: state.auth.token,
+		showInactive: state.instruments.showInactive
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetchInstr: token => dispatch(fetchInstruments(token)),
+		fetchInstr: (token, showInactive) => dispatch(fetchInstruments(token, showInactive)),
 		addInstr: (payload, token) => dispatch(addInstrument(payload, token)),
 		updateInstr: (payload, token) => dispatch(updateInstruments(payload, token)),
-		deleteInstrument: (payload, token) => dispatch(deleteInstrument(payload, token)),
 		toggleAvailable: (payload, token) => dispatch(toggleAvailableStatus(payload, token)),
+		toggleActive: (payload, token) => dispatch(toggleActiveInstr(payload, token)),
 		toggleForm: () => dispatch(toggleShowForm())
 	}
 }
