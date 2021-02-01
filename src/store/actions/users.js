@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
 import errorHandler from './errorHandler'
-import { message } from 'antd'
 
 export const fetchUsersStart = () => {
 	return {
@@ -20,7 +19,7 @@ export const fetchUsers = (token, showInactive) => {
 	return dispatch => {
 		dispatch(fetchUsersStart())
 		axios
-			.get('/admin/users/?auth=' + token + '&showInactive=' + showInactive)
+			.get('/admin/users/?showInactive=' + showInactive, { headers: { Authorization: 'Bearer ' + token } })
 			.then(res => {
 				dispatch(fetchUsersSuccess(res.data))
 			})
@@ -37,6 +36,13 @@ export const toggleUserForm = payload => {
 	}
 }
 
+export const addUserSuccess = payload => {
+	return {
+		type: actionTypes.ADD_USER_SUCCESS,
+		data: payload
+	}
+}
+
 export const addUserFailed = () => {
 	return {
 		type: actionTypes.ADD_USER_FAILED
@@ -47,10 +53,9 @@ export const addUser = (formData, token) => {
 	return dispatch => {
 		dispatch(fetchUsersStart())
 		axios
-			.post('/admin/users/?auth=' + token, formData)
+			.post('/admin/users', formData, { headers: { Authorization: 'Bearer ' + token } })
 			.then(res => {
-				message.success('User was successfully adde to database')
-				dispatch(fetchUsers(token))
+				dispatch(addUserSuccess(res.data))
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))
@@ -59,14 +64,20 @@ export const addUser = (formData, token) => {
 	}
 }
 
+export const updateUserSuccess = payload => {
+	return {
+		type: actionTypes.UPDATE_USER_SUCCESS,
+		data: payload
+	}
+}
+
 export const updateUser = (formData, token) => {
 	return dispatch => {
 		dispatch(fetchUsersStart())
 		axios
-			.put('/admin/users/?auth=' + token, formData)
+			.put('/admin/users', formData, { headers: { Authorization: 'Bearer ' + token } })
 			.then(res => {
-				message.success('User database was successfully updated')
-				dispatch(fetchUsers(token))
+				dispatch(updateUserSuccess(res.data))
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))
@@ -84,7 +95,7 @@ export const toggleActive = (id, token) => {
 	return dispatch => {
 		dispatch(fetchUsersStart())
 		axios
-			.patch('admin/users/toggle-active/' + id + '/?auth=' + token)
+			.patch('admin/users/toggle-active/' + id, null, { headers: { Authorization: 'Bearer ' + token } })
 			.then(res => dispatch(toggleActiveSuccess(res.data)))
 			.catch(err => {
 				dispatch(errorHandler(err))

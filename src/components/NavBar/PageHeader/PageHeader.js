@@ -6,7 +6,8 @@ import {
 	openDashDrawer,
 	toggleShowForm,
 	toggleUserForm,
-	toggleShowInactive
+	toggleShowInactive,
+	toggleShowInactiveInstruments
 } from '../../../store/actions/index'
 
 import { PageHeader, Switch, Button } from 'antd'
@@ -98,6 +99,16 @@ const PageHeaderEl = props => {
 						disabled={props.instFormVisible}>
 						Add Instrument
 					</Button>
+					<div className={classes.SwitchElement}>
+						<label>Show Inactive</label>
+						<Switch
+							size='small'
+							checked={props.showInactiveInst}
+							checkedChildren='On'
+							unCheckedChildren='Off'
+							onChange={props.toggleShowInactiveInstr}
+						/>
+					</div>
 				</div>
 			)
 			break
@@ -125,7 +136,8 @@ const mapStateToProps = state => {
 		cardSwitchOn: state.dash.showCards,
 		statusButtonsData: state.dash.statusButtonsData,
 		instFormVisible: state.instruments.showForm,
-		showInactive: state.users.showInactive
+		showInactive: state.users.showInactive,
+		showInactiveInst: state.instruments.showInactive
 	}
 }
 
@@ -135,7 +147,8 @@ const mapDispatchToProps = dispatch => {
 		statusButtonClicked: id => dispatch(openDashDrawer(id)),
 		toggleInstForm: () => dispatch(toggleShowForm()),
 		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing)),
-		switchShowInactive: () => dispatch(toggleShowInactive())
+		switchShowInactive: () => dispatch(toggleShowInactive()),
+		toggleShowInactiveInstr: () => dispatch(toggleShowInactiveInstruments())
 	}
 }
 

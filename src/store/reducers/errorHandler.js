@@ -15,6 +15,7 @@ const reducer = (state = initialState, action) => {
 			action.error.response.data.errors.forEach(err => {
 				message.error({ content: err.msg, style: { color: 'red' } })
 			})
+
 			return state
 
 		case actionTypes.HTTP_404_ERROR:

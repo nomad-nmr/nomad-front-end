@@ -21,9 +21,10 @@ export {
 	fetchInstruments,
 	addInstrument,
 	updateInstruments,
-	deleteInstrument,
+	toggleActiveInstr,
 	toggleAvailableStatus,
-	toggleShowForm
+	toggleShowForm,
+	toggleShowInactiveInstruments
 } from './instruments'
 
 export { fetchUsers, toggleUserForm, addUser, updateUser, toggleActive, toggleShowInactive } from './users'
