@@ -70,3 +70,8 @@ export const fetchStatusTable = tab => {
 			})
 	}
 }
+
+export const statusUpdate = data => ({
+	type: actionTypes.STATUS_UPDATE,
+	data
+})

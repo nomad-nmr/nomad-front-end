@@ -14,7 +14,8 @@ export {
 	openDashDrawer,
 	closeDashDrawer,
 	fetchStatusSummary,
-	fetchStatusTable
+	fetchStatusTable,
+	statusUpdate
 } from './dashboard'
 
 export {
