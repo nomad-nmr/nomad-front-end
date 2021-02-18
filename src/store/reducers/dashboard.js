@@ -24,7 +24,11 @@ const calcButtonsCount = inputArr => {
 				obj.running++
 			}
 			obj.errors += errorCount
-			obj.pending += pendingCount
+			//pending experiments are counted only for available instruments
+			if (i.available) {
+				obj.pending += pendingCount
+			}
+
 			return obj
 		},
 		{
