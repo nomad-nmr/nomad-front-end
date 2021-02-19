@@ -1,6 +1,5 @@
 import React from 'react'
 import { Table, Badge, Tag } from 'antd'
-import TweenOne from 'rc-tween-one'
 import {
 	CheckCircleOutlined,
 	SyncOutlined,
@@ -87,20 +86,7 @@ const statusTable = props => {
 						)
 					case 'Error':
 						return (
-							<Tag
-								icon={
-									<TweenOne
-										animation={{
-											opacity: 1,
-											scale: 1,
-											yoyo: true,
-											repeat: -1,
-											duration: 500
-										}}>
-										<CloseCircleOutlined />
-									</TweenOne>
-								}
-								color='error'>
+							<Tag icon={<CloseCircleOutlined />} color='error'>
 								{text}
 							</Tag>
 						)

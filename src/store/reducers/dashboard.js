@@ -15,6 +15,31 @@ const initialState = {
 	tableLoading: true
 }
 
+//Calculation of count of entries with running, pending and error status [statusButtonsData] from [statusSummaryData]
+const calcButtonsCount = inputArr => {
+	const statusButtonsObj = inputArr.reduce(
+		(obj, i) => {
+			const { running = false, errorCount = 0, pendingCount = 0 } = i.status.summary
+			if (running) {
+				obj.running++
+			}
+			obj.errors += errorCount
+			//pending experiments are counted only for available instruments
+			if (i.available) {
+				obj.pending += pendingCount
+			}
+
+			return obj
+		},
+		{
+			running: 0,
+			errors: 0,
+			pending: 0
+		}
+	)
+	return Object.entries(statusButtonsObj)
+}
+
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case actionTypes.TOGGLE_CARDS:
@@ -59,27 +84,10 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.FETCH_STATUS_SUMMARY_SUCCESS:
-			//Calculation of count of entries with running, pending and error status
-			const statusButtonsObj = action.data.reduce(
-				(obj, i) => {
-					const { running = false, errorCount = 0, pendingCount = 0 } = i.status.summary
-					if (running) {
-						obj.running++
-					}
-					obj.errors += errorCount
-					obj.pending += pendingCount
-					return obj
-				},
-				{
-					running: 0,
-					errors: 0,
-					pending: 0
-				}
-			)
 			return {
 				...state,
 				statusSummaryData: addKey(action.data),
-				statusButtonsData: Object.entries(statusButtonsObj)
+				statusButtonsData: calcButtonsCount(action.data)
 			}
 
 		case actionTypes.FETCH_STATUS_TABLE_START:
@@ -94,6 +102,17 @@ const reducer = (state = initialState, action) => {
 				...state,
 				statusTableData: highlightRows(addKey(action.data)),
 				tableLoading: false
+			}
+
+		//Reducer for updating statusSummaryData through websockets
+		case actionTypes.STATUS_UPDATE:
+			const newStatSummary = [...state.statusSummaryData]
+			const instrIndex = newStatSummary.findIndex(i => i._id === action.data.instrId)
+			newStatSummary[instrIndex].status.summary = action.data.statusSummary
+			return {
+				...state,
+				statusSummaryData: newStatSummary,
+				statusButtonsData: calcButtonsCount(newStatSummary)
 			}
 
 		default:

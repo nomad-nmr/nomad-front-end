@@ -1,8 +1,10 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import { fetchStatusSummary, fetchStatusTable, closeDashDrawer } from '../../store/actions'
-import Animate from 'rc-animate'
 
+import { fetchStatusSummary, fetchStatusTable, closeDashDrawer, statusUpdate } from '../../store/actions'
+import socket from '../../socketConnection'
+
+import Animate from 'rc-animate'
 import InfoCards from '../../components/InfoCards/InfoCards'
 import StatusTabs from '../../components/StatusTabs/StatusTabs'
 import StatusDrawer from '../../components/StatusDrawer/StatusDrawer'
@@ -10,17 +12,41 @@ import './Dashboard.css'
 
 const Dashboard = props => {
 	const [activeTab, setActiveTab] = useState('0')
-	const { fetchButtons, fetchStatusSum, fetchStatusTable } = props
+	const { fetchStatusSum, fetchStatusTable } = props
+
+	const activeTabIdRef = useRef(null)
 
 	useEffect(() => {
+		socket.removeAllListeners('statusUpdate')
 		fetchStatusSum()
 		fetchStatusTable('0')
-	}, [fetchButtons, fetchStatusSum, fetchStatusTable])
+	}, [fetchStatusSum, fetchStatusTable])
+
+	//Hook creates reference to instrument ID in activeTab and activeTab index value that is used in subsequent hook to reload the active tab if it gets updated.
+	useEffect(() => {
+		if (props.statusSummary.length > 0) {
+			activeTabIdRef.current = {
+				instrId: props.statusSummary[activeTab]._id,
+				activeTab
+			}
+		}
+	}, [props.statusSummary, activeTab])
+
+	//Hook for socket.io that gets triggered when status of an instrument is updated by tracker at the backend
+	useEffect(() => {
+		socket.on('statusUpdate', data => {
+			props.statUpdate(data)
+			const { instrId, activeTab } = activeTabIdRef.current
+			if (instrId === data.instrId) {
+				fetchStatusTable(activeTab)
+			}
+		})
+		// eslint-disable-next-line
+	}, [])
 
 	const tabChangeHandler = key => {
 		fetchStatusTable(key)
 		setActiveTab(key)
-		fetchStatusSum()
 	}
 
 	return (
@@ -58,7 +84,8 @@ const mapDispatchToProps = dispatch => {
 	return {
 		fetchStatusSum: () => dispatch(fetchStatusSummary()),
 		onCloseDrawer: () => dispatch(closeDashDrawer()),
-		fetchStatusTable: key => dispatch(fetchStatusTable(key))
+		fetchStatusTable: key => dispatch(fetchStatusTable(key)),
+		statUpdate: data => dispatch(statusUpdate(data))
 	}
 }
 
