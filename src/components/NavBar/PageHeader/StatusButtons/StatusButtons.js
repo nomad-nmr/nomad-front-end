@@ -5,6 +5,7 @@ import { CaretRightOutlined, DownOutlined, ExclamationOutlined } from '@ant-desi
 import classes from './StatusButtons.module.css'
 
 const statusButtons = props => {
+	//props.data (statusButtonsData) is array of arrays [type, count]
 	const buttonsArr = props.data.map((button, index) => {
 		let badgeBackground = ''
 		let icon

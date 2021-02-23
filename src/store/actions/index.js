@@ -29,3 +29,5 @@ export {
 } from './instruments'
 
 export { fetchUsers, toggleUserForm, addUser, updateUser, toggleActive, toggleShowInactive } from './users'
+
+export { fetchGroupsTable } from './groups'

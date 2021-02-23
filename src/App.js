@@ -17,7 +17,6 @@ import NavBar from './components/NavBar/NavBar'
 import LoginModal from './components/Modals/LoginModal/LoginModal'
 import LogoutModal from './components/Modals/LogoutModal/LogoutModal'
 import Dashboard from './containers/Dashboard/Dashboard'
-import Groups from './containers/Groups/Groups'
 import Experiments from './containers/Experiments/Experiments'
 import Error500 from './components/Errors/Error500'
 import Error404 from './components/Errors/Error404'
@@ -43,6 +42,7 @@ const App = props => {
 	// Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
 	const Users = React.lazy(() => import('./containers/Users/Users'))
 	const Instruments = React.lazy(() => import('./containers/Instruments/Instruments'))
+	const Groups = React.lazy(() => import('./containers/Groups/Groups'))
 
 	//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
 	let authModal = null
@@ -94,7 +94,12 @@ const App = props => {
 									return accessLevel === 'admin' ? <Users /> : <Error403 />
 								}}
 							/>
-							<Route path='/admin/groups' component={accessLevel === 'admin' ? Groups : Error403} />
+							<Route
+								path='/admin/groups'
+								render={() => {
+									return accessLevel === 'admin' ? <Groups /> : <Error403 />
+								}}
+							/>
 							<Route
 								path='/admin/instruments'
 								render={() => {
