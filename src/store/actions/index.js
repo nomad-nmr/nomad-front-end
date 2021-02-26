@@ -16,7 +16,7 @@ export {
 	fetchStatusSummary,
 	fetchStatusTable,
 	statusUpdate,
-	toggleAvailableOnCard
+	toggleAvailableOnDash
 } from './dashboard'
 
 export {

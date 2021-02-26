@@ -104,7 +104,7 @@ const reducer = (state = initialState, action) => {
 				tableLoading: false
 			}
 
-		case actionTypes.TOGGLE_AVAILABLE_CARD_SUCCESS:
+		case actionTypes.TOGGLE_AVAILABLE_SUCCESS_DASH:
 			return {
 				...state,
 				statusSummaryData: updateTableSwitch(state.statusSummaryData, 'available', action.data._id),

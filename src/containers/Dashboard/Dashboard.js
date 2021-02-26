@@ -6,7 +6,7 @@ import {
 	fetchStatusTable,
 	closeDashDrawer,
 	statusUpdate,
-	toggleAvailableOnCard
+	toggleAvailableOnDash
 } from '../../store/actions'
 import socket from '../../socketConnection'
 
@@ -97,7 +97,7 @@ const mapDispatchToProps = dispatch => {
 		onCloseDrawer: () => dispatch(closeDashDrawer()),
 		fetchStatusTable: key => dispatch(fetchStatusTable(key)),
 		statUpdate: data => dispatch(statusUpdate(data)),
-		toggleAvailable: (instrId, token) => dispatch(toggleAvailableOnCard(instrId, token))
+		toggleAvailable: (instrId, token) => dispatch(toggleAvailableOnDash(instrId, token))
 	}
 }
 

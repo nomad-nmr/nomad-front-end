@@ -78,12 +78,12 @@ export const statusUpdate = data => ({
 
 export const toggleAvailableSwitchSuccess = payload => {
 	return {
-		type: actionTypes.TOGGLE_AVAILABLE_CARD_SUCCESS,
+		type: actionTypes.TOGGLE_AVAILABLE_SUCCESS_DASH,
 		data: payload
 	}
 }
 
-export const toggleAvailableOnCard = (id, token) => {
+export const toggleAvailableOnDash = (id, token) => {
 	return dispatch => {
 		axios
 			.patch(`/admin/instruments/toggle-available/${id}`, null, {
