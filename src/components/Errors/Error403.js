@@ -6,7 +6,7 @@ const error403 = props => (
 	<Result
 		status='403'
 		title='403'
-		subTitle='Sorry, you are not authorized to access this resource.'
+		subTitle='Sorry, you are not authorized to access this resource. Please, login'
 		extra={
 			<Button type='primary' onClick={() => props.history.push({ pathname: '/' })}>
 				Back Home

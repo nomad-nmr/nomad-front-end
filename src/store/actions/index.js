@@ -15,7 +15,8 @@ export {
 	closeDashDrawer,
 	fetchStatusSummary,
 	fetchStatusTable,
-	statusUpdate
+	statusUpdate,
+	toggleAvailableOnCard
 } from './dashboard'
 
 export {
@@ -23,11 +24,19 @@ export {
 	addInstrument,
 	updateInstruments,
 	toggleActiveInstr,
-	toggleAvailableStatus,
+	toggleAvailableInTable,
 	toggleShowForm,
 	toggleShowInactiveInstruments
 } from './instruments'
 
 export { fetchUsers, toggleUserForm, addUser, updateUser, toggleActive, toggleShowInactive } from './users'
 
-export { fetchGroupsTable } from './groups'
+export {
+	fetchGroups,
+	addGroup,
+	updateGroup,
+	toggleGroupForm,
+	toggleShowInactiveGroups,
+	toggleActiveGroup,
+	fetchGroupList
+} from './groups'

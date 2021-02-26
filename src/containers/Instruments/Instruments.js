@@ -4,7 +4,7 @@ import {
 	fetchInstruments,
 	updateInstruments,
 	toggleActiveInstr,
-	toggleAvailableStatus,
+	toggleAvailableInTable,
 	toggleShowForm,
 	addInstrument
 } from '../../store/actions/index'
@@ -29,43 +29,39 @@ const Instruments = props => {
 	const columns = [
 		{
 			title: 'Name',
-			dataIndex: 'name',
-			key: 'name'
+			dataIndex: 'name'
 		},
 		{
 			title: 'Model',
-			dataIndex: 'model',
-			key: 'model'
+			dataIndex: 'model'
 		},
 		{
 			title: 'Probe',
-			dataIndex: 'probe',
-			key: 'probe'
+			dataIndex: 'probe'
 		},
 		{
 			title: 'Capacity',
 			dataIndex: 'capacity',
-			key: 'capacity'
+			align: 'center'
 		},
 		{
 			title: 'Available',
-			key: 'available',
+			align: 'center',
 			render: record => (
 				<Switch
 					checked={record.available}
 					checkedChildren='On'
 					unCheckedChildren='Off'
 					size='small'
-					loading={props.switchIsLoading}
 					onChange={() => props.toggleAvailable(record._id, props.authToken)}
 				/>
 			)
 		},
 		{
-			title: 'Action',
-			key: 'action',
+			title: 'Actions',
+			align: 'center',
 			render: record => (
-				<Space size='middle'>
+				<Space>
 					<Button
 						size='small'
 						type='link'
@@ -145,7 +141,7 @@ const mapDispatchToProps = dispatch => {
 		fetchInstr: (token, showInactive) => dispatch(fetchInstruments(token, showInactive)),
 		addInstr: (payload, token) => dispatch(addInstrument(payload, token)),
 		updateInstr: (payload, token) => dispatch(updateInstruments(payload, token)),
-		toggleAvailable: (payload, token) => dispatch(toggleAvailableStatus(payload, token)),
+		toggleAvailable: (payload, token) => dispatch(toggleAvailableInTable(payload, token)),
 		toggleActive: (payload, token) => dispatch(toggleActiveInstr(payload, token)),
 		toggleForm: () => dispatch(toggleShowForm())
 	}

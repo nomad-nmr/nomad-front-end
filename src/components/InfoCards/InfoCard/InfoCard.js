@@ -1,15 +1,29 @@
 import React from 'react'
-import { Card, Row, Col, Tag } from 'antd'
+// import { connect } from 'react-redux'
+
+import { Card, Row, Col, Tag, Switch } from 'antd'
+
 import TrafficLights from '../../TrafficLights/TrafficLights'
 import classes from './InfoCard.module.css'
 
 const InfoCard = props => {
-	const { name, model, probe, available } = props.data
+	const { name, model, probe, available, _id } = props.data
 	const { busyUntil, dayExpt, nightExpt } = props.data.status.summary
 	const cardColor = available ? '#52c41a' : '#ff4d4f'
 	const cardBackgroundColor = available ? '#f6ffed' : '#fff1f0'
 
-	//Setting up traffic lights for cards dynamically
+	const switchElement = (
+		<div className={classes.Switch}>
+			<Switch
+				checked={available}
+				checkedChildren='On'
+				unCheckedChildren='Off'
+				onChange={() => {
+					props.onSwitch(_id, props.authToken)
+				}}
+			/>
+		</div>
+	)
 
 	return (
 		<Card
@@ -58,6 +72,7 @@ const InfoCard = props => {
 					{nightExpt}
 				</li>
 			</ul>
+			{props.accessLevel === 'admin' && switchElement}
 		</Card>
 	)
 }

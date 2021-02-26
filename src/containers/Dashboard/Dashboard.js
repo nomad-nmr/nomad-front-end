@@ -1,7 +1,13 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchStatusSummary, fetchStatusTable, closeDashDrawer, statusUpdate } from '../../store/actions'
+import {
+	fetchStatusSummary,
+	fetchStatusTable,
+	closeDashDrawer,
+	statusUpdate,
+	toggleAvailableOnCard
+} from '../../store/actions'
 import socket from '../../socketConnection'
 
 import Animate from 'rc-animate'
@@ -63,6 +69,9 @@ const Dashboard = props => {
 					tableData={props.statusTable}
 					clicked={tabChangeHandler}
 					tableLoading={props.tableLoading}
+					switchHandler={props.toggleAvailable}
+					token={props.authToken}
+					accessLvl={props.accessLevel}
 				/>
 			</div>
 			<StatusDrawer status={props.drawerStatus} closeClicked={props.onCloseDrawer} />
@@ -76,7 +85,9 @@ const mapStateToProps = state => {
 		statusSummary: state.dash.statusSummaryData,
 		statusTable: state.dash.statusTableData,
 		tableLoading: state.dash.tableLoading,
-		drawerStatus: state.dash.drawerStatus
+		drawerStatus: state.dash.drawerStatus,
+		accessLevel: state.auth.accessLevel,
+		authToken: state.auth.token
 	}
 }
 
@@ -85,7 +96,8 @@ const mapDispatchToProps = dispatch => {
 		fetchStatusSum: () => dispatch(fetchStatusSummary()),
 		onCloseDrawer: () => dispatch(closeDashDrawer()),
 		fetchStatusTable: key => dispatch(fetchStatusTable(key)),
-		statUpdate: data => dispatch(statusUpdate(data))
+		statUpdate: data => dispatch(statusUpdate(data)),
+		toggleAvailable: (instrId, token) => dispatch(toggleAvailableOnCard(instrId, token))
 	}
 }
 

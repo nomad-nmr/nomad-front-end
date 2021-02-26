@@ -15,14 +15,119 @@ export const fetchGroupsSuccess = data => {
 	}
 }
 
-export const fetchGroupsTable = token => {
+export const fetchGroups = (token, showInactive) => {
 	return dispatch => {
 		dispatch(fetchGroupsStart())
 		axios
-			.get('/admin/groups/', { headers: { Authorization: 'Bearer ' + token } })
+			.get('/admin/groups/?showInactive=' + showInactive, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
 			.then(res => {
 				dispatch(fetchGroupsSuccess(res.data))
 			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}
+
+export const addGroupSuccess = data => {
+	return {
+		type: actionTypes.ADD_GROUP_SUCCESS,
+		data
+	}
+}
+
+export const addGroupFailed = () => {
+	return {
+		type: actionTypes.ADD_GROUP_FAILED
+	}
+}
+
+export const addGroup = (formData, token) => {
+	return dispatch => {
+		dispatch(fetchGroupsStart())
+		axios
+			.post('/admin/groups/', formData, { headers: { Authorization: 'Bearer ' + token } })
+			.then(res => {
+				dispatch(addGroupSuccess(res.data))
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+				dispatch(addGroupFailed())
+			})
+	}
+}
+
+export const updateGroupSuccess = data => {
+	return {
+		type: actionTypes.UPDATE_GROUP_SUCCESS,
+		data
+	}
+}
+
+export const updateGroup = (formData, token) => {
+	return dispatch => {
+		dispatch(fetchGroupsStart())
+		axios
+			.put('/admin/groups/', formData, { headers: { Authorization: 'Bearer ' + token } })
+			.then(res => {
+				dispatch(updateGroupSuccess(res.data))
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+				dispatch(addGroupFailed())
+			})
+	}
+}
+
+export const toggleGroupForm = data => {
+	return {
+		type: actionTypes.TOGGLE_GROUP_FORM,
+		data
+	}
+}
+
+export const toggleShowInactiveGroups = () => {
+	return {
+		type: actionTypes.TOGGLE_SHOW_INACTIVE_GROUPS
+	}
+}
+
+export const toggleActiveGroupSuccess = data => {
+	return {
+		type: actionTypes.TOGGLE_ACTIVE_GROUP_SUCCESS,
+		data
+	}
+}
+
+export const toggleActiveGroup = (groupId, token) => {
+	return dispatch => {
+		dispatch(fetchGroupsStart())
+		axios
+			.patch('/admin/groups/toggle-active/' + groupId, null, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
+			.then(res => {
+				dispatch(toggleActiveGroupSuccess(res.data))
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+				dispatch(addGroupFailed())
+			})
+	}
+}
+
+export const fetchGroupListSuccess = data => ({
+	type: actionTypes.FETCH_GROUP_LIST_SUCCESS,
+	data
+})
+
+export const fetchGroupList = token => {
+	return dispatch => {
+		axios
+			.get('admin/groups/?list=true', { headers: { Authorization: 'Bearer ' + token } })
+			.then(res => dispatch(fetchGroupListSuccess(res.data)))
 			.catch(err => {
 				dispatch(errorHandler(err))
 			})

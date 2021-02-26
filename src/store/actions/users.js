@@ -29,10 +29,10 @@ export const fetchUsers = (token, showInactive) => {
 	}
 }
 
-export const toggleUserForm = payload => {
+export const toggleUserForm = data => {
 	return {
 		type: actionTypes.TOGGLE_USERS_FORM,
-		data: payload
+		data
 	}
 }
 
@@ -87,7 +87,7 @@ export const updateUser = (formData, token) => {
 }
 
 export const toggleActiveSuccess = payload => ({
-	type: actionTypes.TOGGLE_ACTIVE_SUCCESS,
+	type: actionTypes.TOGGLE_ACTIVE_USER_SUCCESS,
 	data: payload
 })
 
@@ -105,5 +105,5 @@ export const toggleActive = (id, token) => {
 }
 
 export const toggleShowInactive = () => ({
-	type: actionTypes.TOGGLE_SHOW_INACTIVE
+	type: actionTypes.TOGGLE_SHOW_INACTIVE_USERS
 })

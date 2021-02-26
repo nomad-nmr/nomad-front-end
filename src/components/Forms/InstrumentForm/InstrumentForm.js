@@ -49,9 +49,6 @@ const InstrumentsForm = props => {
 				ref={props.formReference}
 				name='instruments-settings'
 				onFinish={onFinish}>
-				<Form.Item hidden name='key'>
-					<Input />
-				</Form.Item>
 				<Form.Item
 					name='name'
 					label='Name'
@@ -73,13 +70,11 @@ const InstrumentsForm = props => {
 						]}>
 						<InputNumber className={classes.InputNumber} min={0} />
 					</Form.Item>
-					<Tooltip title='Number of holder in sample changer'>
+					<Tooltip title='Number of holders in sample changer'>
 						<QuestionCircleOutlined className={classes.Hint} />
 					</Tooltip>
 				</Form.Item>
-				<Form.Item hidden name='running'>
-					<Input />
-				</Form.Item>
+
 				<Form.Item hidden name='_id'>
 					<Input />
 				</Form.Item>
@@ -95,6 +90,5 @@ const InstrumentsForm = props => {
 		</div>
 	)
 }
-
 
 export default InstrumentsForm

@@ -1,9 +1,15 @@
-import { addKey } from '../../utils/tableUtils'
+import { message } from 'antd'
+
+import { addKey, updateTableSwitch } from '../../utils/tableUtils'
 import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
 	groupsTableData: [],
-	tableIsLoading: false
+	tableIsLoading: false,
+	showForm: false,
+	isEditing: false,
+	showInactive: false,
+	groupList: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -19,6 +25,66 @@ const reducer = (state = initialState, action) => {
 				...state,
 				groupsTableData: addKey(action.data),
 				tableIsLoading: false
+			}
+
+		case actionTypes.ADD_GROUP_SUCCESS:
+			const newGroupTable = state.groupsTableData.concat([action.data])
+			message.success('Group was successfully added to database')
+			return {
+				...state,
+				groupsTableData: addKey(newGroupTable),
+				tableIsLoading: false,
+				showForm: false
+			}
+
+		case actionTypes.UPDATE_GROUP_SUCCESS:
+			const updatedGroupTable = [...state.groupsTableData]
+			const groupIndex = updatedGroupTable.findIndex(
+				grp => grp._id.toString() === action.data._id.toString()
+			)
+			updatedGroupTable[groupIndex] = action.data
+			message.success('Group was successfully updated in database')
+			return {
+				...state,
+				groupsTableData: addKey(updatedGroupTable),
+				tableIsLoading: false,
+				showForm: !state.showForm
+			}
+
+		case actionTypes.ADD_GROUP_FAILED:
+			return {
+				...state,
+				tableIsLoading: false
+			}
+
+		case actionTypes.TOGGLE_GROUP_FORM:
+			return {
+				...state,
+				showForm: !state.showForm,
+				isEditing: action.data
+			}
+
+		case actionTypes.TOGGLE_SHOW_INACTIVE_GROUPS:
+			return {
+				...state,
+				showInactive: !state.showInactive
+			}
+
+		case actionTypes.TOGGLE_ACTIVE_GROUP_SUCCESS:
+			let updatedTableData = updateTableSwitch(state.groupsTableData, 'isActive', action.data._id)
+			if (!state.showInactive) {
+				updatedTableData = updatedTableData.filter(i => i.isActive === true)
+			}
+			return {
+				...state,
+				groupsTableData: addKey(updatedTableData),
+				tableIsLoading: false
+			}
+
+		case actionTypes.FETCH_GROUP_LIST_SUCCESS:
+			return {
+				...state,
+				groupList: action.data
 			}
 
 		default: {

@@ -1,46 +1,50 @@
 import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import { Button, Table, Drawer, Tag, Row, Col } from 'antd'
+import { Button, Table, Drawer, Tag, Space } from 'antd'
 
 import UserForm from '../../components/Forms/UserForm/UserForm'
-import { addUser, updateUser, fetchUsers, toggleUserForm, toggleActive } from '../../store/actions/index'
+import {
+	addUser,
+	updateUser,
+	fetchUsers,
+	toggleUserForm,
+	toggleActive,
+	fetchGroupList
+} from '../../store/actions/index'
 
 const { CheckableTag } = Tag
 
 const Users = props => {
-	const { fetchUsers, authToken, showInactive } = props
+	const { fetchUsers, fetchGrpList, authToken, showInactive } = props
 
 	const formRef = useRef({})
 
 	useEffect(() => {
 		fetchUsers(authToken, showInactive)
-	}, [fetchUsers, authToken, showInactive])
+		fetchGrpList(authToken)
+	}, [fetchUsers, fetchGrpList, authToken, showInactive])
 
 	const columns = [
 		{
 			title: 'Username',
 			dataIndex: 'username',
-			key: 'username',
 			sorter: (a, b) => a.username.localeCompare(b.username)
 		},
 		{
 			title: 'Email',
-			dataIndex: 'email',
-			key: 'email'
+			dataIndex: 'email'
 		},
 		{
 			title: 'Full name',
-			dataIndex: 'fullName',
-			key: 'fullName'
+			dataIndex: 'fullName'
 		},
 		{
 			title: 'Group',
-			dataIndex: 'groupName',
-			key: 'groupName'
+			dataIndex: 'groupName'
 		},
 		{
 			title: 'Access level',
-			key: 'accessLevel',
+			align: 'center',
 			render: record => {
 				let tagColor = null
 				switch (record.accessLevel) {
@@ -60,39 +64,35 @@ const Users = props => {
 		},
 		{
 			title: 'Last login',
-			dataIndex: 'lastLogin',
-			key: 'lastLogin'
+			dataIndex: 'lastLogin'
 		},
 		{
 			title: 'Inactive Days',
 			dataIndex: 'inactiveDays',
-			key: 'inactiveDays'
+			align: 'center'
 		},
 		{
-			title: 'Action',
-			key: 'action',
+			title: 'Actions',
+			align: 'center',
 			render: record => (
-				<Row>
-					<Col span={12}>
-						<CheckableTag
-							key={record.key}
-							checked={record.isActive}
-							onChange={() => props.toggleActive(record._id, authToken)}>
-							{record.isActive ? 'Active' : 'Inactive'}
-						</CheckableTag>
-					</Col>
-					<Col span={12}>
-						<Button
-							size='small'
-							type='link'
-							onClick={() => {
-								props.toggleUsrDrawer(true)
-								setTimeout(() => formRef.current.setFieldsValue(record), 100)
-							}}>
-							Edit
-						</Button>
-					</Col>
-				</Row>
+				<Space>
+					<CheckableTag
+						key={record.key}
+						checked={record.isActive}
+						onChange={() => props.toggleActive(record._id, authToken)}>
+						{record.isActive ? 'Active' : 'Inactive'}
+					</CheckableTag>
+
+					<Button
+						size='small'
+						type='link'
+						onClick={() => {
+							props.toggleUsrDrawer(true)
+							setTimeout(() => formRef.current.setFieldsValue(record), 100)
+						}}>
+						Edit
+					</Button>
+				</Space>
 			)
 		}
 	]
@@ -115,6 +115,7 @@ const Users = props => {
 					addUsrHandler={props.addUsrHandler}
 					updateUsrHandler={props.updateUsrHandler}
 					editing={props.formEditing}
+					groupList={props.grpList}
 				/>
 			</Drawer>
 		</div>
@@ -128,17 +129,21 @@ const mapStateToProps = state => {
 		authToken: state.auth.token,
 		usrDrawerVisible: state.users.showForm,
 		formEditing: state.users.editing,
-		showInactive: state.users.showInactive
+		showInactive: state.users.showInactive,
+		//list of group names for select component
+		grpList: state.groups.groupList
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
 		fetchUsers: (token, showInactive) => dispatch(fetchUsers(token, showInactive)),
+		//argument editing (boolean) is used to disable name input
 		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing)),
 		addUsrHandler: (formData, token) => dispatch(addUser(formData, token)),
 		updateUsrHandler: (formData, token) => dispatch(updateUser(formData, token)),
-		toggleActive: (id, token) => dispatch(toggleActive(id, token))
+		toggleActive: (id, token) => dispatch(toggleActive(id, token)),
+		fetchGrpList: token => dispatch(fetchGroupList(token))
 	}
 }
 
