@@ -1,4 +1,4 @@
-import { addKey, updatedTableSwitch } from '../../utils/tableUtils'
+import { addKey, updateTableSwitch } from '../../utils/tableUtils'
 import * as actionTypes from '../actions/actionTypes'
 import { message } from 'antd'
 
@@ -39,8 +39,11 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.ADD_USER_SUCCESS:
-			const updatedUsersTable = state.usersTableData.concat([action.data])
-			message.success('User was successfully adde to database')
+			const newUser = { ...action.data }
+			newUser.groupName = newUser.group.groupName
+			delete newUser.group
+			const updatedUsersTable = state.usersTableData.concat([newUser])
+			message.success('User was successfully added to database')
 			return {
 				...state,
 				usersTableData: addKey(updatedUsersTable),
@@ -57,7 +60,10 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.UPDATE_USER_SUCCESS:
 			const newUsersTable = [...state.usersTableData]
 			const userIndex = newUsersTable.findIndex(usr => usr._id.toString() === action.data._id.toString())
-			newUsersTable[userIndex] = action.data
+			const updatedUser = { ...action.data }
+			updatedUser.groupName = updatedUser.group.groupName
+			delete updatedUser.group
+			newUsersTable[userIndex] = updatedUser
 			message.success('User database was successfully updated')
 
 			return {
@@ -67,8 +73,8 @@ const reducer = (state = initialState, action) => {
 				showForm: false
 			}
 
-		case actionTypes.TOGGLE_ACTIVE_SUCCESS:
-			let updatedTableData = updatedTableSwitch(state.usersTableData, 'isActive', action.data._id)
+		case actionTypes.TOGGLE_ACTIVE_USER_SUCCESS:
+			let updatedTableData = updateTableSwitch(state.usersTableData, 'isActive', action.data._id)
 			if (!state.showInactive) {
 				updatedTableData = updatedTableData.filter(i => i.isActive === true)
 			}
@@ -78,7 +84,7 @@ const reducer = (state = initialState, action) => {
 				tableIsLoading: false
 			}
 
-		case actionTypes.TOGGLE_SHOW_INACTIVE:
+		case actionTypes.TOGGLE_SHOW_INACTIVE_USERS:
 			return {
 				...state,
 				showInactive: !state.showInactive

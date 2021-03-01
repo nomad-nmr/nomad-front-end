@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes'
-import { addKey, highlightRows } from '../../utils/tableUtils'
+import { addKey, highlightRows, updateTableSwitch } from '../../utils/tableUtils'
 
 const initialState = {
 	showCards: true,
@@ -102,6 +102,13 @@ const reducer = (state = initialState, action) => {
 				...state,
 				statusTableData: highlightRows(addKey(action.data)),
 				tableLoading: false
+			}
+
+		case actionTypes.TOGGLE_AVAILABLE_SUCCESS_DASH:
+			return {
+				...state,
+				statusSummaryData: updateTableSwitch(state.statusSummaryData, 'available', action.data._id),
+				tableIsLoading: false
 			}
 
 		//Reducer for updating statusSummaryData through websockets

@@ -21,6 +21,13 @@ export const addInstrumentSuccess = payload => {
 		data: payload
 	}
 }
+
+export const addInstrumentFailed = () => {
+	return {
+		type: actionTypes.ADD_INSTRUMENT_FAILED
+	}
+}
+
 export const updateInstrumentSuccess = payload => {
 	return {
 		type: actionTypes.UPDATE_INSTRUMENT_SUCCESS,
@@ -54,6 +61,7 @@ export const addInstrument = (formData, token) => {
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))
+				dispatch(addInstrumentFailed())
 			})
 	}
 }
@@ -79,7 +87,7 @@ export const toggleAvailableSwitchSuccess = payload => {
 	}
 }
 
-export const toggleAvailableStatus = (id, token) => {
+export const toggleAvailableInTable = (id, token) => {
 	return dispatch => {
 		dispatch(fetchInstrumentsStart())
 		axios

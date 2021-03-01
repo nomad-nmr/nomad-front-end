@@ -13,7 +13,12 @@ const statusTabs = props => {
 			<TabPane
 				tab={<div style={{ fontSize: '1.2rem', color: fontColor, padding: '0px 5px' }}>{tab.name}</div>}
 				key={tab.key}>
-				<StatusBanner data={tab} />
+				<StatusBanner
+					data={tab}
+					authToken={props.token}
+					onSwitch={props.switchHandler}
+					accessLevel={props.accessLvl}
+				/>
 				<div className={classes.StatusTable}>
 					<StatusTable data={props.tableData} loading={props.tableLoading} />
 				</div>

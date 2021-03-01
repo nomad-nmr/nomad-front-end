@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { Card, Row, Col, Tag } from 'antd'
+
 import TrafficLights from '../../TrafficLights/TrafficLights'
 import classes from './InfoCard.module.css'
 
@@ -8,8 +10,6 @@ const InfoCard = props => {
 	const { busyUntil, dayExpt, nightExpt } = props.data.status.summary
 	const cardColor = available ? '#52c41a' : '#ff4d4f'
 	const cardBackgroundColor = available ? '#f6ffed' : '#fff1f0'
-
-	//Setting up traffic lights for cards dynamically
 
 	return (
 		<Card

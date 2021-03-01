@@ -75,3 +75,25 @@ export const statusUpdate = data => ({
 	type: actionTypes.STATUS_UPDATE,
 	data
 })
+
+export const toggleAvailableSwitchSuccess = payload => {
+	return {
+		type: actionTypes.TOGGLE_AVAILABLE_SUCCESS_DASH,
+		data: payload
+	}
+}
+
+export const toggleAvailableOnDash = (id, token) => {
+	return dispatch => {
+		axios
+			.patch(`/admin/instruments/toggle-available/${id}`, null, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
+			.then(res => {
+				dispatch(toggleAvailableSwitchSuccess(res.data))
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}

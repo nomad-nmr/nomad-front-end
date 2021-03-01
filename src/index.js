@@ -11,6 +11,7 @@ import dashReducer from './store/reducers/dashboard'
 import instrumentsReducer from './store/reducers/instruments'
 import errorHandlerReducer from './store/reducers/errorHandler'
 import usersReducer from './store/reducers/users'
+import groupsReducer from './store/reducers/groups'
 
 import './index.css'
 import App from './App'
@@ -27,7 +28,8 @@ const rootReducer = combineReducers({
 	dash: dashReducer,
 	instruments: instrumentsReducer,
 	errors: errorHandlerReducer,
-	users: usersReducer
+	users: usersReducer,
+	groups: groupsReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))

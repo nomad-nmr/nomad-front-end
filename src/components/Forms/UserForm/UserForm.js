@@ -26,24 +26,35 @@ const UserForm = props => {
 
 	const onReset = () => {
 		form.resetFields()
-		props.toggleDrawer(false)
+		props.toggleDrawer()
 	}
 
 	const onFinish = values => {
 		// Checking whether to update or add
 		if (values._id) {
 			props.updateUsrHandler(values, props.authToken)
+			form.resetFields()
 		} else {
 			props.addUsrHandler(values, props.authToken)
+			form.resetFields()
 		}
 	}
+
+	const groupSelectOptions = props.groupList.map((grp, index) => {
+		return (
+			<Option key={index} value={grp}>
+				{grp}
+			</Option>
+		)
+	})
+
 	return (
 		<div className={classes.formInDrawer}>
 			<Form
 				{...layout}
 				form={form}
 				ref={props.formReference}
-				initialValues={{ groupName: 'default', accessLevel: 'user', isActive: true }}
+				initialValues={{ accessLevel: 'user', isActive: true, groupName: 'default' }}
 				onFinish={onFinish}>
 				<Form.Item
 					name='username'
@@ -67,9 +78,7 @@ const UserForm = props => {
 					<Input />
 				</Form.Item>
 				<Form.Item name='groupName' label='Group'>
-					<Select style={{ width: '60%' }}>
-						<Option value='default'>default</Option>
-					</Select>
+					<Select style={{ width: '60%' }}>{groupSelectOptions}</Select>
 				</Form.Item>
 				<Form.Item name='accessLevel' label='Access Level'>
 					<Select style={{ width: '60%' }}>
@@ -79,9 +88,6 @@ const UserForm = props => {
 				</Form.Item>
 				<Form.Item name='isActive' label='Active' valuePropName='checked'>
 					<Checkbox />
-				</Form.Item>
-				<Form.Item hidden name='key'>
-					<Input />
 				</Form.Item>
 				<Form.Item hidden name='_id'>
 					<Input />

@@ -5,6 +5,7 @@ import antdLogo from '../../assets/antd-logo.png'
 import reduxLogo from '../../assets/redux-logo.png'
 import nodeLogo from '../../assets/node-logo.svg'
 import mongoLogo from '../../assets/mongoDB-logo.png'
+import socketIO from '../../assets/websocket.png'
 import classes from './Credits.module.css'
 
 const credits = () => {
@@ -26,6 +27,11 @@ const credits = () => {
 			<a href='https://nodejs.org/'>
 				<img src={nodeLogo} alt='Node.js Logo' />
 			</a>
+			<Divider type='vertical' />
+			<a href='https://socket.io/'>
+				<img src={socketIO} alt='Socket.io Logo' />
+			</a>
+			<Divider type='vertical' />
 			<a href='https://www.mongodb.com//'>
 				<img src={mongoLogo} alt='Node.js Logo' />
 			</a>

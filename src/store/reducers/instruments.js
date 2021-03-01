@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes'
-import { addKey, updatedTableSwitch } from '../../utils/tableUtils'
+import { addKey, updateTableSwitch } from '../../utils/tableUtils'
 
 import { message } from 'antd'
 
@@ -45,6 +45,12 @@ const reducer = (state = initialState, action) => {
 				showForm: false
 			}
 
+		case actionTypes.ADD_INSTRUMENT_FAILED:
+			return {
+				...state,
+				tableIsLoading: false
+			}
+
 		case actionTypes.UPDATE_INSTRUMENT_SUCCESS:
 			let updatedTable = [...state.instrumentsTableData]
 			const instrId = state.instrumentsTableData.findIndex(
@@ -63,16 +69,12 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.TOGGLE_AVAILABLE_SWITCH_SUCCESS:
 			return {
 				...state,
-				instrumentsTableData: updatedTableSwitch(
-					state.instrumentsTableData,
-					'available',
-					action.data._id
-				),
+				instrumentsTableData: updateTableSwitch(state.instrumentsTableData, 'available', action.data._id),
 				tableIsLoading: false
 			}
 
 		case actionTypes.TOGGLE_ACTIVE_INSTRUMENTS_SUCCESS:
-			let updatedTableData = updatedTableSwitch(state.instrumentsTableData, 'isActive', action.data._id)
+			let updatedTableData = updateTableSwitch(state.instrumentsTableData, 'isActive', action.data._id)
 			if (!state.showInactive) {
 				updatedTableData = updatedTableData.filter(i => i.isActive === true)
 			}

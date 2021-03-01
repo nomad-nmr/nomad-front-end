@@ -1,16 +1,19 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { PageHeader, Switch, Button } from 'antd'
+
 import {
 	toggleCards,
 	openDashDrawer,
 	toggleShowForm,
 	toggleUserForm,
+	toggleGroupForm,
 	toggleShowInactive,
-	toggleShowInactiveInstruments
+	toggleShowInactiveInstruments,
+	toggleShowInactiveGroups
 } from '../../../store/actions/index'
 
-import { PageHeader, Switch, Button } from 'antd'
 import classes from './PageHeader.module.css'
 import StatusButtons from './StatusButtons/StatusButtons'
 
@@ -26,8 +29,8 @@ const PageHeaderEl = props => {
 		cardSwitchOn,
 		statusButtonsData,
 		statusButtonClicked,
-		showInactive,
-		switchShowInactive
+		showInactiveUsr,
+		switchShowInactiveUsr
 	} = props
 
 	let headerTitle = ''
@@ -73,10 +76,10 @@ const PageHeaderEl = props => {
 						<label>Show Inactive</label>
 						<Switch
 							size='small'
-							checked={showInactive}
+							checked={showInactiveUsr}
 							checkedChildren='On'
 							unCheckedChildren='Off'
-							onChange={switchShowInactive}
+							onChange={switchShowInactiveUsr}
 						/>
 					</div>
 				</div>
@@ -85,6 +88,27 @@ const PageHeaderEl = props => {
 		case '/admin/groups':
 			headerTitle = 'Manage Groups'
 			avatarSrc = groupIcon
+			extra = (
+				<div className={classes.ExtraContainer}>
+					<Button
+						className={classes.Button}
+						type='primary'
+						onClick={props.toggleGrpForm}
+						disabled={props.grpFormVisible}>
+						Add Group
+					</Button>
+					<div className={classes.SwitchElement}>
+						<label>Show Inactive</label>
+						<Switch
+							size='small'
+							checked={props.showInactiveGrps}
+							checkedChildren='On'
+							unCheckedChildren='Off'
+							onChange={props.toggleShowInactiveGrps}
+						/>
+					</div>
+				</div>
+			)
 			break
 
 		case '/admin/instruments':
@@ -136,8 +160,10 @@ const mapStateToProps = state => {
 		cardSwitchOn: state.dash.showCards,
 		statusButtonsData: state.dash.statusButtonsData,
 		instFormVisible: state.instruments.showForm,
-		showInactive: state.users.showInactive,
-		showInactiveInst: state.instruments.showInactive
+		showInactiveUsr: state.users.showInactive,
+		showInactiveInst: state.instruments.showInactive,
+		grpFormVisible: state.groups.showForm,
+		showInactiveGrps: state.groups.showInactive
 	}
 }
 
@@ -147,8 +173,10 @@ const mapDispatchToProps = dispatch => {
 		statusButtonClicked: id => dispatch(openDashDrawer(id)),
 		toggleInstForm: () => dispatch(toggleShowForm()),
 		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing)),
-		switchShowInactive: () => dispatch(toggleShowInactive()),
-		toggleShowInactiveInstr: () => dispatch(toggleShowInactiveInstruments())
+		switchShowInactiveUsr: () => dispatch(toggleShowInactive()),
+		toggleShowInactiveInstr: () => dispatch(toggleShowInactiveInstruments()),
+		toggleGrpForm: () => dispatch(toggleGroupForm()),
+		toggleShowInactiveGrps: () => dispatch(toggleShowInactiveGroups())
 	}
 }
 
