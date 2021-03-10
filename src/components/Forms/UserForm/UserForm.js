@@ -40,10 +40,10 @@ const UserForm = props => {
 		}
 	}
 
-	const groupSelectOptions = props.groupList.map((grp, index) => {
+	const groupSelectOptions = props.groupList.map(grp => {
 		return (
-			<Option key={index} value={grp}>
-				{grp}
+			<Option key={grp.id} value={grp.name}>
+				{grp.name}
 			</Option>
 		)
 	})

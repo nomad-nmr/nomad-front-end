@@ -7,7 +7,8 @@ const initialState = {
 	instrumentsTableData: [],
 	tableIsLoading: false,
 	showForm: false,
-	showInactive: false
+	showInactive: false,
+	instrumentList: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -88,6 +89,12 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				showInactive: !state.showInactive
+			}
+
+		case actionTypes.FETCH_INSTRUMENT_LIST_SUCCESS:
+			return {
+				...state,
+				instrumentList: action.data
 			}
 
 		default:

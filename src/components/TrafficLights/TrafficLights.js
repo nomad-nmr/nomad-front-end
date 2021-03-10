@@ -6,16 +6,16 @@ import classes from './TrafficLights.module.css'
 const TrafficLights = props => {
 	const trafficLightsArr = []
 
-	const { errors, running, availableHolders } = props.data.status.summary
+	const { errorCount, running, availableHolders } = props.data.status.summary
 
 	const tooltipPlace = props.type === 'horizontal' ? 'top' : 'right'
 	const assignedStyle = props.type === 'horizontal' ? { marginLeft: '5px' } : { marginTop: '3px' }
 
-	if (errors) {
+	if (errorCount) {
 		trafficLightsArr.push(
 			<Tooltip key='errors' placement={tooltipPlace} title='Errors'>
 				<Avatar size='small' style={assignedStyle} className={classes.Errors}>
-					{errors}
+					{errorCount}
 				</Avatar>
 			</Tooltip>
 		)

@@ -12,6 +12,7 @@ import instrumentsReducer from './store/reducers/instruments'
 import errorHandlerReducer from './store/reducers/errorHandler'
 import usersReducer from './store/reducers/users'
 import groupsReducer from './store/reducers/groups'
+import expHistoryReducer from './store/reducers/expHistory'
 
 import './index.css'
 import App from './App'
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
 	instruments: instrumentsReducer,
 	errors: errorHandlerReducer,
 	users: usersReducer,
-	groups: groupsReducer
+	groups: groupsReducer,
+	expHistory: expHistoryReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))

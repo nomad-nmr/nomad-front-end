@@ -137,3 +137,19 @@ export const toggleShowInactiveInstruments = () => {
 		type: actionTypes.TOGGLE_SHOW_INACTIVE_INSTRUMENTS
 	}
 }
+
+export const fetchInstrumentListSuccess = data => ({
+	type: actionTypes.FETCH_INSTRUMENT_LIST_SUCCESS,
+	data
+})
+
+export const fetchInstrumentList = token => {
+	return dispatch => {
+		axios
+			.get('admin/instruments/?list=true', { headers: { Authorization: 'Bearer ' + token } })
+			.then(res => dispatch(fetchInstrumentListSuccess(res.data)))
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}
