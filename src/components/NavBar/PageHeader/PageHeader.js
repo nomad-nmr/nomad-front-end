@@ -1,7 +1,10 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { PageHeader, Switch, Button } from 'antd'
+import { PageHeader, Switch, Button, DatePicker } from 'antd'
+
+import moment from 'moment'
+import 'moment/locale/en-gb'
 
 import {
 	toggleCards,
@@ -11,7 +14,8 @@ import {
 	toggleGroupForm,
 	toggleShowInactive,
 	toggleShowInactiveInstruments,
-	toggleShowInactiveGroups
+	toggleShowInactiveGroups,
+	setExpHistoryDate
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -22,8 +26,10 @@ import userIcon from '../../../assets/user.svg'
 import groupIcon from '../../../assets/group.svg'
 import magnetIcon from '../../../assets/magnet.svg'
 import experimentIcon from '../../../assets/lab.svg'
+import historyIcon from '../../../assets/history-icon.webp'
 
 const PageHeaderEl = props => {
+	moment.locale('en-gb')
 	const {
 		toggleCards,
 		cardSwitchOn,
@@ -140,6 +146,19 @@ const PageHeaderEl = props => {
 			headerTitle = 'Setting Experiments'
 			avatarSrc = experimentIcon
 			break
+		case '/admin/history':
+			headerTitle = 'Experiment History'
+			avatarSrc = historyIcon
+			extra = (
+				<DatePicker
+					style={{ marginLeft: '10px' }}
+					defaultValue={moment()}
+					allowClear={false}
+					format='DD MMM YYYY'
+					onChange={date => props.setExpHistoryDate(moment(date).format('YYYY-MM-DD'))}
+				/>
+			)
+			break
 		default:
 			headerTitle = ''
 			avatarSrc = ''
@@ -176,7 +195,8 @@ const mapDispatchToProps = dispatch => {
 		switchShowInactiveUsr: () => dispatch(toggleShowInactive()),
 		toggleShowInactiveInstr: () => dispatch(toggleShowInactiveInstruments()),
 		toggleGrpForm: () => dispatch(toggleGroupForm()),
-		toggleShowInactiveGrps: () => dispatch(toggleShowInactiveGroups())
+		toggleShowInactiveGrps: () => dispatch(toggleShowInactiveGroups()),
+		setExpHistoryDate: date => dispatch(setExpHistoryDate(date))
 	}
 }
 

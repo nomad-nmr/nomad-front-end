@@ -23,6 +23,7 @@ const Dashboard = props => {
 	const activeTabIdRef = useRef(null)
 
 	useEffect(() => {
+		window.scrollTo(0, 0)
 		socket.removeAllListeners('statusUpdate')
 		fetchStatusSum()
 		fetchStatusTable('0')

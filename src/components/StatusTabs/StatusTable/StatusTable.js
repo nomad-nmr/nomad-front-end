@@ -42,8 +42,8 @@ const statusTable = props => {
 			align: 'center'
 		},
 		{
-			title: 'Experiment',
-			dataIndex: 'experiment',
+			title: 'Parameter Set',
+			dataIndex: 'parameterSet',
 			key: 'exp'
 		},
 		{

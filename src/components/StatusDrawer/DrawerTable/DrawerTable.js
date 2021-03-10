@@ -75,15 +75,12 @@ const DrawerTable = props => {
 			size='small'
 			pagination={false}
 			rowClassName={record => (record.highlight ? classes.RowHighlight : null)}
-			expandable={
-				props.id === 'errors'
-					? {
-							expandedRowRender: record => (
-								<p style={{ margin: 0, backgroundColor: '#fff1f0' }}>{record.description}</p>
-							)
-					  }
-					: false
-			}
+			expandable={{
+				expandedRowRender: record => (
+					<p style={{ margin: 0, backgroundColor: '#fff1f0' }}>{record.description}</p>
+				),
+				rowExpandable: () => props.id === 'errors'
+			}}
 		/>
 	)
 }

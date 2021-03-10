@@ -1,4 +1,5 @@
 import { message } from 'antd'
+import moment from 'moment'
 
 import { addKey, updateTableSwitch } from '../../utils/tableUtils'
 import * as actionTypes from '../actions/actionTypes'
@@ -21,14 +22,22 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.FETCH_GROUPS_TABLE_SUCCESS:
+			const newTableData = action.data.map(grp => ({
+				...grp,
+				createdAt: moment(grp.createdAt).format('DD MMM YYYY, h:mm')
+			}))
 			return {
 				...state,
-				groupsTableData: addKey(action.data),
+				groupsTableData: addKey(newTableData),
 				tableIsLoading: false
 			}
 
 		case actionTypes.ADD_GROUP_SUCCESS:
-			const newGroupTable = state.groupsTableData.concat([action.data])
+			const updatedGroup = {
+				...action.data,
+				createdAt: moment(action.data.createdAt).format('DD MMM YYYY, h:mm')
+			}
+			const newGroupTable = state.groupsTableData.concat([updatedGroup])
 			message.success('Group was successfully added to database')
 			return {
 				...state,
@@ -42,7 +51,10 @@ const reducer = (state = initialState, action) => {
 			const groupIndex = updatedGroupTable.findIndex(
 				grp => grp._id.toString() === action.data._id.toString()
 			)
-			updatedGroupTable[groupIndex] = action.data
+			updatedGroupTable[groupIndex] = {
+				...action.data,
+				createdAt: moment(action.data.createdAt).format('DD MMM YYYY, h:mm')
+			}
 			message.success('Group was successfully updated in database')
 			return {
 				...state,

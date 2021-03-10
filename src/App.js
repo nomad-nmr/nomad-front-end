@@ -43,6 +43,7 @@ const App = props => {
 	const Users = React.lazy(() => import('./containers/Users/Users'))
 	const Instruments = React.lazy(() => import('./containers/Instruments/Instruments'))
 	const Groups = React.lazy(() => import('./containers/Groups/Groups'))
+	const ExpHistory = React.lazy(() => import('./containers/ExpHistory/ExpHistory'))
 
 	//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
 	let authModal = null
@@ -104,6 +105,12 @@ const App = props => {
 								path='/admin/instruments'
 								render={() => {
 									return accessLevel === 'admin' ? <Instruments /> : <Error403 />
+								}}
+							/>
+							<Route
+								path='/admin/history'
+								render={() => {
+									return accessLevel === 'admin' ? <ExpHistory /> : <Error403 />
 								}}
 							/>
 							<Route

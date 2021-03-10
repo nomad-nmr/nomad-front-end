@@ -26,7 +26,8 @@ export {
 	toggleActiveInstr,
 	toggleAvailableInTable,
 	toggleShowForm,
-	toggleShowInactiveInstruments
+	toggleShowInactiveInstruments,
+	fetchInstrumentList
 } from './instruments'
 
 export { fetchUsers, toggleUserForm, addUser, updateUser, toggleActive, toggleShowInactive } from './users'
@@ -40,3 +41,5 @@ export {
 	toggleActiveGroup,
 	fetchGroupList
 } from './groups'
+
+export { fetchHistory, setExpHistoryDate } from './expHistory'

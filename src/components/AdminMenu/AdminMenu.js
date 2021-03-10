@@ -62,7 +62,7 @@ const adminMenu = props => {
 					}>
 					<Menu.Item key='/admin/history'>
 						<HistoryOutlined />
-						<span>History Tables</span>
+						<span>Experiment History</span>
 					</Menu.Item>
 					<Menu.Item key='/admin/accounting'>
 						<PoundOutlined />

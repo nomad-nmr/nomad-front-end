@@ -23,6 +23,7 @@ const Instruments = props => {
 	const formRef = useRef({})
 
 	useEffect(() => {
+		window.scrollTo(0, 0)
 		fetchInstr(authToken, showInactive)
 	}, [fetchInstr, authToken, showInactive])
 

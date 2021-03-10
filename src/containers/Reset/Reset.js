@@ -40,20 +40,6 @@ const Reset = props => {
 		})
 	}, [getPassReset, token, userName, fullName])
 
-	// const [passwd, setPasswd] = useState('')
-	// const [confirmPass, setConfirmPass] = useState({ value: '' })
-
-	// const onConfirmPasswdChange = value => {
-	// 	console.log(value)
-	// 	setConfirmPass({ value })
-	// 	// if (passwd === confirmPass.value) {
-	// 	// 	setConfirmPass({ ...confirmPass, validateStatus: 'success', errorMsq: null })
-	// 	// } else {
-	// 	// 	setConfirmPass({ ...confirmPass, validateStatus: 'error', errorMsq: 'Passwords do not match!' })
-	// 	// }
-	// 	console.log(passwd, confirmPass)
-	// }
-
 	//Users added to the system through autoFeed function will miss certain properties in the database.
 	//Following fields get rendered if userName is undefined to allow users to add the additional information
 	//TODO add more fields here for other properties like occupation that will be added to model in future.

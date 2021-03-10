@@ -1,7 +1,9 @@
 import React from 'react'
 import { Tabs } from 'antd'
-import StatusBanner from './StatusBanner/StatusBanner'
-import StatusTable from './StatusTable/StatusTable'
+
+import StatusBanner from '../StatusTabs/StatusBanner/StatusBanner'
+import StatusTable from '../StatusTabs/StatusTable/StatusTable'
+
 import classes from './StatusTabs.module.css'
 
 const { TabPane } = Tabs

@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react'
 
-import { Form, Input, Button, Space, Col, Row, Checkbox } from 'antd'
+import { Form, Input, Button, Space, Col, Row, Checkbox, Modal } from 'antd'
+
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+
+const { confirm } = Modal
 
 const GroupForm = props => {
 	const [form] = Form.useForm()
@@ -11,7 +15,21 @@ const GroupForm = props => {
 
 	const onFinish = formData => {
 		if (formData._id) {
-			props.updateGroupHandler(formData, props.authToken)
+			if (!formData.isActive) {
+				confirm({
+					title: 'Setting a group inactive will also set all users in the group inactive?',
+					icon: <ExclamationCircleOutlined />,
+					content: 'Do you want to continue',
+					onOk() {
+						props.updateGroupHandler(formData, props.authToken)
+					},
+					onCancel() {
+						return
+					}
+				})
+			} else {
+				props.updateGroupHandler(formData, props.authToken)
+			}
 		} else {
 			props.addGroupHandler(formData, props.authToken)
 		}

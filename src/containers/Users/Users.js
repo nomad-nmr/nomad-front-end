@@ -20,6 +20,7 @@ const Users = props => {
 	const formRef = useRef({})
 
 	useEffect(() => {
+		window.scrollTo(0, 0)
 		fetchUsers(authToken, showInactive)
 		fetchGrpList(authToken)
 	}, [fetchUsers, fetchGrpList, authToken, showInactive])
@@ -64,7 +65,8 @@ const Users = props => {
 		},
 		{
 			title: 'Last login',
-			dataIndex: 'lastLogin'
+			dataIndex: 'lastLogin',
+			align: 'center'
 		},
 		{
 			title: 'Inactive Days',
@@ -88,7 +90,7 @@ const Users = props => {
 						type='link'
 						onClick={() => {
 							props.toggleUsrDrawer(true)
-							setTimeout(() => formRef.current.setFieldsValue(record), 100)
+							setTimeout(() => formRef.current.setFieldsValue(record), 200)
 						}}>
 						Edit
 					</Button>

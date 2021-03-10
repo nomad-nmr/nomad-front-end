@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import { Table, Tag, Space, Button } from 'antd'
+import { Table, Tag, Space, Button, Popconfirm } from 'antd'
 import Animate from 'rc-animate'
+
+import { ExclamationCircleOutlined } from '@ant-design/icons'
 
 import GroupForm from '../../components/Forms/GroupForm/GroupForm'
 
@@ -14,6 +16,7 @@ import {
 } from '../../store/actions/index'
 
 import './Groups.css'
+import classes from './Groups.module.css'
 
 const { CheckableTag } = Tag
 
@@ -23,9 +26,55 @@ const Groups = props => {
 	const formRef = useRef({})
 
 	useEffect(() => {
+		window.scrollTo(0, 0)
 		fetchGrps(authToken, showInactive)
 	}, [fetchGrps, authToken, showInactive])
 
+	const renderActions = record => {
+		let popConfirmMsg = (
+			<div className={classes.Message}>
+				<h4>Setting a group inactive will also set all users in the group inactive.</h4>
+				<p>Do you want to continue?</p>
+			</div>
+		)
+
+		if (!record.isActive) {
+			popConfirmMsg = (
+				<div className={classes.Message}>
+					<h4>After setting a group active the users within the group will remain inactive.</h4>
+					<p>Do you want to continue?</p>
+				</div>
+			)
+		}
+
+		return (
+			<Space>
+				<Popconfirm
+					title={popConfirmMsg}
+					placement='left'
+					icon={<ExclamationCircleOutlined style={{ fontSize: '20px', paddingRight: '10px' }} />}
+					onConfirm={() => {
+						props.toggleActive(record._id, authToken)
+					}}>
+					<CheckableTag key={record.key} checked={record.isActive}>
+						{record.isActive ? 'Active' : 'Inactive'}
+					</CheckableTag>
+				</Popconfirm>
+
+				<Button
+					size='small'
+					type='link'
+					onClick={() => {
+						if (!props.showForm) {
+							props.toggleGrpForm(true)
+						}
+						setTimeout(() => formRef.current.setFieldsValue(record), 100)
+					}}>
+					Edit
+				</Button>
+			</Space>
+		)
+	}
 	const columns = [
 		{
 			title: 'Group Name',
@@ -52,30 +101,7 @@ const Groups = props => {
 		{
 			title: 'Actions',
 			align: 'center',
-			render: record => (
-				<Space>
-					<CheckableTag
-						key={record.key}
-						checked={record.isActive}
-						onChange={() => {
-							props.toggleActive(record._id, authToken)
-						}}>
-						{record.isActive ? 'Active' : 'Inactive'}
-					</CheckableTag>
-
-					<Button
-						size='small'
-						type='link'
-						onClick={() => {
-							if (!props.showForm) {
-								props.toggleGrpForm(true)
-							}
-							setTimeout(() => formRef.current.setFieldsValue(record), 100)
-						}}>
-						Edit
-					</Button>
-				</Space>
-			)
+			render: record => renderActions(record)
 		}
 	]
 
