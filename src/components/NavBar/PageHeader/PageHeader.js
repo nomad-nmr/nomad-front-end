@@ -1,10 +1,9 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { PageHeader, Switch, Button, DatePicker } from 'antd'
+import { PageHeader, Switch, Button, DatePicker, Input } from 'antd'
 
 import moment from 'moment'
-import 'moment/locale/en-gb'
 
 import {
 	toggleCards,
@@ -15,7 +14,8 @@ import {
 	toggleShowInactive,
 	toggleShowInactiveInstruments,
 	toggleShowInactiveGroups,
-	setExpHistoryDate
+	setExpHistoryDate,
+	searchUser
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -29,7 +29,8 @@ import experimentIcon from '../../../assets/lab.svg'
 import historyIcon from '../../../assets/history-icon.webp'
 
 const PageHeaderEl = props => {
-	moment.locale('en-gb')
+	const { Search } = Input
+
 	const {
 		toggleCards,
 		cardSwitchOn,
@@ -78,6 +79,12 @@ const PageHeaderEl = props => {
 						disabled={props.formVisible}>
 						Add User
 					</Button>
+					<Search
+						placeholder='search user'
+						allowClear
+						onSearch={props.userSearchHandler}
+						style={{ width: 150, marginLeft: '20px' }}
+					/>
 					<div className={classes.SwitchElement}>
 						<label>Show Inactive</label>
 						<Switch
@@ -196,7 +203,8 @@ const mapDispatchToProps = dispatch => {
 		toggleShowInactiveInstr: () => dispatch(toggleShowInactiveInstruments()),
 		toggleGrpForm: () => dispatch(toggleGroupForm()),
 		toggleShowInactiveGrps: () => dispatch(toggleShowInactiveGroups()),
-		setExpHistoryDate: date => dispatch(setExpHistoryDate(date))
+		setExpHistoryDate: date => dispatch(setExpHistoryDate(date)),
+		userSearchHandler: value => dispatch(searchUser(value))
 	}
 }
 

@@ -123,10 +123,12 @@ export const fetchGroupListSuccess = data => ({
 	data
 })
 
-export const fetchGroupList = token => {
+export const fetchGroupList = (token, showInactive) => {
 	return dispatch => {
 		axios
-			.get('admin/groups/?list=true', { headers: { Authorization: 'Bearer ' + token } })
+			.get('admin/groups/?list=true&showInactive=' + showInactive, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
 			.then(res => dispatch(fetchGroupListSuccess(res.data)))
 			.catch(err => {
 				dispatch(errorHandler(err))

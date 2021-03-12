@@ -4,10 +4,14 @@ import { message } from 'antd'
 
 const initialState = {
 	usersTableData: [],
+	pagination: { current: 1, pageSize: 10 },
+	filters: {},
+	showInactive: false,
+	searchUserValue: '',
 	tableIsLoading: false,
 	showForm: false,
 	editing: false,
-	showInactive: false
+	inactiveDaysOrder: undefined
 }
 
 const reducer = (state = initialState, action) => {
@@ -19,7 +23,7 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.FETCH_USERS_TABLE_SUCCESS:
-			const users = action.data.map(usr => {
+			const users = action.data.users.map(usr => {
 				usr.groupName = usr.group.groupName
 				delete usr.group
 				return usr
@@ -27,6 +31,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				usersTableData: addKey(users),
+				pagination: action.data.pagination,
 				tableIsLoading: false,
 				showForm: false
 			}
@@ -88,6 +93,22 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				showInactive: !state.showInactive
+			}
+
+		case actionTypes.USER_TABLE_CHANGE:
+			const { pagination, filters, sorter } = action.payload
+			console.log(sorter)
+			return {
+				...state,
+				pagination,
+				filters,
+				inactiveDaysOrder: action.payload.sorter.order
+			}
+
+		case actionTypes.SEARCH_USER:
+			return {
+				...state,
+				searchUserValue: action.payload
 			}
 
 		default:

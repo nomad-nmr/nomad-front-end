@@ -48,6 +48,7 @@ const Dashboard = props => {
 				fetchStatusTable(activeTab)
 			}
 		})
+		// useEffect for socket.io function must have empty dependency array otherwise the triggers infinite loop!!!
 		// eslint-disable-next-line
 	}, [])
 

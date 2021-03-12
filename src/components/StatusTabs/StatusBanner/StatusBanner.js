@@ -22,7 +22,7 @@ const statusBanner = props => {
 			message={
 				<Row className={classes.Banner}>
 					<Col className={classes.Switch} span={2}>
-						{props.accessLevel && switchElement}
+						{props.accessLevel === 'admin' && switchElement}
 					</Col>
 					<Col span={18} offset={2}>
 						<ul>

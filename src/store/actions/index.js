@@ -30,7 +30,16 @@ export {
 	fetchInstrumentList
 } from './instruments'
 
-export { fetchUsers, toggleUserForm, addUser, updateUser, toggleActive, toggleShowInactive } from './users'
+export {
+	fetchUsers,
+	toggleUserForm,
+	addUser,
+	updateUser,
+	toggleActive,
+	toggleShowInactive,
+	userTableChange,
+	searchUser
+} from './users'
 
 export {
 	fetchGroups,
