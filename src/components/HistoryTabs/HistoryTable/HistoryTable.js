@@ -33,7 +33,7 @@ const HistoryTable = props => {
 			render: (text, record) => {
 				if (record.user.id) {
 					return (
-						<Tooltip title={record.user.id.fullName} color={'purple'}>
+						<Tooltip title={record.user.id.fullName} color={'blue'}>
 							<span>{text}</span>
 						</Tooltip>
 					)
@@ -103,7 +103,8 @@ const HistoryTable = props => {
 		},
 		{
 			title: 'Remarks',
-			dataIndex: 'remarks'
+			dataIndex: 'remarks',
+			width: 400
 		}
 	]
 

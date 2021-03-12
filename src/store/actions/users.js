@@ -15,11 +15,13 @@ export const fetchUsersSuccess = payload => {
 	}
 }
 
-export const fetchUsers = (token, showInactive) => {
+export const fetchUsers = (token, searchParams) => {
 	return dispatch => {
 		dispatch(fetchUsersStart())
 		axios
-			.get('/admin/users/?showInactive=' + showInactive, { headers: { Authorization: 'Bearer ' + token } })
+			.get('/admin/users/?' + new URLSearchParams(searchParams).toString(), {
+				headers: { Authorization: 'Bearer ' + token }
+			})
 			.then(res => {
 				dispatch(fetchUsersSuccess(res.data))
 			})
@@ -106,4 +108,14 @@ export const toggleActive = (id, token) => {
 
 export const toggleShowInactive = () => ({
 	type: actionTypes.TOGGLE_SHOW_INACTIVE_USERS
+})
+
+export const userTableChange = (pagination, filters, sorter) => ({
+	type: actionTypes.USER_TABLE_CHANGE,
+	payload: { pagination, filters, sorter }
+})
+
+export const searchUser = payload => ({
+	type: actionTypes.SEARCH_USER,
+	payload
 })
