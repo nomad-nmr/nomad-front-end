@@ -37,7 +37,6 @@ export {
 	updateUser,
 	toggleActive,
 	toggleShowInactive,
-	userTableChange,
 	searchUser
 } from './users'
 

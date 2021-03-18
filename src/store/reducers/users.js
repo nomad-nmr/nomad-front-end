@@ -4,14 +4,15 @@ import { message } from 'antd'
 
 const initialState = {
 	usersTableData: [],
-	pagination: { current: 1, pageSize: 10 },
+	pagination: { current: 1, pageSize: 20 },
+	total: 0,
 	filters: {},
 	showInactive: false,
 	searchUserValue: '',
 	tableIsLoading: false,
 	showForm: false,
 	editing: false,
-	inactiveDaysOrder: undefined
+	lastLoginOrder: undefined
 }
 
 const reducer = (state = initialState, action) => {
@@ -31,7 +32,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				usersTableData: addKey(users),
-				pagination: action.data.pagination,
+				total: action.data.total,
 				tableIsLoading: false,
 				showForm: false
 			}
@@ -93,16 +94,6 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				showInactive: !state.showInactive
-			}
-
-		case actionTypes.USER_TABLE_CHANGE:
-			const { pagination, filters, sorter } = action.payload
-			console.log(sorter)
-			return {
-				...state,
-				pagination,
-				filters,
-				inactiveDaysOrder: action.payload.sorter.order
 			}
 
 		case actionTypes.SEARCH_USER:
