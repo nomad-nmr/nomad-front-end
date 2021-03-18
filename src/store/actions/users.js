@@ -110,11 +110,6 @@ export const toggleShowInactive = () => ({
 	type: actionTypes.TOGGLE_SHOW_INACTIVE_USERS
 })
 
-export const userTableChange = (pagination, filters, sorter) => ({
-	type: actionTypes.USER_TABLE_CHANGE,
-	payload: { pagination, filters, sorter }
-})
-
 export const searchUser = payload => ({
 	type: actionTypes.SEARCH_USER,
 	payload

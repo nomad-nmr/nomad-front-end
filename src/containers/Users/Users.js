@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
-import { Button, Table, Drawer, Tag, Space } from 'antd'
+import { Button, Table, Drawer, Tag, Space, Pagination } from 'antd'
 
 import UserForm from '../../components/Forms/UserForm/UserForm'
 import {
@@ -9,38 +9,36 @@ import {
 	fetchUsers,
 	toggleUserForm,
 	toggleActive,
-	fetchGroupList,
-	userTableChange
+	fetchGroupList
 } from '../../store/actions/index'
 
 const { CheckableTag } = Tag
 
 const Users = props => {
-	const {
-		fetchUsers,
-		fetchGrpList,
-		authToken,
-		pgn,
-		filters,
-		showInactive,
-		grpList,
-		searchUserValue,
-		inactiveDaysOrder
-	} = props
+	const { fetchUsers, fetchGrpList, authToken, showInactive, grpList, searchUserValue } = props
 
 	const formRef = useRef({})
 
+	//Local state fo table and its pagination
 	const [groupFilters, setGroupFilters] = useState([])
+	const [pageSize, setPageSize] = useState(15)
+	const [currentPage, setCurrentPage] = useState(1)
+	const [filters, setFilters] = useState({})
+	const [sorter, setSorter] = useState({})
 
+	//Hook to fetch users according using search params stored in the state
 	useEffect(() => {
 		window.scrollTo(0, 0)
-		const searchParams = { ...pgn, ...filters, showInactive, username: searchUserValue, inactiveDaysOrder }
-		console.log(searchParams)
+		const searchParams = {
+			current: currentPage,
+			pageSize,
+			...filters,
+			showInactive,
+			username: searchUserValue,
+			lastLoginOrder: sorter.order
+		}
 		fetchUsers(authToken, searchParams)
-		console.log('Hu')
-		//adding pgn in the dependency array results in infinite loop as pagination is state is updated after fetching data to update totalCount
-		// eslint-disable-next-line
-	}, [authToken, fetchUsers, filters, showInactive, searchUserValue])
+	}, [authToken, fetchUsers, filters, showInactive, searchUserValue, currentPage, pageSize, sorter])
 
 	//Hook to fetch group list for form and filters
 	useEffect(() => {
@@ -52,6 +50,13 @@ const Users = props => {
 		const grpFilters = grpList.map(grp => ({ text: grp.name, value: grp.id }))
 		setGroupFilters(grpFilters)
 	}, [grpList])
+
+	const handleTableChange = (pagination, filters, sorter) => {
+		setFilters(filters)
+		setSorter(sorter)
+		setCurrentPage(1)
+		setPageSize(15)
+	}
 
 	const columns = [
 		{
@@ -70,7 +75,8 @@ const Users = props => {
 			title: 'Group',
 			dataIndex: 'groupName',
 			key: 'group',
-			filters: groupFilters
+			filters: groupFilters,
+			filteredValue: filters.group || null
 		},
 		{
 			title: 'Access level',
@@ -95,18 +101,20 @@ const Users = props => {
 			filters: [
 				{ text: 'Admin', value: 'admin' },
 				{ text: 'User', value: 'user' }
-			]
+			],
+			filteredValue: filters.accessLevel || null
 		},
 		{
 			title: 'Last login',
 			dataIndex: 'lastLogin',
-			align: 'center'
+			align: 'center',
+			sorter: (a, b) => a.lastLogin - b.lastLogin,
+			sortOrder: sorter.order
 		},
 		{
 			title: 'Inactive Days',
 			dataIndex: 'inactiveDays',
-			align: 'center',
-			sorter: (a, b) => a.inactiveDays.toString().localeCompare(b.inactiveDays.toString())
+			align: 'center'
 		},
 		{
 			title: 'Actions',
@@ -135,16 +143,32 @@ const Users = props => {
 	]
 
 	return (
-		<div style={{ margin: '30px 20px' }}>
+		<div style={{ margin: '30px 20px 70px 20px' }}>
 			<Table
 				size='small'
 				dataSource={props.tabData}
 				columns={columns}
 				loading={props.tabLoading}
-				pagination={pgn}
-				onChange={props.onTableChange}
+				pagination={false}
+				onChange={handleTableChange}
+				filters={filters}
 			/>
-			{/* <Pagination style={{ marginTop: '20px', textAlign: 'right' }} defaultCurrent={6} total={500} /> */}
+			<Pagination
+				style={{ marginTop: '20px', textAlign: 'right' }}
+				current={currentPage}
+				pageSize={pageSize}
+				defaultPageSize={15}
+				total={props.totalUsers}
+				size='small'
+				hideOnSinglePage
+				pageSizeOptions={[10, 15, 30, 60, 100]}
+				onChange={page => setCurrentPage(page)}
+				onShowSizeChange={(current, size) => {
+					setCurrentPage(current)
+					setPageSize(size)
+				}}
+				showTotal={total => `Total ${total} users`}
+			/>
 			<Drawer
 				width='400'
 				visible={props.usrDrawerVisible}
@@ -170,17 +194,16 @@ const Users = props => {
 const mapStateToProps = state => {
 	return {
 		tabData: state.users.usersTableData,
-		pgn: state.users.pagination,
+		totalUsers: state.users.total,
 		tabLoading: state.users.tableIsLoading,
 		authToken: state.auth.token,
 		usrDrawerVisible: state.users.showForm,
 		formEditing: state.users.editing,
 		showInactive: state.users.showInactive,
+
 		//list of group names for select component
 		grpList: state.groups.groupList,
-		filters: state.users.filters,
-		searchUserValue: state.users.searchUserValue,
-		inactiveDaysOrder: state.users.inactiveDaysOrder
+		searchUserValue: state.users.searchUserValue
 	}
 }
 
@@ -192,8 +215,7 @@ const mapDispatchToProps = dispatch => {
 		addUsrHandler: (formData, token) => dispatch(addUser(formData, token)),
 		updateUsrHandler: (formData, token) => dispatch(updateUser(formData, token)),
 		toggleActive: (id, token) => dispatch(toggleActive(id, token)),
-		fetchGrpList: (token, showInactive) => dispatch(fetchGroupList(token, showInactive)),
-		onTableChange: (pagination, filters, sorter) => dispatch(userTableChange(pagination, filters, sorter))
+		fetchGrpList: (token, showInactive) => dispatch(fetchGroupList(token, showInactive))
 	}
 }
 
