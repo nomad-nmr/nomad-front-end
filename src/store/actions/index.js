@@ -51,3 +51,5 @@ export {
 } from './groups'
 
 export { fetchHistory, setExpHistoryDate } from './expHistory'
+
+export { fetchParamSets, setInstrumentId, searchParamSets, toggleParamsForm, addParamSet } from './paramSets'

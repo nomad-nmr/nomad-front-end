@@ -17,7 +17,6 @@ import NavBar from './components/NavBar/NavBar'
 import LoginModal from './components/Modals/LoginModal/LoginModal'
 import LogoutModal from './components/Modals/LogoutModal/LogoutModal'
 import Dashboard from './containers/Dashboard/Dashboard'
-import Experiments from './containers/Experiments/Experiments'
 import Error500 from './components/Errors/Error500'
 import Error404 from './components/Errors/Error404'
 import Error403 from './components/Errors/Error403'
@@ -44,6 +43,7 @@ const App = props => {
 	const Instruments = React.lazy(() => import('./containers/Instruments/Instruments'))
 	const Groups = React.lazy(() => import('./containers/Groups/Groups'))
 	const ExpHistory = React.lazy(() => import('./containers/ExpHistory/ExpHistory'))
+	const ParameterSets = React.lazy(() => import('./containers/ParameterSets/ParameterSets'))
 
 	//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
 	let authModal = null
@@ -114,8 +114,10 @@ const App = props => {
 								}}
 							/>
 							<Route
-								path='/admin/experiments'
-								component={accessLevel === 'admin' ? Experiments : Error403}
+								path='/admin/parameter-sets'
+								render={() => {
+									return accessLevel === 'admin' ? <ParameterSets /> : <Error403 />
+								}}
 							/>
 							<Route exact path='/dashboard' render={() => <Dashboard />} />
 							<Route exact path='/reset/:token' component={Reset} />

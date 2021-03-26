@@ -81,9 +81,9 @@ const adminMenu = props => {
 						<DeploymentUnitOutlined />
 						<span>Instruments</span>
 					</Menu.Item>
-					<Menu.Item key='/admin/experiments'>
+					<Menu.Item key='/admin/parameter-sets'>
 						<ExperimentOutlined />
-						<span>Experiments</span>
+						<span>Parameter Sets</span>
 					</Menu.Item>
 				</SubMenu>
 			</Menu>
