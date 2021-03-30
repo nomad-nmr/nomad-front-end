@@ -19,7 +19,7 @@ const Users = props => {
 
 	const formRef = useRef({})
 
-	//Local state fo table and its pagination
+	//Local state for table and its pagination
 	const [groupFilters, setGroupFilters] = useState([])
 	const [pageSize, setPageSize] = useState(15)
 	const [currentPage, setCurrentPage] = useState(1)

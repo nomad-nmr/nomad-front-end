@@ -60,8 +60,8 @@ export const addUser = (formData, token) => {
 				dispatch(addUserSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(errorHandler(err))
 				dispatch(addUserFailed())
+				dispatch(errorHandler(err))
 			})
 	}
 }
@@ -82,8 +82,8 @@ export const updateUser = (formData, token) => {
 				dispatch(updateUserSuccess(res.data))
 			})
 			.catch(err => {
-				dispatch(errorHandler(err))
 				dispatch(addUserFailed())
+				dispatch(errorHandler(err))
 			})
 	}
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { PageHeader, Switch, Button, DatePicker, Input } from 'antd'
+import { PageHeader, Switch, Button, DatePicker, Input, Select } from 'antd'
 
 import moment from 'moment'
 
@@ -15,7 +15,10 @@ import {
 	toggleShowInactiveInstruments,
 	toggleShowInactiveGroups,
 	setExpHistoryDate,
-	searchUser
+	searchUser,
+	setInstrumentId,
+	searchParamSets,
+	toggleParamsForm
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -30,7 +33,7 @@ import historyIcon from '../../../assets/history-icon.webp'
 
 const PageHeaderEl = props => {
 	const { Search } = Input
-
+	const { Option } = Select
 	const {
 		toggleCards,
 		cardSwitchOn,
@@ -77,13 +80,14 @@ const PageHeaderEl = props => {
 							props.toggleUsrDrawer(false)
 						}}
 						disabled={props.formVisible}>
-						Add User
+						Add
 					</Button>
 					<Search
-						placeholder='search user'
+						placeholder='search name'
 						allowClear
 						onSearch={props.userSearchHandler}
-						style={{ width: 150, marginLeft: '20px' }}
+						style={{ width: 160, marginLeft: '20px' }}
+						defaultValue={props.usrSearchValue}
 					/>
 					<div className={classes.SwitchElement}>
 						<label>Show Inactive</label>
@@ -106,9 +110,9 @@ const PageHeaderEl = props => {
 					<Button
 						className={classes.Button}
 						type='primary'
-						onClick={props.toggleGrpForm}
+						onClick={() => props.toggleGrpForm(false)}
 						disabled={props.grpFormVisible}>
-						Add Group
+						Add
 					</Button>
 					<div className={classes.SwitchElement}>
 						<label>Show Inactive</label>
@@ -132,9 +136,9 @@ const PageHeaderEl = props => {
 					<Button
 						className={classes.Button}
 						type='primary'
-						onClick={() => props.toggleInstForm()}
+						onClick={() => props.toggleInstForm(false)}
 						disabled={props.instFormVisible}>
-						Add Instrument
+						Add
 					</Button>
 					<div className={classes.SwitchElement}>
 						<label>Show Inactive</label>
@@ -149,9 +153,44 @@ const PageHeaderEl = props => {
 				</div>
 			)
 			break
-		case '/admin/experiments':
-			headerTitle = 'Setting Experiments'
+		case '/admin/parameter-sets':
+			headerTitle = 'Parameter Sets'
 			avatarSrc = experimentIcon
+
+			const instrOptionArr = props.instrList.map(i => (
+				<Option value={i.id} key={i.id}>
+					{i.name}
+				</Option>
+			))
+			instrOptionArr.unshift(
+				<Option key='all' value={null}>
+					All instruments
+				</Option>
+			)
+			extra = (
+				<div className={classes.ExtraContainer}>
+					<Button
+						className={classes.Button}
+						type='primary'
+						onClick={() => props.tglParamsForm(false)}
+						disabled={props.paramsFormVisible}>
+						Add
+					</Button>
+					<Select
+						defaultValue={props.instrId}
+						style={{ width: 140, marginLeft: '15px' }}
+						onChange={props.setInstrId}>
+						{instrOptionArr}
+					</Select>
+					<Search
+						placeholder='search name'
+						allowClear
+						onSearch={props.onSearchHandler}
+						style={{ width: 155, marginLeft: '15px' }}
+						defaultValue={props.paramsSearchValue}
+					/>
+				</div>
+			)
 			break
 		case '/admin/history':
 			headerTitle = 'Experiment History'
@@ -189,7 +228,12 @@ const mapStateToProps = state => {
 		showInactiveUsr: state.users.showInactive,
 		showInactiveInst: state.instruments.showInactive,
 		grpFormVisible: state.groups.showForm,
-		showInactiveGrps: state.groups.showInactive
+		showInactiveGrps: state.groups.showInactive,
+		instrList: state.instruments.instrumentList,
+		instrId: state.paramSets.instrumentId,
+		paramsSearchValue: state.paramSets.searchValue,
+		usrSearchValue: state.users.searchUserValue,
+		paramsFormVisible: state.paramSets.formVisible
 	}
 }
 
@@ -197,14 +241,17 @@ const mapDispatchToProps = dispatch => {
 	return {
 		toggleCards: () => dispatch(toggleCards()),
 		statusButtonClicked: id => dispatch(openDashDrawer(id)),
-		toggleInstForm: () => dispatch(toggleShowForm()),
+		toggleInstForm: editing => dispatch(toggleShowForm(editing)),
 		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing)),
 		switchShowInactiveUsr: () => dispatch(toggleShowInactive()),
 		toggleShowInactiveInstr: () => dispatch(toggleShowInactiveInstruments()),
-		toggleGrpForm: () => dispatch(toggleGroupForm()),
+		toggleGrpForm: editing => dispatch(toggleGroupForm(editing)),
 		toggleShowInactiveGrps: () => dispatch(toggleShowInactiveGroups()),
 		setExpHistoryDate: date => dispatch(setExpHistoryDate(date)),
-		userSearchHandler: value => dispatch(searchUser(value))
+		userSearchHandler: value => dispatch(searchUser(value)),
+		setInstrId: id => dispatch(setInstrumentId(id)),
+		onSearchHandler: value => dispatch(searchParamSets(value)),
+		tglParamsForm: editing => dispatch(toggleParamsForm(editing))
 	}
 }
 

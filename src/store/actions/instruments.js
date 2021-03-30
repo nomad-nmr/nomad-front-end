@@ -103,9 +103,10 @@ export const toggleAvailableInTable = (id, token) => {
 	}
 }
 
-export const toggleShowForm = () => {
+export const toggleShowForm = payload => {
 	return {
-		type: actionTypes.TOGGLE_INSTRUMENT_FORM
+		type: actionTypes.TOGGLE_INSTRUMENT_FORM,
+		payload
 	}
 }
 

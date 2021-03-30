@@ -68,7 +68,7 @@ const Instruments = props => {
 						type='link'
 						onClick={() => {
 							if (!props.formVisible) {
-								props.toggleForm()
+								props.toggleForm(true)
 							}
 							setTimeout(() => formRef.current.setFieldsValue(record), 100)
 						}}>
@@ -95,6 +95,7 @@ const Instruments = props => {
 			toggleEditHandler={props.toggleEdit}
 			toggleFormHandler={props.toggleForm}
 			authToken={props.authToken}
+			editing={props.editing}
 		/>
 	)
 
@@ -133,7 +134,8 @@ const mapStateToProps = state => {
 		switchIsLoading: state.instruments.availableSwitchIsLoading,
 		formVisible: state.instruments.showForm,
 		authToken: state.auth.token,
-		showInactive: state.instruments.showInactive
+		showInactive: state.instruments.showInactive,
+		editing: state.instruments.editing
 	}
 }
 
@@ -144,7 +146,7 @@ const mapDispatchToProps = dispatch => {
 		updateInstr: (payload, token) => dispatch(updateInstruments(payload, token)),
 		toggleAvailable: (payload, token) => dispatch(toggleAvailableInTable(payload, token)),
 		toggleActive: (payload, token) => dispatch(toggleActiveInstr(payload, token)),
-		toggleForm: () => dispatch(toggleShowForm())
+		toggleForm: editing => dispatch(toggleShowForm(editing))
 	}
 }
 
