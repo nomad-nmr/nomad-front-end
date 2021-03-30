@@ -60,7 +60,8 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.ADD_USER_FAILED:
 			return {
 				...state,
-				tableIsLoading: false
+				tableIsLoading: false,
+				showForm: false
 			}
 
 		case actionTypes.UPDATE_USER_SUCCESS:

@@ -52,4 +52,12 @@ export {
 
 export { fetchHistory, setExpHistoryDate } from './expHistory'
 
-export { fetchParamSets, setInstrumentId, searchParamSets, toggleParamsForm, addParamSet } from './paramSets'
+export {
+	fetchParamSets,
+	setInstrumentId,
+	searchParamSets,
+	toggleParamsForm,
+	addParamSet,
+	updateParamSet,
+	deleteParamSet
+} from './paramSets'

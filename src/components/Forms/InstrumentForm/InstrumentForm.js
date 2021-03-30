@@ -53,7 +53,7 @@ const InstrumentsForm = props => {
 					name='name'
 					label='Name'
 					rules={[{ required: true, whitespace: true, message: 'Instrument name is required' }]}>
-					<Input />
+					<Input disabled={props.editing} />
 				</Form.Item>
 				<Form.Item name='model' label='Model'>
 					<Input />

@@ -110,7 +110,7 @@ const PageHeaderEl = props => {
 					<Button
 						className={classes.Button}
 						type='primary'
-						onClick={props.toggleGrpForm}
+						onClick={() => props.toggleGrpForm(false)}
 						disabled={props.grpFormVisible}>
 						Add
 					</Button>
@@ -136,7 +136,7 @@ const PageHeaderEl = props => {
 					<Button
 						className={classes.Button}
 						type='primary'
-						onClick={() => props.toggleInstForm()}
+						onClick={() => props.toggleInstForm(false)}
 						disabled={props.instFormVisible}>
 						Add
 					</Button>
@@ -172,7 +172,7 @@ const PageHeaderEl = props => {
 					<Button
 						className={classes.Button}
 						type='primary'
-						onClick={() => props.tglParamsForm()}
+						onClick={() => props.tglParamsForm(false)}
 						disabled={props.paramsFormVisible}>
 						Add
 					</Button>
@@ -241,17 +241,17 @@ const mapDispatchToProps = dispatch => {
 	return {
 		toggleCards: () => dispatch(toggleCards()),
 		statusButtonClicked: id => dispatch(openDashDrawer(id)),
-		toggleInstForm: () => dispatch(toggleShowForm()),
+		toggleInstForm: editing => dispatch(toggleShowForm(editing)),
 		toggleUsrDrawer: editing => dispatch(toggleUserForm(editing)),
 		switchShowInactiveUsr: () => dispatch(toggleShowInactive()),
 		toggleShowInactiveInstr: () => dispatch(toggleShowInactiveInstruments()),
-		toggleGrpForm: () => dispatch(toggleGroupForm()),
+		toggleGrpForm: editing => dispatch(toggleGroupForm(editing)),
 		toggleShowInactiveGrps: () => dispatch(toggleShowInactiveGroups()),
 		setExpHistoryDate: date => dispatch(setExpHistoryDate(date)),
 		userSearchHandler: value => dispatch(searchUser(value)),
 		setInstrId: id => dispatch(setInstrumentId(id)),
 		onSearchHandler: value => dispatch(searchParamSets(value)),
-		tglParamsForm: () => dispatch(toggleParamsForm())
+		tglParamsForm: editing => dispatch(toggleParamsForm(editing))
 	}
 }
 

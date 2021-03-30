@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Form, Input, Button, Select, Checkbox } from 'antd'
 
 import classes from '../Form.module.css'
@@ -24,6 +24,10 @@ const tailLayout = {
 const UserForm = props => {
 	const [form] = Form.useForm()
 
+	useEffect(() => {
+		form.resetFields()
+	})
+
 	const onReset = () => {
 		form.resetFields()
 		props.toggleDrawer()
@@ -33,10 +37,8 @@ const UserForm = props => {
 		// Checking whether to update or add
 		if (values._id) {
 			props.updateUsrHandler(values, props.authToken)
-			form.resetFields()
 		} else {
 			props.addUsrHandler(values, props.authToken)
-			form.resetFields()
 		}
 	}
 

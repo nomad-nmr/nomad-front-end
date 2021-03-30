@@ -8,7 +8,8 @@ const initialState = {
 	tableIsLoading: false,
 	showForm: false,
 	showInactive: false,
-	instrumentList: []
+	instrumentList: [],
+	editing: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -18,7 +19,8 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				showForm: !state.showForm,
-				tableIsLoading: false
+				tableIsLoading: false,
+				editing: action.payload
 			}
 
 		case actionTypes.FETCH_INSTRUMENTS_TABLE_START:
@@ -64,7 +66,8 @@ const reducer = (state = initialState, action) => {
 				...state,
 				instrumentsTableData: addKey(updatedTable),
 				tableIsLoading: false,
-				showForm: false
+				showForm: false,
+				editing: false
 			}
 
 		case actionTypes.TOGGLE_AVAILABLE_SWITCH_SUCCESS:

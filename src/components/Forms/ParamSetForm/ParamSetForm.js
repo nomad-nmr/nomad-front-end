@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import moment from 'moment'
 import {
 	Form,
@@ -36,10 +36,13 @@ const tailLayout = {
 const ParamSetForm = props => {
 	const [form] = Form.useForm()
 
+	useEffect(() => {
+		form.resetFields()
+	})
+
 	const availableOnGroup = props.instruments.map(i => (
 		<Col span={8} key={i.id}>
 			<Checkbox
-				// value={{ instrument: { name: i.name, id: i.id } }}
 				value={i.id}
 				style={{
 					lineHeight: '32px'
@@ -50,21 +53,13 @@ const ParamSetForm = props => {
 	))
 
 	const formSubmitHandler = values => {
-		const defaultParamsArr = []
 		values.defaultParams.expt = values.defaultParams.expt.format('HH:mm:ss')
 
-		for (const [key, value] of Object.entries(values.defaultParams)) {
-			defaultParamsArr.push({ name: key, value })
-		}
-		const formData = {
-			...values,
-			defaultParams: defaultParamsArr
-		}
+		//Checking whether to add or update
 		if (values._id) {
-			console.log('updating')
+			props.updateHandler(props.token, values)
 		} else {
-			props.addHandler(props.token, formData)
-			props.toggleDrawer()
+			props.addHandler(props.token, values)
 		}
 	}
 
@@ -75,8 +70,7 @@ const ParamSetForm = props => {
 				form={form}
 				ref={props.formRef}
 				initialValues={{
-					defaultParams: { td1: 1, expt: moment('00:00:00', 'HH:mm:ss') },
-					availableOn: ['60361c99a94fe37cd04dd7c5']
+					defaultParams: { td1: 1, expt: moment('00:00:00', 'HH:mm:ss') }
 				}}
 				onFinish={formSubmitHandler}>
 				<Form.Item hidden name='_id'>
@@ -86,7 +80,7 @@ const ParamSetForm = props => {
 					name='name'
 					label='Name'
 					rules={[{ required: true, whitespace: true, message: 'Parameter set name is required' }]}>
-					<Input style={{ width: '50%' }} />
+					<Input disabled={props.editing} style={{ width: '50%' }} />
 				</Form.Item>
 				<Form.Item name='description' label='Description'>
 					<Input />
@@ -183,7 +177,7 @@ const ParamSetForm = props => {
 				</Row>
 				<Divider>
 					Custom Parameters
-					<Tooltip title='Parameters that users will be able to change at submission'>
+					<Tooltip title='Parameters that users are able to change at submission alongside with default parameters ns and d1'>
 						<QuestionCircleOutlined className={classes.Hint} />
 					</Tooltip>
 				</Divider>
@@ -227,14 +221,7 @@ const ParamSetForm = props => {
 												{...field}
 												name={[field.name, 'value']}
 												style={{ margin: 0 }}
-												fieldKey={[field.fieldKey, 'value']}
-												rules={[
-													{
-														required: true,
-														whitespace: true,
-														message: 'Default value is required'
-													}
-												]}>
+												fieldKey={[field.fieldKey, 'value']}>
 												<Input placeholder='Default Value' />
 											</Form.Item>
 										</Col>
