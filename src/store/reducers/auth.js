@@ -5,12 +5,14 @@ import history from '../../utils/history'
 const initialState = {
 	username: null,
 	accessLevel: null,
+	groupName: null,
 	token: null,
 	authModalVisible: false,
 	loading: false,
 	resetUsername: null,
 	resetFullName: null,
-	resetToken: null
+	resetToken: null,
+	followTo: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -18,13 +20,15 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.OPEN_AUTH_MODAL:
 			return {
 				...state,
-				authModalVisible: true
+				authModalVisible: true,
+				followTo: action.payload
 			}
 
 		case actionTypes.CLOSE_AUTH_MODAL:
 			return {
 				...state,
-				authModalVisible: false
+				authModalVisible: false,
+				followTo: null
 			}
 
 		case actionTypes.SIGN_IN_START:
@@ -39,6 +43,7 @@ const reducer = (state = initialState, action) => {
 				username: action.payload.username,
 				token: action.payload.token,
 				accessLevel: action.payload.accessLevel,
+				groupName: action.payload.groupName,
 				authModalVisible: false,
 				loading: false
 			}
@@ -96,7 +101,6 @@ const reducer = (state = initialState, action) => {
 					? `The new password for user ${action.data.username} was reset`
 					: `The account of ${action.data.username} was updated`,
 				onOk() {
-					console.log('Test')
 					history.push('/')
 					window.location.reload()
 				}

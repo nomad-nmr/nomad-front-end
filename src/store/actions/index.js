@@ -61,3 +61,5 @@ export {
 	updateParamSet,
 	deleteParamSet
 } from './paramSets'
+
+export { bookHolders } from './submit'

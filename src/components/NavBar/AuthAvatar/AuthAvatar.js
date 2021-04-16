@@ -1,12 +1,21 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Avatar, Popover } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import classes from './AuthAvatar.module.css'
-import { openAuthModal } from '../../../store/actions/index'
 
 const AuthAvatar = props => {
 	const assignedClasses = [classes.AuthAvatar]
+
+	const history = useHistory()
+	const { username, redirectTo } = props
+
+	//Hook that redirects after successful login
+	useEffect(() => {
+		if (username && redirectTo) {
+			history.push(redirectTo)
+		}
+	}, [username, redirectTo, history])
 
 	let avatarEl
 	if (props.username) {
@@ -24,18 +33,18 @@ const AuthAvatar = props => {
 					</>
 				}
 				content={
-					<span className={classes.Popover} onClick={props.onClick}>
+					<span className={classes.Popover} onClick={() => props.onClick(null)}>
 						Sign out
 					</span>
 				}>
-				<Avatar size='large' className={assignedClasses.join(' ')} onClick={props.onClick}>
+				<Avatar size='large' className={assignedClasses.join(' ')} onClick={() => props.onClick(null)}>
 					{props.username[0].toUpperCase()}
 				</Avatar>
 			</Popover>
 		)
 	} else {
 		avatarEl = (
-			<Avatar size='large' className={assignedClasses.join(' ')} onClick={props.onClick}>
+			<Avatar size='large' className={assignedClasses.join(' ')} onClick={() => props.onClick(null)}>
 				{<UserOutlined />}
 			</Avatar>
 		)
@@ -44,17 +53,4 @@ const AuthAvatar = props => {
 	return avatarEl
 }
 
-const mapStateToProps = state => {
-	return {
-		username: state.auth.username,
-		accessLevel: state.auth.accessLevel
-	}
-}
-
-const mapDispatchToProps = dispatch => {
-	return {
-		onClick: () => dispatch(openAuthModal())
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AuthAvatar)
+export default AuthAvatar

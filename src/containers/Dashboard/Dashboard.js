@@ -24,7 +24,6 @@ const Dashboard = props => {
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
-		socket.removeAllListeners('statusUpdate')
 		fetchStatusSum()
 		fetchStatusTable('0')
 	}, [fetchStatusSum, fetchStatusTable])
@@ -48,6 +47,9 @@ const Dashboard = props => {
 				fetchStatusTable(activeTab)
 			}
 		})
+		return () => {
+			socket.removeAllListeners('statusUpdate')
+		}
 		// useEffect for socket.io function must have empty dependency array otherwise the triggers infinite loop!!!
 		// eslint-disable-next-line
 	}, [])
