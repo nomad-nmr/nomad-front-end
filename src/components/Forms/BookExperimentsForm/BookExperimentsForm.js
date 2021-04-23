@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space } from 'antd'
-// import { QuestionCircleOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message } from 'antd'
 
 import solvents from '../../../misc/solvents'
-import FormItem from 'antd/lib/form/FormItem'
+import EditParamsModal from '../../Modals/EditParamsModal/EditPramsModal'
+
+import classes from './BookExperimentsForm.module.css'
 
 const { Option } = Select
 
@@ -11,7 +12,13 @@ const BookExperimentsForm = props => {
 	const [form] = Form.useForm()
 
 	const [formState, setFormState] = useState([])
+	const [modalVisible, setModalVisible] = useState(false)
+	//state used to generate form inputs in edit parameters modal
+	const [modalInputData, setModalInputData] = useState({})
+	const [resetModal, setResetModal] = useState(undefined)
 
+	//Hook to create state for dynamic ExpNo part of form from inputData
+	//InputData gets updated every time new holder is booked
 	useEffect(() => {
 		const newFormState = []
 
@@ -47,6 +54,58 @@ const BookExperimentsForm = props => {
 			newFormState[index].expCount--
 			setFormState(newFormState)
 		}
+		const expNo = 10 + newFormState[index].expCount
+		form.resetFields([[e.target.value, 'exps', expNo]])
+	}
+
+	const resetParamsField = (sampleKey, expNo) => {
+		form.resetFields([[sampleKey, 'exps', expNo, 'params']])
+	}
+
+	const openModalHandler = (event, key, expNo) => {
+		event.preventDefault()
+
+		const paramSetName = form.getFieldValue([key, 'exps', expNo, 'paramSet'])
+		const paramsString = form.getFieldValue([key, 'exps', expNo, 'params'])
+		if (paramSetName) {
+			const { defaultParams, customParams } = props.paramSetsData.find(
+				paramSet => paramSet.name === paramSetName
+			)
+			setModalInputData({
+				sampleKey: key,
+				paramSetName,
+				expNo,
+				defaultParams,
+				customParams
+			})
+			setResetModal(paramsString ? null : key + '#' + expNo)
+			setModalVisible(true)
+		} else {
+			message.warning('Please select experiment [Parameter Set]')
+		}
+	}
+
+	const modalOkHandler = values => {
+		for (const key in values) {
+			const params = values[key]
+			let paramsString = ''
+			for (const param in params) {
+				if (params[param]) {
+					paramsString = paramsString + param + ',' + params[param] + ','
+				}
+			}
+			paramsString = paramsString.substring(0, paramsString.length - 1)
+			// values[key] = paramsString
+			const sampleKey = key.split('#')[0]
+			const expNo = key.split('#')[1]
+			form.setFieldsValue({ [sampleKey]: { exps: { [expNo]: { params: paramsString } } } })
+		}
+
+		setModalVisible(false)
+	}
+
+	const closeModalHandler = () => {
+		setModalVisible(false)
 	}
 
 	//Generating form items from input data. inputData is array of objects.
@@ -70,22 +129,42 @@ const BookExperimentsForm = props => {
 			</Option>
 		))
 
+		const key = sample.key
+
 		return (
-			<div key={sample.key}>
+			<div key={key}>
 				<Row gutter={16}>
 					<Col span={2}>
-						<Form.Item name={[sample.key, 'instrumentName']} initialValue={sample.instrument}>
-							<Input size='small' disabled style={{ textAlign: 'center' }} />
+						<Form.Item name={[key, 'instrumentName']} initialValue={sample.instrument}>
+							<Input
+								size='small'
+								disabled
+								style={{
+									textAlign: 'center',
+									color: '#389e0d',
+									fontWeight: 600,
+									backgroundColor: '#f0f5ff'
+								}}
+							/>
 						</Form.Item>
 					</Col>
 					<Col span={1}>
-						<Form.Item name={[sample.key, 'holder']} initialValue={sample.holder}>
-							<Input size='small' disabled style={{ textAlign: 'center' }} />
+						<Form.Item name={[key, 'holder']} initialValue={sample.holder}>
+							<Input
+								size='small'
+								disabled
+								style={{
+									textAlign: 'center',
+									color: '#389e0d',
+									fontWeight: 600,
+									backgroundColor: '#f0f5ff'
+								}}
+							/>
 						</Form.Item>
 					</Col>
 					<Col span={2}>
 						<Form.Item
-							name={[sample.key, 'solvent']}
+							name={[key, 'solvent']}
 							rules={[
 								{
 									required: true,
@@ -103,7 +182,7 @@ const BookExperimentsForm = props => {
 					</Col>
 					<Col span={6}>
 						<Form.Item
-							name={[sample.key, 'title']}
+							name={[key, 'title']}
 							rules={[
 								{
 									required: true,
@@ -116,38 +195,65 @@ const BookExperimentsForm = props => {
 							<Input size='small' />
 						</Form.Item>
 					</Col>
+					<Col span={1}>
+						<Space>
+							<button className={classes.CircleButton} value={key} onClick={addExpHandler}>
+								+
+							</button>
+							<button
+								className={[classes.CircleButton, classes.CircleButtonMinus].join(' ')}
+								value={key}
+								onClick={removeExpHandler}>
+								-
+							</button>
+						</Space>
+					</Col>
 					<Col span={10}>
 						{expNoArr.map(expNo => (
-							<Row key={expNo} gutter={12}>
-								<Col span={12}>
-									<FormItem
-										name={[sample.key, 'exps', expNo, 'paramSet']}
-										style={{ textAlign: 'left' }}>
-										<Select>{paramSetsOptions}</Select>
-									</FormItem>
+							<Row key={expNo} gutter={16} align='top'>
+								<Col span={1}>
+									<span>{expNo}</span>
 								</Col>
-								<Col span={2}>
+								<Col span={10}>
+									<Form.Item
+										name={[key, 'exps', expNo, 'paramSet']}
+										style={{ textAlign: 'left' }}
+										rules={[
+											{
+												required: true,
+												message: 'Parameter set is required'
+											}
+										]}>
+										<Select
+											onChange={value => {
+												resetParamsField(key, expNo)
+											}}>
+											{paramSetsOptions}
+										</Select>
+									</Form.Item>
+								</Col>
+								<Col span={6}>
+									<Form.Item name={[key, 'exps', expNo, 'params']}>
+										<Input
+											disabled
+											style={{
+												color: '#fa8c16',
+												fontWeight: 600,
+												backgroundColor: '#f0f5ff'
+											}}
+										/>
+									</Form.Item>
+								</Col>
+								<Col>
 									<button
-										value={sample.key}
-										onClick={e => {
-											e.preventDefault()
-											console.log(form.getFieldValue([e.target.value, 'exps', expNo, 'paramSet']))
-										}}>
+										className={classes.ActionButton}
+										value={key}
+										onClick={e => openModalHandler(e, key, expNo)}>
 										Edit
 									</button>
 								</Col>
 							</Row>
 						))}
-					</Col>
-					<Col span={2}>
-						<Space>
-							<button value={sample.key} onClick={addExpHandler}>
-								Add
-							</button>
-							<button value={sample.key} onClick={removeExpHandler}>
-								Remove
-							</button>
-						</Space>
 					</Col>
 				</Row>
 				<Divider style={{ marginTop: 0 }} />
@@ -157,21 +263,26 @@ const BookExperimentsForm = props => {
 
 	return (
 		<div style={{ margin: '20px 40px' }}>
-			<Row
-				gutter={16}
-				style={{ backgroundColor: '#d9d9d9', padding: '10px 0', fontWeight: 600, marginBottom: 15 }}>
+			<Row gutter={16} className={classes.Header}>
 				<Col span={2}>Instrument</Col>
 				<Col span={1}>Holder</Col>
 				<Col span={2}>Solvent</Col>
 				<Col span={6}>Title</Col>
-				<Col span={5}>Experiment [Parameter Set]</Col>
+				<Col span={1}>
+					<span style={{ marginLeft: 20 }}>ExpNo</span>
+				</Col>
+				<Col span={3} offset={1}>
+					Experiment [Parameter Set]
+				</Col>
+				<Col span={2} offset={1}>
+					Parameters
+				</Col>
 			</Row>
 			{props.loading ? (
 				<Spin size='large' style={{ margin: 30 }} />
 			) : (
 				<Form form={form} size='small' onFinish={values => console.log(values)}>
 					{formItems}
-
 					<Form.Item>
 						<Button type='primary' size='middle' htmlType='submit'>
 							Continue
@@ -179,6 +290,14 @@ const BookExperimentsForm = props => {
 					</Form.Item>
 				</Form>
 			)}
+
+			<EditParamsModal
+				visible={modalVisible}
+				closeModal={closeModalHandler}
+				onOkHandler={modalOkHandler}
+				inputData={modalInputData}
+				reset={resetModal}
+			/>
 		</div>
 	)
 }
