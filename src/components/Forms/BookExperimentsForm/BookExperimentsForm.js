@@ -16,6 +16,7 @@ const BookExperimentsForm = props => {
 	//state used to generate form inputs in edit parameters modal
 	const [modalInputData, setModalInputData] = useState({})
 	const [resetModal, setResetModal] = useState(undefined)
+	const [exptState, setExptState] = useState({})
 
 	//Hook to create state for dynamic ExpNo part of form from inputData
 	//InputData gets updated every time new holder is booked
@@ -56,10 +57,17 @@ const BookExperimentsForm = props => {
 		}
 		const expNo = 10 + newFormState[index].expCount
 		form.resetFields([[e.target.value, 'exps', expNo]])
+		const newExptState = { ...exptState }
+		delete newExptState[e.target.value + '#' + expNo]
+		setExptState(newExptState)
 	}
 
-	const resetParamsField = (sampleKey, expNo) => {
+	const onParamSetChange = (sampleKey, expNo, paramSetName) => {
 		form.resetFields([[sampleKey, 'exps', expNo, 'params']])
+		const key = sampleKey + '#' + expNo
+		const paramSet = props.paramSetsData.find(paramSet => paramSet.name === paramSetName)
+		const newExptState = { ...exptState, [key]: paramSet.defaultParams[4].value }
+		setExptState(newExptState)
 	}
 
 	const openModalHandler = (event, key, expNo) => {
@@ -86,20 +94,18 @@ const BookExperimentsForm = props => {
 	}
 
 	const modalOkHandler = values => {
-		for (const key in values) {
-			const params = values[key]
-			let paramsString = ''
-			for (const param in params) {
-				if (params[param]) {
-					paramsString = paramsString + param + ',' + params[param] + ','
-				}
+		const key = Object.keys(values)[0]
+		const params = Object.values(values)[0]
+		let paramsString = ''
+		for (const param in params) {
+			if (params[param] && param !== 'expt') {
+				paramsString = paramsString + param + ',' + params[param] + ','
 			}
-			paramsString = paramsString.substring(0, paramsString.length - 1)
-			// values[key] = paramsString
-			const sampleKey = key.split('#')[0]
-			const expNo = key.split('#')[1]
-			form.setFieldsValue({ [sampleKey]: { exps: { [expNo]: { params: paramsString } } } })
 		}
+		paramsString = paramsString.substring(0, paramsString.length - 1)
+		const sampleKey = key.split('#')[0]
+		const expNo = key.split('#')[1]
+		form.setFieldsValue({ [sampleKey]: { exps: { [expNo]: { params: paramsString } } } })
 
 		setModalVisible(false)
 	}
@@ -226,7 +232,7 @@ const BookExperimentsForm = props => {
 										]}>
 										<Select
 											onChange={value => {
-												resetParamsField(key, expNo)
+												onParamSetChange(key, expNo, value)
 											}}>
 											{paramSetsOptions}
 										</Select>
@@ -252,6 +258,7 @@ const BookExperimentsForm = props => {
 										Edit
 									</button>
 								</Col>
+								<Col span={2}>{exptState[key + '#' + expNo]}</Col>
 							</Row>
 						))}
 					</Col>
