@@ -33,11 +33,11 @@ const AuthAvatar = props => {
 					</>
 				}
 				content={
-					<span className={classes.Popover} onClick={() => props.onClick(null)}>
+					<span className={classes.Popover} onClick={() => props.onClick('/')}>
 						Sign out
 					</span>
 				}>
-				<Avatar size='large' className={assignedClasses.join(' ')} onClick={() => props.onClick(null)}>
+				<Avatar size='large' className={assignedClasses.join(' ')} onClick={() => props.onClick('/')}>
 					{props.username[0].toUpperCase()}
 				</Avatar>
 			</Popover>

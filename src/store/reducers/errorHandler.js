@@ -33,6 +33,7 @@ const reducer = (state = initialState, action) => {
 			return state
 
 		case actionTypes.HTTP_OTHER_ERROR:
+			console.log(action)
 			Modal.error({
 				title: 'Error message',
 				content: action.error.toString()

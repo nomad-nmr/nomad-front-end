@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message, Modal } from 'antd'
+import moment from 'moment'
 
 import solvents from '../../../misc/solvents'
 import EditParamsModal from '../../Modals/EditParamsModal/EditPramsModal'
@@ -10,6 +12,7 @@ const { Option } = Select
 
 const BookExperimentsForm = props => {
 	const [form] = Form.useForm()
+	const history = useHistory()
 
 	const [formState, setFormState] = useState([])
 	const [modalVisible, setModalVisible] = useState(false)
@@ -17,12 +20,12 @@ const BookExperimentsForm = props => {
 	const [modalInputData, setModalInputData] = useState({})
 	const [resetModal, setResetModal] = useState(undefined)
 	const [exptState, setExptState] = useState({})
+	const [totalExptState, setTotalExptState] = useState({})
 
 	//Hook to create state for dynamic ExpNo part of form from inputData
 	//InputData gets updated every time new holder is booked
 	useEffect(() => {
 		const newFormState = []
-
 		props.inputData.forEach(i => {
 			const found = formState.find(entry => entry.key === i.key)
 			if (found) {
@@ -59,7 +62,18 @@ const BookExperimentsForm = props => {
 		form.resetFields([[e.target.value, 'exps', expNo]])
 		const newExptState = { ...exptState }
 		delete newExptState[e.target.value + '#' + expNo]
+
+		const sampleKey = e.target.value.split('#')[0]
+		const oldExpt = exptState[e.target.value + '#' + expNo]
+		const newTotalExptValue = moment
+			.duration(totalExptState[sampleKey], 'seconds')
+			.subtract(oldExpt)
+			.as('seconds')
+
+		const newTotalExptState = { ...totalExptState, [sampleKey]: newTotalExptValue }
+
 		setExptState(newExptState)
+		setTotalExptState(newTotalExptState)
 	}
 
 	const onParamSetChange = (sampleKey, expNo, paramSetName) => {
@@ -67,7 +81,17 @@ const BookExperimentsForm = props => {
 		const key = sampleKey + '#' + expNo
 		const paramSet = props.paramSetsData.find(paramSet => paramSet.name === paramSetName)
 		const newExptState = { ...exptState, [key]: paramSet.defaultParams[4].value }
+
+		const oldExpt = exptState[key]
+		const newTotalExptValue = moment
+			.duration(totalExptState[sampleKey], 'seconds')
+			.subtract(oldExpt)
+			.add(moment.duration(paramSet.defaultParams[4].value))
+			.as('seconds')
+		const newTotalExptState = { ...totalExptState, [sampleKey]: newTotalExptValue }
+
 		setExptState(newExptState)
+		setTotalExptState(newTotalExptState)
 	}
 
 	const openModalHandler = (event, key, expNo) => {
@@ -101,6 +125,24 @@ const BookExperimentsForm = props => {
 			if (params[param] && param !== 'expt') {
 				paramsString = paramsString + param + ',' + params[param] + ','
 			}
+
+			if (param === 'expt') {
+				const newExptState = { ...exptState, [key]: params.expt }
+
+				const sampleKey = key.split('#')[0]
+
+				const oldExpt = exptState[key]
+				const newTotalExptValue = moment
+					.duration(totalExptState[sampleKey], 'seconds')
+					.subtract(oldExpt)
+					.add(moment.duration(params.expt))
+					.as('seconds')
+
+				const newTotalExptState = { ...totalExptState, [sampleKey]: newTotalExptValue }
+
+				setExptState(newExptState)
+				setTotalExptState(newTotalExptState)
+			}
 		}
 		paramsString = paramsString.substring(0, paramsString.length - 1)
 		const sampleKey = key.split('#')[0]
@@ -112,6 +154,57 @@ const BookExperimentsForm = props => {
 
 	const closeModalHandler = () => {
 		setModalVisible(false)
+	}
+
+	const onFinishHandler = values => {
+		if (props.accessLevel !== 'admin') {
+			//accumulator is an object total expt for each instrument in the form
+			const accumulator = {}
+			for (let sampleKey in totalExptState) {
+				const instrId = sampleKey.split('-')[0]
+				if (accumulator[instrId]) {
+					accumulator[instrId] += totalExptState[sampleKey]
+				} else {
+					accumulator[instrId] = totalExptState[sampleKey]
+				}
+			}
+
+			const nightInstrId = []
+			for (let instrId in accumulator) {
+				if (accumulator[instrId] > 7200) {
+					return Modal.error({
+						title: 'Maximum allowance exceeded',
+						content:
+							'Total experimental time for at least one instrument has exceeded maximum allowance'
+					})
+				}
+
+				if (accumulator[instrId] > 1200 && accumulator[instrId] < 7200) {
+					nightInstrId.push(instrId)
+				}
+			}
+
+			if (nightInstrId.length > 0) {
+				return Modal.confirm({
+					title: 'Maximum allowance exceeded',
+					content:
+						'The experiments that exceeded peak time allowance will be submitted into the night queue.',
+					onOk: () => {
+						for (let sampleKey in values) {
+							const found = nightInstrId.find(id => id === sampleKey.split('-')[0])
+							if (found) {
+								values[sampleKey].night = true
+							}
+						}
+						props.bookExpsHandler(props.token, values)
+						history.push('/')
+					}
+				})
+			}
+		}
+
+		props.bookExpsHandler(props.token, values)
+		history.push('/')
 	}
 
 	//Generating form items from input data. inputData is array of objects.
@@ -137,9 +230,19 @@ const BookExperimentsForm = props => {
 
 		const key = sample.key
 
+		const totalExptClass = [classes.TotalExptBasic]
+		if (totalExptState[key] < 1200) {
+			totalExptClass.push(classes.TotalExptOk)
+		} else if (totalExptState[key] > 7200) {
+			totalExptClass.push(classes.TotalExptDanger)
+		} else {
+			totalExptClass.push(classes.TotalExptWarning)
+		}
+
 		return (
 			<div key={key}>
 				<Row gutter={16}>
+					{/* <Form.Item name={[key, 'night']} hidden initialValue={false}></Form.Item> */}
 					<Col span={2}>
 						<Form.Item name={[key, 'instrumentName']} initialValue={sample.instrument}>
 							<Input
@@ -186,7 +289,7 @@ const BookExperimentsForm = props => {
 							</Select>
 						</Form.Item>
 					</Col>
-					<Col span={6}>
+					<Col span={7}>
 						<Form.Item
 							name={[key, 'title']}
 							rules={[
@@ -220,7 +323,7 @@ const BookExperimentsForm = props => {
 								<Col span={1}>
 									<span>{expNo}</span>
 								</Col>
-								<Col span={10}>
+								<Col span={13}>
 									<Form.Item
 										name={[key, 'exps', expNo, 'paramSet']}
 										style={{ textAlign: 'left' }}
@@ -238,29 +341,50 @@ const BookExperimentsForm = props => {
 										</Select>
 									</Form.Item>
 								</Col>
-								<Col span={6}>
-									<Form.Item name={[key, 'exps', expNo, 'params']}>
-										<Input
-											disabled
-											style={{
-												color: '#fa8c16',
-												fontWeight: 600,
-												backgroundColor: '#f0f5ff'
-											}}
-										/>
-									</Form.Item>
-								</Col>
-								<Col>
-									<button
-										className={classes.ActionButton}
-										value={key}
-										onClick={e => openModalHandler(e, key, expNo)}>
-										Edit
-									</button>
+								<Col span={7}>
+									<Space align='start'>
+										<Form.Item name={[key, 'exps', expNo, 'params']}>
+											<Input
+												disabled
+												style={{
+													color: '#fa8c16',
+													fontWeight: 600,
+													backgroundColor: '#f0f5ff'
+												}}
+											/>
+										</Form.Item>
+										<button
+											className={classes.ActionButton}
+											value={key}
+											onClick={e => openModalHandler(e, key, expNo)}>
+											Edit
+										</button>
+									</Space>
 								</Col>
 								<Col span={2}>{exptState[key + '#' + expNo]}</Col>
 							</Row>
 						))}
+					</Col>
+					<Col span={1}>
+						<button
+							className={classes.CancelButton}
+							value={key}
+							onClick={e => {
+								e.preventDefault()
+								props.onCancelHolder(props.token, e.target.value)
+								form.resetFields([e.target.value])
+							}}>
+							Cancel
+						</button>
+					</Col>
+				</Row>
+				<Row gutter={16}>
+					<Col span={3} offset={20} style={{ textAlign: 'right', marginBottom: 10 }}>
+						<span className={totalExptClass.join(' ')}>
+							Total ExpT:
+							{'  ' +
+								moment.duration(totalExptState[key], 'seconds').format('HH:mm:ss', { trim: false })}
+						</span>
 					</Col>
 				</Row>
 				<Divider style={{ marginTop: 0 }} />
@@ -274,37 +398,39 @@ const BookExperimentsForm = props => {
 				<Col span={2}>Instrument</Col>
 				<Col span={1}>Holder</Col>
 				<Col span={2}>Solvent</Col>
-				<Col span={6}>Title</Col>
+				<Col span={7}>Title</Col>
 				<Col span={1}>
 					<span style={{ marginLeft: 20 }}>ExpNo</span>
 				</Col>
-				<Col span={3} offset={1}>
+				<Col span={4} offset={1}>
 					Experiment [Parameter Set]
 				</Col>
 				<Col span={2} offset={1}>
 					Parameters
 				</Col>
+				<Col span={2}>
+					<span style={{ marginLeft: 15 }}>ExpT</span>
+				</Col>
 			</Row>
 			{props.loading ? (
 				<Spin size='large' style={{ margin: 30 }} />
 			) : (
-				<Form form={form} size='small' onFinish={values => console.log(values)}>
+				<Form form={form} ref={props.formRef} size='small' onFinish={onFinishHandler}>
 					{formItems}
 					<Form.Item>
 						<Button type='primary' size='middle' htmlType='submit'>
 							Continue
 						</Button>
 					</Form.Item>
+					<EditParamsModal
+						visible={modalVisible}
+						closeModal={closeModalHandler}
+						onOkHandler={modalOkHandler}
+						inputData={modalInputData}
+						reset={resetModal}
+					/>
 				</Form>
 			)}
-
-			<EditParamsModal
-				visible={modalVisible}
-				closeModal={closeModalHandler}
-				onOkHandler={modalOkHandler}
-				inputData={modalInputData}
-				reset={resetModal}
-			/>
 		</div>
 	)
 }

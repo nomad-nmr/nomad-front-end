@@ -22,7 +22,10 @@ const MainMenu = props => {
 			<Menu.Item key='/submit' icon={<DownloadOutlined style={{ fontSize: 20 }} />}>
 				<span className={classes.MenuItem}>Book New Job</span>
 			</Menu.Item>
-			<Menu.Item key='/batch-submit' icon={<DeliveredProcedureOutlined style={{ fontSize: 20 }} />}>
+			<Menu.Item
+				key='/batch-submit'
+				disabled
+				icon={<DeliveredProcedureOutlined style={{ fontSize: 20 }} />}>
 				<span className={classes.MenuItem}>Batch Submit</span>
 			</Menu.Item>
 			<Menu.Item key='/search' disabled icon={<SearchOutlined style={{ fontSize: 20 }} />}>

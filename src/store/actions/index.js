@@ -62,4 +62,4 @@ export {
 	deleteParamSet
 } from './paramSets'
 
-export { bookHolders } from './submit'
+export { bookHolders, cancelHolder, cancelBookedHolders, bookExperiments } from './submit'

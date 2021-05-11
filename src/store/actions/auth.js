@@ -64,10 +64,10 @@ export const signOutHandler = token => {
 }
 
 // signing out user when token expires
-export const checkAuthTimeout = expirationTime => {
+export const checkAuthTimeout = (expirationTime, token) => {
 	return dispatch => {
 		setTimeout(() => {
-			dispatch(signOutHandler())
+			dispatch(signOutHandler(token))
 		}, expirationTime * 1000)
 	}
 }
@@ -89,7 +89,7 @@ export const signInHandler = formData => {
 				}
 				localStorage.setItem('user', JSON.stringify(user))
 				dispatch(signInSuccess(resp.data))
-				dispatch(checkAuthTimeout(resp.data.expiresIn))
+				dispatch(checkAuthTimeout(resp.data.expiresIn, user.token))
 			})
 			.catch(error => {
 				dispatch(errorHandler(error))
@@ -105,11 +105,11 @@ export const authCheckState = () => {
 			const { username, token, accessLevel, expirationDate, groupName } = user
 			const expDateTime = Date.parse(expirationDate)
 			if (expDateTime <= new Date().getTime()) {
-				dispatch(signOutHandler())
+				dispatch(signOutHandler(token))
 			} else {
 				dispatch(signInSuccess({ token, username, accessLevel, groupName }))
 				const expiresIn = (expDateTime - new Date().getTime()) / 1000
-				dispatch(checkAuthTimeout(expiresIn))
+				dispatch(checkAuthTimeout(expiresIn, token))
 			}
 		}
 	}

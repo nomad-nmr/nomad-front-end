@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import socket from '../../socketConnection'
@@ -6,16 +7,30 @@ import socket from '../../socketConnection'
 import InfoCards from '../../components/InfoCards/InfoCards'
 import BookHoldersForm from '../../components/Forms/BookHoldersForm/BookHoldersForm'
 import BookExperimentsForm from '../../components/Forms/BookExperimentsForm/BookExperimentsForm'
-import { fetchInstrumentList, bookHolders, statusUpdate, fetchParamSets } from '../../store/actions'
+import {
+	fetchInstrumentList,
+	bookHolders,
+	statusUpdate,
+	fetchParamSets,
+	cancelHolder,
+	signOutHandler,
+	cancelBookedHolders,
+	bookExperiments
+} from '../../store/actions'
 
 const Submit = props => {
-	const { fetchInstrList, fetchParamSets, authToken, accessLvl, instrList, bookedSlots } = props
-	// const formInputData = { bookedSlots, username, groupName }
+	const {
+		fetchInstrList,
+		fetchParamSets,
+		authToken,
+		accessLvl,
+		instrList,
+		bookedSlots,
+		cancelBookedHoldersHandler,
+		logoutHandler
+	} = props
 
-	useEffect(() => {
-		fetchInstrList(authToken)
-		fetchParamSets(authToken, { instrumentId: null, searchValue: '' })
-	}, [fetchInstrList, fetchParamSets, authToken])
+	const history = useHistory()
 
 	//Hook for socket.io to update status on InfoCards
 	useEffect(() => {
@@ -29,9 +44,34 @@ const Submit = props => {
 		// eslint-disable-next-line
 	}, [])
 
+	//Clean up hook that cancels all booked holders after user leaves submit page.
+	//Booked holders data are derived from form reference because state (bookedSlots) gives empty array when clean up is run
+	const bookExpsFormRef = useRef({})
+	useEffect(() => {
+		return () => {
+			if (bookExpsFormRef.current.getFieldsValue) {
+				// eslint-disable-next-line
+				const formData = bookExpsFormRef.current.getFieldsValue()
+				const keysArr = Object.keys(formData)
+				cancelBookedHoldersHandler(authToken, keysArr)
+			}
+
+			if (accessLvl !== 'admin') {
+				logoutHandler(authToken)
+			}
+		}
+	}, [accessLvl, authToken, cancelBookedHoldersHandler, logoutHandler, bookExpsFormRef, history])
+
+	useEffect(() => {
+		fetchInstrList(authToken)
+		fetchParamSets(authToken, { instrumentId: null, searchValue: '' })
+	}, [fetchInstrList, fetchParamSets, authToken, bookedSlots])
+
+	//form reference used to set instrument by clicking on cards
 	const bookHoldersFormRef = useRef({})
 
 	const availableInstrList = accessLvl === 'admin' ? instrList : instrList.filter(i => i.available)
+
 	const onCardClick = key => {
 		let instrId = props.statusSummary[key]._id
 		if (accessLvl !== 'admin' && !props.statusSummary[key].available) {
@@ -40,19 +80,6 @@ const Submit = props => {
 		bookHoldersFormRef.current.setFieldsValue({ instrumentId: instrId })
 	}
 
-	//Setting app an array of data that is going to be used for rendering dynamic form items
-	const formInputData = []
-	bookedSlots.forEach(inst => {
-		inst.holders.forEach(holder => {
-			formInputData.push({
-				instrument: inst.instrumentName,
-				holder,
-				instId: inst.instrumentId,
-				key: inst.instrumentId + '-' + holder
-			})
-		})
-	})
-
 	return (
 		<div style={{ marginBottom: 70 }}>
 			<InfoCards cardsData={props.statusSummary} clicked={onCardClick} />
@@ -60,13 +87,19 @@ const Submit = props => {
 				instruments={availableInstrList}
 				formRef={bookHoldersFormRef}
 				onSubmit={props.bookSlotsHandler}
-				bookedCount={formInputData.length}
+				bookedCount={bookedSlots.length}
+				token={props.authToken}
 			/>
-			{formInputData.length !== 0 || props.loading ? (
+			{bookedSlots.length !== 0 || props.loading ? (
 				<BookExperimentsForm
-					inputData={formInputData}
+					inputData={bookedSlots}
+					formRef={bookExpsFormRef}
 					loading={props.loading}
 					paramSetsData={props.paramSets}
+					onCancelHolder={props.cancelHolderHandler}
+					token={props.authToken}
+					accessLevel={props.accessLvl}
+					bookExpsHandler={props.bookExpsHandler}
 				/>
 			) : null}
 		</div>
@@ -90,7 +123,11 @@ const mapDispatchToProps = dispatch => {
 		fetchInstrList: token => dispatch(fetchInstrumentList(token)),
 		bookSlotsHandler: (token, formData) => dispatch(bookHolders(token, formData)),
 		statUpdate: data => dispatch(statusUpdate(data)),
-		fetchParamSets: (token, searchParams) => dispatch(fetchParamSets(token, searchParams))
+		fetchParamSets: (token, searchParams) => dispatch(fetchParamSets(token, searchParams)),
+		cancelHolderHandler: (token, key) => dispatch(cancelHolder(token, key)),
+		logoutHandler: token => dispatch(signOutHandler(token)),
+		cancelBookedHoldersHandler: (token, keys) => dispatch(cancelBookedHolders(token, keys)),
+		bookExpsHandler: (token, data) => dispatch(bookExperiments(token, data))
 	}
 }
 

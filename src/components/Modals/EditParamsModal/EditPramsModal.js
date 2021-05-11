@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Form, Input, InputNumber, Row, Col, Button, Space, Divider } from 'antd'
+import { Modal, Form, Input, InputNumber, Row, Col, Button, Space, Divider, message } from 'antd'
 import moment from 'moment'
 // eslint-disable-next-line
 import momentDurationFormatSetup from 'moment-duration-format'
@@ -26,6 +26,10 @@ const EditParamsModal = props => {
 		const defaultParamsEntries = defaultParams.map(i => [i.name, i.value])
 		const defParamsObj = Object.fromEntries(defaultParamsEntries)
 		const { expt, td1, ds, ns, d1 } = defParamsObj
+		if (!expt || !td1 || !ds || !ns || !d1) {
+			return message.warning('Parameter/s for estimate experimental time calculation are not defined')
+		}
+
 		const exptUnit = moment.duration(expt) / (ns * td1 + ds) - d1 * 1000
 
 		let currentNs = nsState ? nsState : ns
@@ -44,7 +48,6 @@ const EditParamsModal = props => {
 				break
 		}
 
-		console.log(currentNs, currentD1)
 		const newExpt = (exptUnit + currentD1 * 1000) * (currentNs * td1 + ds)
 		const newExptString = moment.duration(newExpt).format('HH:mm:ss', {
 			trim: false
