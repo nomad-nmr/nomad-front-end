@@ -30,6 +30,7 @@ import groupIcon from '../../../assets/group.svg'
 import magnetIcon from '../../../assets/magnet.svg'
 import experimentIcon from '../../../assets/lab.svg'
 import historyIcon from '../../../assets/history-icon.webp'
+import submitIcon from '../../../assets/submit.png'
 
 const PageHeaderEl = props => {
 	const { Search } = Input
@@ -102,6 +103,7 @@ const PageHeaderEl = props => {
 				</div>
 			)
 			break
+
 		case '/admin/groups':
 			headerTitle = 'Manage Groups'
 			avatarSrc = groupIcon
@@ -153,6 +155,7 @@ const PageHeaderEl = props => {
 				</div>
 			)
 			break
+
 		case '/admin/parameter-sets':
 			headerTitle = 'Parameter Sets'
 			avatarSrc = experimentIcon
@@ -192,6 +195,7 @@ const PageHeaderEl = props => {
 				</div>
 			)
 			break
+
 		case '/admin/history':
 			headerTitle = 'Experiment History'
 			avatarSrc = historyIcon
@@ -205,6 +209,12 @@ const PageHeaderEl = props => {
 				/>
 			)
 			break
+
+		case '/submit':
+			headerTitle = 'Book New Job'
+			avatarSrc = submitIcon
+			break
+
 		default:
 			headerTitle = ''
 			avatarSrc = ''

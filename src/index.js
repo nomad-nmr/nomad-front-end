@@ -14,6 +14,7 @@ import usersReducer from './store/reducers/users'
 import groupsReducer from './store/reducers/groups'
 import expHistoryReducer from './store/reducers/expHistory'
 import paramSetsReducer from './store/reducers/paramSets'
+import submitReducer from './store/reducers/submit'
 
 import './index.css'
 import App from './App'
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
 	users: usersReducer,
 	groups: groupsReducer,
 	expHistory: expHistoryReducer,
-	paramSets: paramSetsReducer
+	paramSets: paramSetsReducer,
+	submit: submitReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))

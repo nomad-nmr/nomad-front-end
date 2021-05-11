@@ -36,7 +36,7 @@ const Logo = props => {
 	}
 
 	return (
-		<div className={classes.Logo} onClick={() => window.location.reload()}>
+		<div className={classes.Logo} onClick={() => props.history.push('/dashboard')}>
 			{logoImg}
 		</div>
 	)

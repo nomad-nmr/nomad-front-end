@@ -2,9 +2,10 @@ import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
 import errorHandler from './errorHandler'
 
-export const openAuthModal = () => {
+export const openAuthModal = payload => {
 	return {
-		type: actionTypes.OPEN_AUTH_MODAL
+		type: actionTypes.OPEN_AUTH_MODAL,
+		payload
 	}
 }
 
@@ -63,10 +64,10 @@ export const signOutHandler = token => {
 }
 
 // signing out user when token expires
-export const checkAuthTimeout = expirationTime => {
+export const checkAuthTimeout = (expirationTime, token) => {
 	return dispatch => {
 		setTimeout(() => {
-			dispatch(signOutHandler())
+			dispatch(signOutHandler(token))
 		}, expirationTime * 1000)
 	}
 }
@@ -81,13 +82,14 @@ export const signInHandler = formData => {
 				const expirationDate = new Date(new Date().getTime() + resp.data.expiresIn * 1000)
 				const user = {
 					username: resp.data.username,
+					groupName: resp.data.groupName,
 					accessLevel: resp.data.accessLevel,
 					token: resp.data.token,
 					expirationDate
 				}
 				localStorage.setItem('user', JSON.stringify(user))
 				dispatch(signInSuccess(resp.data))
-				dispatch(checkAuthTimeout(resp.data.expiresIn))
+				dispatch(checkAuthTimeout(resp.data.expiresIn, user.token))
 			})
 			.catch(error => {
 				dispatch(errorHandler(error))
@@ -100,14 +102,14 @@ export const authCheckState = () => {
 	return dispatch => {
 		const user = JSON.parse(localStorage.getItem('user'))
 		if (user) {
-			const { username, token, accessLevel, expirationDate } = user
+			const { username, token, accessLevel, expirationDate, groupName } = user
 			const expDateTime = Date.parse(expirationDate)
 			if (expDateTime <= new Date().getTime()) {
-				dispatch(signOutHandler())
+				dispatch(signOutHandler(token))
 			} else {
-				dispatch(signInSuccess({ token, username, accessLevel }))
+				dispatch(signInSuccess({ token, username, accessLevel, groupName }))
 				const expiresIn = (expDateTime - new Date().getTime()) / 1000
-				dispatch(checkAuthTimeout(expiresIn))
+				dispatch(checkAuthTimeout(expiresIn, token))
 			}
 		}
 	}

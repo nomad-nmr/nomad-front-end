@@ -29,9 +29,7 @@ const ParamSets = props => {
 	}, [fetchInstrList, authToken])
 
 	// TODO: //Hook to create list of parameters with comments that is used in the form to auto populate parameter comment field
-
 	// const [paramsList, setParamsList] = useState([])
-
 	// useEffect(() => {
 	// 	const customParamsList = []
 
@@ -157,7 +155,7 @@ const ParamSets = props => {
 }
 
 const mapStateToProps = state => ({
-	tableData: state.paramSets.paramSetsTabData,
+	tableData: state.paramSets.paramSetsData,
 	loading: state.paramSets.loading,
 	authToken: state.auth.token,
 	instrumentId: state.paramSets.instrumentId,

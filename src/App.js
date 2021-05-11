@@ -44,6 +44,7 @@ const App = props => {
 	const Groups = React.lazy(() => import('./containers/Groups/Groups'))
 	const ExpHistory = React.lazy(() => import('./containers/ExpHistory/ExpHistory'))
 	const ParameterSets = React.lazy(() => import('./containers/ParameterSets/ParameterSets'))
+	const Submit = React.lazy(() => import('./containers/Submit/Submit'))
 
 	//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
 	let authModal = null
@@ -65,6 +66,7 @@ const App = props => {
 					signInHandler={onSignIn}
 					passwdResetHandler={props.onPasswdReset}
 					loading={props.authSpin}
+					redirect={props.followPath}
 				/>
 			)
 		}
@@ -92,35 +94,42 @@ const App = props => {
 							<Route
 								path='/admin/users'
 								render={() => {
-									return accessLevel === 'admin' ? <Users /> : <Error403 />
+									return accessLevel === 'admin' ? <Users /> : <Redirect to='/dashboard' />
 								}}
 							/>
 							<Route
 								path='/admin/groups'
 								render={() => {
-									return accessLevel === 'admin' ? <Groups /> : <Error403 />
+									return accessLevel === 'admin' ? <Groups /> : <Redirect to='/dashboard' />
 								}}
 							/>
 							<Route
 								path='/admin/instruments'
 								render={() => {
-									return accessLevel === 'admin' ? <Instruments /> : <Error403 />
+									return accessLevel === 'admin' ? <Instruments /> : <Redirect to='/dashboard' />
 								}}
 							/>
 							<Route
 								path='/admin/history'
 								render={() => {
-									return accessLevel === 'admin' ? <ExpHistory /> : <Error403 />
+									return accessLevel === 'admin' ? <ExpHistory /> : <Redirect to='/dashboard' />
 								}}
 							/>
 							<Route
 								path='/admin/parameter-sets'
 								render={() => {
-									return accessLevel === 'admin' ? <ParameterSets /> : <Error403 />
+									return accessLevel === 'admin' ? <ParameterSets /> : <Redirect to='/dashboard' />
 								}}
 							/>
 							<Route exact path='/dashboard' render={() => <Dashboard />} />
 							<Route exact path='/reset/:token' component={Reset} />
+							<Route
+								exact
+								path='/submit'
+								render={() => {
+									return username ? <Submit /> : <Redirect to='/dashboard' />
+								}}
+							/>
 							<Route path='/500' component={Error500} />
 							<Route path='/404' component={Error404} />
 							<Route path='/403' component={Error403} />
@@ -146,7 +155,8 @@ const mapStateToProps = state => {
 		authToken: state.auth.token,
 		accessLevel: state.auth.accessLevel,
 		authModalVisible: state.auth.authModalVisible,
-		authSpin: state.auth.loading
+		authSpin: state.auth.loading,
+		followPath: state.auth.followTo
 	}
 }
 

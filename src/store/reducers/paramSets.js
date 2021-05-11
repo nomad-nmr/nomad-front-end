@@ -3,7 +3,7 @@ import { addKey } from '../../utils/tableUtils'
 import { message } from 'antd'
 
 const initialState = {
-	paramSetsTabData: [],
+	paramSetsData: [],
 	loading: false,
 	instrumentId: null,
 	searchValue: '',
@@ -19,7 +19,7 @@ const reducer = (state = initialState, { type, payload }) => {
 		case actionTypes.FETCH_PARAM_SETS_SUCCESS:
 			return {
 				...state,
-				paramSetsTabData: addKey(payload),
+				paramSetsData: addKey(payload),
 				loading: false
 			}
 
@@ -33,25 +33,25 @@ const reducer = (state = initialState, { type, payload }) => {
 			return { ...state, formVisible: !state.formVisible, editing: payload }
 
 		case actionTypes.ADD_PARAMETER_SET_SUCCESS:
-			const newTableData = state.paramSetsTabData.concat([payload])
+			const newTableData = state.paramSetsData.concat([payload])
 			message.success('Parameter set was successfully added into the database')
 			return {
 				...state,
 				loading: false,
-				paramSetsTabData: addKey(newTableData),
+				paramSetsData: addKey(newTableData),
 				formVisible: false
 			}
 
 		case actionTypes.UPDATE_PARAMETER_SET_SUCCESS:
-			const updatedTableData = [...state.paramSetsTabData]
-			const index = state.paramSetsTabData.findIndex(
+			const updatedTableData = [...state.paramSetsData]
+			const index = state.paramSetsData.findIndex(
 				paramSet => paramSet._id.toString() === payload._id.toString()
 			)
 			updatedTableData[index] = payload
 			return {
 				...state,
 				loading: false,
-				paramSetsTabData: addKey(updatedTableData),
+				paramSetsData: addKey(updatedTableData),
 				formVisible: false,
 				editing: false
 			}
@@ -60,13 +60,13 @@ const reducer = (state = initialState, { type, payload }) => {
 			return { ...state, loading: false, formVisible: false }
 
 		case actionTypes.DELETE_PARAMETER_SET_SUCCESS:
-			const filteredTableData = state.paramSetsTabData.filter(
+			const filteredTableData = state.paramSetsData.filter(
 				paramSet => paramSet._id.toString() !== payload.id.toString()
 			)
 			message.success('Parameter set was deleted')
 			return {
 				...state,
-				paramSetsTabData: filteredTableData,
+				paramSetsData: filteredTableData,
 				loading: false
 			}
 

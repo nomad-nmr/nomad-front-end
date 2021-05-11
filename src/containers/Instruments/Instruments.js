@@ -8,7 +8,7 @@ import {
 	toggleShowForm,
 	addInstrument
 } from '../../store/actions/index'
-import { Table, Space, Switch, Button, Tag, Tooltip, message } from 'antd'
+import { Table, Space, Switch, Button, Tag, Tooltip, message, Avatar } from 'antd'
 import Animate from 'rc-animate'
 import InstrumentForm from '../../components/Forms/InstrumentForm/InstrumentForm'
 import { CopyTwoTone } from '@ant-design/icons'
@@ -44,6 +44,12 @@ const Instruments = props => {
 			title: 'Capacity',
 			dataIndex: 'capacity',
 			align: 'center'
+		},
+		{
+			title: 'Connected',
+			dataIndex: 'connected',
+			align: 'center',
+			render: record => <Avatar size='small' style={{ backgroundColor: record ? '#389e0d' : '#cf1322' }} />
 		},
 		{
 			title: 'Available',

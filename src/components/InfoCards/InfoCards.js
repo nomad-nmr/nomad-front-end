@@ -5,13 +5,15 @@ import classes from './InfoCards.module.css'
 const infoCards = props => {
 	return (
 		<div className={classes.InfoCards}>
-			{props.cardsData.map(card => {
-				return (
-					<div key={card.key} onClick={() => props.clicked(card.key.toString())}>
-						<InfoCard data={card} />
-					</div>
-				)
-			})}
+			{props.cardsData
+				? props.cardsData.map(card => {
+						return (
+							<div key={card.key} onClick={() => props.clicked(card.key.toString())}>
+								<InfoCard data={card} />
+							</div>
+						)
+				  })
+				: []}
 		</div>
 	)
 }
