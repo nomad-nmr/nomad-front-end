@@ -97,3 +97,29 @@ export const toggleAvailableOnDash = (id, token) => {
 			})
 	}
 }
+
+export const updateCheckboxStatusTab = payload => ({
+	type: actionTypes.UPDATE_CHECKBOX_STATUS_TAB,
+	payload
+})
+
+export const deleteHoldersSuccess = payload => ({
+	type: actionTypes.DELETE_HOLDERS_SUCCESS,
+	payload
+})
+
+export const deleteHolders = (token, instrId, holders) => {
+	return dispatch => {
+		axios
+			.delete('/submit/delete-holders/' + instrId, {
+				data: holders,
+				headers: { Authorization: 'Bearer ' + token }
+			})
+			.then(res => {
+				if (res.status === 200) dispatch(deleteHoldersSuccess(holders))
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}

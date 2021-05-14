@@ -1,13 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 
-import {
-	fetchStatusSummary,
-	fetchStatusTable,
-	closeDashDrawer,
-	statusUpdate,
-	toggleAvailableOnDash
-} from '../../store/actions'
+import { fetchStatusSummary, fetchStatusTable, closeDashDrawer, statusUpdate } from '../../store/actions'
 import socket from '../../socketConnection'
 
 import Animate from 'rc-animate'
@@ -18,7 +12,7 @@ import './Dashboard.css'
 
 const Dashboard = props => {
 	const [activeTab, setActiveTab] = useState('0')
-	const { fetchStatusSum, fetchStatusTable } = props
+	const { fetchStatusSum, fetchStatusTable, statusSummary } = props
 
 	const activeTabIdRef = useRef(null)
 
@@ -28,11 +22,19 @@ const Dashboard = props => {
 		fetchStatusTable('0')
 	}, [fetchStatusSum, fetchStatusTable])
 
+	//Hook sets active tab to 1st instrument in the array when the page get reloaded
+	useEffect(() => {
+		if (activeTab === '0' && statusSummary.length > 0) {
+			setActiveTab(statusSummary[0].key)
+		}
+	}, [activeTab, statusSummary])
+
 	//Hook creates reference to instrument ID in activeTab and activeTab index value that is used in subsequent hook to reload the active tab if it gets updated.
 	useEffect(() => {
 		if (props.statusSummary.length > 0) {
 			activeTabIdRef.current = {
-				instrId: props.statusSummary[activeTab]._id,
+				// instrId: props.statusSummary[activeTab]._id,
+				instrId: activeTab,
 				activeTab
 			}
 		}
@@ -73,9 +75,6 @@ const Dashboard = props => {
 					tableData={props.statusTable}
 					clicked={tabChangeHandler}
 					tableLoading={props.tableLoading}
-					switchHandler={props.toggleAvailable}
-					token={props.authToken}
-					accessLvl={props.accessLevel}
 				/>
 			</div>
 			<StatusDrawer status={props.drawerStatus} closeClicked={props.onCloseDrawer} />
@@ -91,7 +90,8 @@ const mapStateToProps = state => {
 		tableLoading: state.dash.tableLoading,
 		drawerStatus: state.dash.drawerStatus,
 		accessLevel: state.auth.accessLevel,
-		authToken: state.auth.token
+		authToken: state.auth.token,
+		username: state.auth.username
 	}
 }
 
@@ -100,8 +100,7 @@ const mapDispatchToProps = dispatch => {
 		fetchStatusSum: () => dispatch(fetchStatusSummary()),
 		onCloseDrawer: () => dispatch(closeDashDrawer()),
 		fetchStatusTable: key => dispatch(fetchStatusTable(key)),
-		statUpdate: data => dispatch(statusUpdate(data)),
-		toggleAvailable: (instrId, token) => dispatch(toggleAvailableOnDash(instrId, token))
+		statUpdate: data => dispatch(statusUpdate(data))
 	}
 }
 
