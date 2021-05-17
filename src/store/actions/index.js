@@ -16,7 +16,9 @@ export {
 	fetchStatusSummary,
 	fetchStatusTable,
 	statusUpdate,
-	toggleAvailableOnDash
+	toggleAvailableOnDash,
+	updateCheckboxStatusTab,
+	deleteHolders
 } from './dashboard'
 
 export {

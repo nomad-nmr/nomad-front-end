@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes'
-import { addKey, highlightRows, updateTableSwitch } from '../../utils/tableUtils'
+import { addKey, updateTableSwitch } from '../../utils/tableUtils'
 
 const initialState = {
 	showCards: true,
@@ -12,7 +12,8 @@ const initialState = {
 	},
 	statusSummaryData: [],
 	statusTableData: [],
-	tableLoading: true
+	tableLoading: true,
+	statusTabChecked: []
 }
 
 //Calculation of count of entries with running, pending and error status [statusButtonsData] from [statusSummaryData]
@@ -84,9 +85,10 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.FETCH_STATUS_SUMMARY_SUCCESS:
+			const newStatSumData = action.data.map(i => ({ ...i, key: i._id }))
 			return {
 				...state,
-				statusSummaryData: addKey(action.data),
+				statusSummaryData: newStatSumData,
 				statusButtonsData: calcButtonsCount(action.data)
 			}
 
@@ -100,7 +102,7 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.FETCH_STATUS_TABLE_SUCCESS:
 			return {
 				...state,
-				statusTableData: highlightRows(addKey(action.data)),
+				statusTableData: action.data,
 				tableLoading: false
 			}
 
@@ -120,6 +122,21 @@ const reducer = (state = initialState, action) => {
 				...state,
 				statusSummaryData: newStatSummary,
 				statusButtonsData: calcButtonsCount(newStatSummary)
+			}
+
+		case actionTypes.UPDATE_CHECKBOX_STATUS_TAB:
+			return {
+				...state,
+				statusTabChecked: action.payload
+			}
+
+		case actionTypes.DELETE_HOLDERS_SUCCESS:
+			console.log(action.payload)
+			const newTabData = state.statusTableData.filter(row => !action.payload.includes(row.holder))
+			return {
+				...state,
+				statusTableData: newTabData,
+				statusTabChecked: []
 			}
 
 		default:

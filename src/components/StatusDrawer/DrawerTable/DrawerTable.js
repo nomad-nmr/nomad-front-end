@@ -11,42 +11,49 @@ const DrawerTable = props => {
 			title: 'Instrument',
 			dataIndex: 'instrument',
 			key: 'instrument',
-			align: 'center'
+			align: 'center',
+			width: 200
 		},
 		{
 			title: 'Holder',
 			dataIndex: 'holder',
 			key: 'holder',
-			align: 'center'
+			align: 'center',
+			width: 100
 		},
 		{
 			title: 'User',
 			dataIndex: 'username',
 			key: 'user',
-			align: 'center'
+			align: 'center',
+			width: 100
 		},
 		{
 			title: 'Group',
 			dataIndex: 'group',
 			key: 'group',
-			align: 'center'
+			align: 'center',
+			width: 100
 		},
 		{
 			title: 'Dataset Name',
 			dataIndex: 'datasetName',
 			key: 'name',
-			align: 'center'
+			align: 'center',
+			width: 250
 		},
 		{
 			title: 'ExpNo',
 			dataIndex: 'expNo',
 			key: 'expno',
-			align: 'center'
+			align: 'center',
+			width: 100
 		},
 		{
-			title: 'Experiment',
-			dataIndex: 'experiment',
-			key: 'exp'
+			title: 'Parameter Set',
+			dataIndex: 'parameterSet',
+			key: 'exp',
+			width: 200
 		},
 		{
 			title: 'Title',
@@ -67,6 +74,28 @@ const DrawerTable = props => {
 		]
 	}
 
+	const expandConfig =
+		props.id === 'errors'
+			? {
+					expandedRowRender: record => (
+						<p style={{ margin: 0, backgroundColor: '#fff1f0' }}>{record.description}</p>
+					),
+					rowExpandable: () => props.id === 'errors'
+			  }
+			: null
+
+	const rowSelectConfig =
+		props.id === 'pending'
+			? {
+					selectionType: 'checkbox',
+					onChange: (selectedRowKeys, selectedRows) => {
+						// console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+						const selectedHolders = selectedRows.map(row => row.holder)
+						console.log(selectedHolders)
+					}
+			  }
+			: null
+
 	return (
 		<Table
 			columns={columns}
@@ -74,13 +103,10 @@ const DrawerTable = props => {
 			loading={props.loading}
 			size='small'
 			pagination={false}
+			scroll={{ y: 300 }}
 			rowClassName={record => (record.highlight ? classes.RowHighlight : null)}
-			expandable={{
-				expandedRowRender: record => (
-					<p style={{ margin: 0, backgroundColor: '#fff1f0' }}>{record.description}</p>
-				),
-				rowExpandable: () => props.id === 'errors'
-			}}
+			expandable={expandConfig}
+			rowSelection={rowSelectConfig}
 		/>
 	)
 }
