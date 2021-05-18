@@ -1,14 +1,16 @@
 import * as actionTypes from '../actions/actionTypes'
-import { addKey, updateTableSwitch } from '../../utils/tableUtils'
+import { updateTableSwitch, addKey } from '../../utils/tableUtils'
+import { message } from 'antd'
 
 const initialState = {
 	showCards: true,
 	statusButtonsData: [],
-	drawerStatus: {
+	drawerState: {
 		visible: false,
 		id: '',
 		dataLoading: true,
-		tableData: []
+		tableData: [],
+		pendingChecked: []
 	},
 	statusSummaryData: [],
 	statusTableData: [],
@@ -25,10 +27,8 @@ const calcButtonsCount = inputArr => {
 				obj.running++
 			}
 			obj.errors += errorCount
-			//pending experiments are counted only for available instruments
-			if (i.available) {
-				obj.pending += pendingCount
-			}
+
+			obj.pending += pendingCount
 
 			return obj
 		},
@@ -51,37 +51,38 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.OPEN_DASH_DRAWER_START:
-			const newDrawerStatus = {
-				...state.drawerStatus,
+			const newDrawerState = {
+				...state.drawerState,
 				visible: true,
 				id: action.id
 			}
 			return {
 				...state,
-				drawerStatus: newDrawerStatus
+				drawerState: newDrawerState
 			}
 
 		case actionTypes.FETCH_DASH_DRAWER_SUCCESS:
 			const tableData = action.data ? action.data : []
-			const updatedDrawerStatus = {
-				...state.drawerStatus,
+			const updatedDrawerState = {
+				...state.drawerState,
 				dataLoading: false,
 				tableData: addKey(tableData)
 			}
 			return {
 				...state,
-				drawerStatus: updatedDrawerStatus
+				drawerState: updatedDrawerState
 			}
 
 		case actionTypes.CLOSE_DASH_DRAWER:
 			const newStatus = {
-				...state.drawerStatus,
+				...state.drawerState,
 				visible: false,
-				tableData: []
+				tableData: [],
+				pendingChecked: []
 			}
 			return {
 				...state,
-				drawerStatus: newStatus
+				drawerState: newStatus
 			}
 
 		case actionTypes.FETCH_STATUS_SUMMARY_SUCCESS:
@@ -131,12 +132,24 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.DELETE_HOLDERS_SUCCESS:
-			console.log(action.payload)
 			const newTabData = state.statusTableData.filter(row => !action.payload.includes(row.holder))
 			return {
 				...state,
 				statusTableData: newTabData,
 				statusTabChecked: []
+			}
+
+		case actionTypes.UPDATE_PENDING_CHECKED:
+			return {
+				...state,
+				drawerState: { ...state.drawerState, pendingChecked: action.payload }
+			}
+
+		case actionTypes.POST_PENDING_SUCCESS:
+			message.success('Success!')
+			return {
+				...state,
+				drawerState: { ...state.drawerState, visible: false, pendingChecked: [] }
 			}
 
 		default:

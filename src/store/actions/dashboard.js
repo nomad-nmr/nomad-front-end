@@ -116,10 +116,74 @@ export const deleteHolders = (token, instrId, holders) => {
 				headers: { Authorization: 'Bearer ' + token }
 			})
 			.then(res => {
-				if (res.status === 200) dispatch(deleteHoldersSuccess(holders))
+				if (res.status === 200) {
+					dispatch(deleteHoldersSuccess(holders))
+				}
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))
 			})
 	}
+}
+
+export const updatePendingChecked = payload => ({
+	type: actionTypes.UPDATE_PENDING_CHECKED,
+	payload
+})
+
+export const postPendingSuccess = () => ({
+	type: actionTypes.POST_PENDING_SUCCESS
+})
+
+export const postPending = (token, type, data) => {
+	return dispatch => {
+		axios
+			.post(
+				'/submit/pending/' + type,
+				{ data: skimPendingData(data) },
+				{
+					headers: { Authorization: 'Bearer ' + token }
+				}
+			)
+			.then(res => {
+				if (res.status === 200) {
+					dispatch(postPendingSuccess())
+				}
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}
+
+export const postPendingAuth = (type, inputData) => {
+	return dispatch => {
+		axios
+			.post('/submit/pending-auth/' + type, {
+				username: inputData.username,
+				password: inputData.password,
+				data: skimPendingData(inputData.holders)
+			})
+			.then(res => {
+				if (res.status === 200) {
+					dispatch(postPendingSuccess())
+				}
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}
+
+//Helper function for restructuring pending data object
+const skimPendingData = data => {
+	const result = {}
+	data.forEach(i => {
+		if (!result[i.instrId]) {
+			result[i.instrId] = [i.holder]
+		} else {
+			result[i.instrId].push(i.holder)
+		}
+	})
+	return result
 }

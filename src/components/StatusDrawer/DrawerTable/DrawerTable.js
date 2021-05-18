@@ -1,11 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Table } from 'antd'
+
 import classes from './DrawerTable.module.css'
+import { updatePendingChecked } from '../../../store/actions'
 
 const DrawerTable = props => {
-	// shouldComponentUpdate(nextProps, nextState) {
-	//   return nextProps.drawerVisible
-	// }
 	let columns = [
 		{
 			title: 'Instrument',
@@ -43,17 +43,11 @@ const DrawerTable = props => {
 			width: 250
 		},
 		{
-			title: 'ExpNo',
-			dataIndex: 'expNo',
-			key: 'expno',
+			title: 'Exp Count',
+			dataIndex: 'expCount',
+			key: 'expCount',
 			align: 'center',
 			width: 100
-		},
-		{
-			title: 'Parameter Set',
-			dataIndex: 'parameterSet',
-			key: 'exp',
-			width: 200
 		},
 		{
 			title: 'Title',
@@ -66,12 +60,27 @@ const DrawerTable = props => {
 		columns = [
 			...columns,
 			{
+				title: 'ExpNo',
+				dataIndex: 'expNo',
+				key: 'expno',
+				align: 'center',
+				width: 100
+			},
+			{
+				title: 'Parameter Set',
+				dataIndex: 'parameterSet',
+				key: 'exp',
+				width: 200
+			},
+			{
 				title: 'ExpT',
 				dataIndex: 'time',
 				key: 'time',
 				align: 'center'
 			}
 		]
+		//removing expCount
+		columns.splice(5, 1)
 	}
 
 	const expandConfig =
@@ -88,10 +97,23 @@ const DrawerTable = props => {
 		props.id === 'pending'
 			? {
 					selectionType: 'checkbox',
+					hideSelectAll: true,
+					selectedRowKeys: props.selectedHolders.map(i => i.key),
+					getCheckboxProps: record => {
+						if (props.username) {
+							return {
+								disabled: props.accessLvl !== 'admin' && record.username !== props.username
+							}
+						}
+					},
 					onChange: (selectedRowKeys, selectedRows) => {
-						// console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-						const selectedHolders = selectedRows.map(row => row.holder)
-						console.log(selectedHolders)
+						const holdersArr = selectedRows.map(row => ({
+							holder: row.holder,
+							instrId: row.instrId,
+							username: row.username,
+							key: row.key
+						}))
+						props.onCheckedHandler(holdersArr)
 					}
 			  }
 			: null
@@ -111,4 +133,18 @@ const DrawerTable = props => {
 	)
 }
 
-export default React.memo(DrawerTable, (prevProps, nextProps) => prevProps.data === nextProps.data)
+const mapStateToProps = state => {
+	return {
+		username: state.auth.username,
+		accessLvl: state.auth.accessLevel,
+		selectedHolders: state.dash.drawerState.pendingChecked
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onCheckedHandler: checkedHolders => dispatch(updatePendingChecked(checkedHolders))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerTable)
