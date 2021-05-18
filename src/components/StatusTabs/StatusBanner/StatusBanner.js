@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Alert, Row, Col, Tag, Switch, Button, Space } from 'antd'
+import { Alert, Row, Col, Tag, Switch, Button, Space, Modal } from 'antd'
 
 import TrafficLights from '../../TrafficLights/TrafficLights'
 
@@ -8,10 +8,14 @@ import { deleteHolders, toggleAvailableOnDash } from '../../../store/actions'
 
 import classes from './StatusBanner.module.css'
 
-const statusBanner = props => {
+const StatusBanner = props => {
 	const { busyUntil, dayExpt, nightExpt } = props.data.status.summary
 	const bannerType = props.data.available ? 'success' : 'error'
 	const { authToken, instrId, checkedHolders, accessLvl, data, tabData } = props
+
+	const submittedCheckedHolders = checkedHolders.filter(holder => {
+		return tabData.find(row => row.holder === holder && row.status === 'Submitted')
+	})
 
 	const switchElement = (
 		<Switch
@@ -23,7 +27,22 @@ const statusBanner = props => {
 	)
 
 	const cancelButton = (
-		<Button onClick={() => props.deleteHoldersHandler(authToken, instrId, checkedHolders)}>
+		<Button
+			onClick={() => {
+				if (checkedHolders.length > 0) {
+					if (submittedCheckedHolders.length > 0) {
+						Modal.confirm({
+							title: 'Delete Submitted Experiments!',
+							content: 'Are you sure that you want to experiments with status "Submitted"?',
+							onOk() {
+								props.deleteHoldersHandler(authToken, instrId, checkedHolders)
+							}
+						})
+					} else {
+						props.deleteHoldersHandler(authToken, instrId, checkedHolders)
+					}
+				}
+			}}>
 			Cancel Selected
 		</Button>
 	)
@@ -107,4 +126,4 @@ const mapDispatchToProps = dispatch => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(statusBanner)
+export default connect(mapStateToProps, mapDispatchToProps)(StatusBanner)

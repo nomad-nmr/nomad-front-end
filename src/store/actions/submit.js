@@ -15,7 +15,7 @@ export const bookHolders = (token, formData) => {
 	return dispatch => {
 		dispatch(fetchHoldersStart())
 		axios
-			.post('/submit/book-holders', formData, {
+			.post('/submit/holders', formData, {
 				headers: { Authorization: 'Bearer ' + token }
 			})
 			.then(res => {
@@ -37,7 +37,7 @@ export const cancelHolder = (token, key) => {
 		dispatch(fetchHoldersStart())
 
 		axios
-			.delete('/submit/cancel-holder/' + key, {
+			.delete('/submit/holder/' + key, {
 				headers: { Authorization: 'Bearer ' + token }
 			})
 			.then(res => {
@@ -61,7 +61,7 @@ export const cancelBookedHolders = (token, keys) => {
 
 	return dispatch => {
 		axios
-			.delete('/submit/book-holders', {
+			.delete('/submit/holders', {
 				data,
 				headers: { Authorization: 'Bearer ' + token }
 			})
@@ -81,7 +81,7 @@ export const bookExperimentsSuccess = () => ({
 export const bookExperiments = (token, formData) => {
 	return dispatch => {
 		axios
-			.post('/submit/book', formData, {
+			.post('/submit/experiments', formData, {
 				headers: { Authorization: 'Bearer ' + token }
 			})
 			.then(res => {

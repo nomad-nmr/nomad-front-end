@@ -77,7 +77,7 @@ const Dashboard = props => {
 					tableLoading={props.tableLoading}
 				/>
 			</div>
-			<StatusDrawer status={props.drawerStatus} closeClicked={props.onCloseDrawer} />
+			<StatusDrawer status={props.drawerState} closeClicked={props.onCloseDrawer} />
 		</Fragment>
 	)
 }
@@ -88,7 +88,7 @@ const mapStateToProps = state => {
 		statusSummary: state.dash.statusSummaryData,
 		statusTable: state.dash.statusTableData,
 		tableLoading: state.dash.tableLoading,
-		drawerStatus: state.dash.drawerStatus,
+		drawerState: state.dash.drawerState,
 		accessLevel: state.auth.accessLevel,
 		authToken: state.auth.token,
 		username: state.auth.username

@@ -18,6 +18,9 @@ export {
 	statusUpdate,
 	toggleAvailableOnDash,
 	updateCheckboxStatusTab,
+	updatePendingChecked,
+	postPending,
+	postPendingAuth,
 	deleteHolders
 } from './dashboard'
 
