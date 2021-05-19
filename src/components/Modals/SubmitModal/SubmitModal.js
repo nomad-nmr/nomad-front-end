@@ -5,6 +5,11 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 const SubmitModal = props => {
 	const [form] = Form.useForm()
 
+	const cancelModal = () => {
+		props.setVisible(false)
+		form.resetFields()
+	}
+
 	return (
 		<Modal
 			visible={props.visible}
@@ -12,6 +17,7 @@ const SubmitModal = props => {
 			okText='Continue'
 			keyboard
 			footer={null}
+			onCancel={cancelModal}
 			title={
 				<div style={{ color: '#096dd9' }}>
 					<UserOutlined />
@@ -22,7 +28,7 @@ const SubmitModal = props => {
 				form={form}
 				onFinish={values => {
 					props.finishHandler(props.data.type, { ...values, holders: props.data.holders })
-					props.setVisible(false)
+					cancelModal()
 				}}>
 				<Form.Item name='username' initialValue={props.data.username}>
 					<Input disabled prefix={<UserOutlined className='site-form-item-icon' />} />
@@ -46,7 +52,7 @@ const SubmitModal = props => {
 						<Button type='primary' htmlType='submit'>
 							Submit
 						</Button>
-						<Button onClick={() => props.setVisible(false)}>Cancel</Button>
+						<Button onClick={cancelModal}>Cancel</Button>
 					</Space>
 				</Form.Item>
 			</Form>
