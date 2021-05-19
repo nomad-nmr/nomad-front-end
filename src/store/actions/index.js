@@ -21,7 +21,7 @@ export {
 	updatePendingChecked,
 	postPending,
 	postPendingAuth,
-	deleteHolders
+	deleteExperiments
 } from './dashboard'
 
 export {

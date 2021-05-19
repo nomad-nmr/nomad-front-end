@@ -4,7 +4,7 @@ import { Alert, Row, Col, Tag, Switch, Button, Space, Modal } from 'antd'
 
 import TrafficLights from '../../TrafficLights/TrafficLights'
 
-import { deleteHolders, toggleAvailableOnDash } from '../../../store/actions'
+import { deleteExperiments, toggleAvailableOnDash } from '../../../store/actions'
 
 import classes from './StatusBanner.module.css'
 
@@ -122,7 +122,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		toggleAvailable: (instrId, token) => dispatch(toggleAvailableOnDash(instrId, token)),
-		deleteHoldersHandler: (token, instrId, holders) => dispatch(deleteHolders(token, instrId, holders))
+		deleteHoldersHandler: (token, instrId, holders) => dispatch(deleteExperiments(token, instrId, holders))
 	}
 }
 

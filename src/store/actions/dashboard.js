@@ -108,10 +108,10 @@ export const deleteHoldersSuccess = payload => ({
 	payload
 })
 
-export const deleteHolders = (token, instrId, holders) => {
+export const deleteExperiments = (token, instrId, holders) => {
 	return dispatch => {
 		axios
-			.delete('/submit/delete-holders/' + instrId, {
+			.delete('/submit/experiments/' + instrId, {
 				data: holders,
 				headers: { Authorization: 'Bearer ' + token }
 			})
