@@ -73,9 +73,10 @@ const Reset = props => {
 						rules={[
 							{ required: true, message: 'Please input your Password!' },
 							{
-								pattern: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})'),
+								// pattern: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[a-zA-Zd]{8,}$'),
+								pattern: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'),
 								message:
-									'Password must have minimum eight characters, at least one letter, one number and one special character'
+									'Password must have minimum eight characters, at least one one uppercase letter, one lowercase letter and one number.'
 							}
 						]}>
 						<Input.Password />

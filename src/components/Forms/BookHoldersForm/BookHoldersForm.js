@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Select, InputNumber, Button, Space } from 'antd'
 import { useHistory } from 'react-router-dom'
 
+import SelectGrpUsr from '../../Forms/SelectGrpUsr/SelectGrpUsr'
 import classes from '../Form.module.css'
 
 const { Option } = Select
@@ -27,8 +28,17 @@ const BookHoldersForm = props => {
 				form={form}
 				ref={props.formRef}
 				initialValues={{ count: 1 }}
-				onFinish={values => props.onSubmit(props.token, values)}>
+				onFinish={values => props.onSubmit(values)}>
 				<Space size='large' style={{ alignItems: 'flex-start' }}>
+					{props.accessLevel === 'admin' && (
+						<SelectGrpUsr
+							userList={props.userList}
+							groupList={props.groupList}
+							token={props.token}
+							onGrpChange={props.onGrpChange}
+							formRef={props.formRef}
+						/>
+					)}
 					<Form.Item label='Instrument' name='instrumentId' rules={[{ required: true }]}>
 						<Select style={{ width: 200 }}>{instrOptions}</Select>
 					</Form.Item>

@@ -36,8 +36,9 @@ const StatusDrawer = props => {
 			if (usernames.size !== 1) {
 				return message.error('Holders for multiple user selected!')
 			}
-			setModalVisible(true)
 			setModalData({ username: usernames.values().next().value, type, holders: selectedHolders })
+
+			setModalVisible(true)
 		}
 	}
 
@@ -88,12 +89,15 @@ const StatusDrawer = props => {
 				<DrawerTable id={id} data={tableData} loading={dataLoading} drawerVisible={visible} />
 				<div style={{ textAlign: 'center', marginTop: 20 }}>{buttons}</div>
 			</Drawer>
-			<SubmitModal
-				visible={modalVisible}
-				setVisible={setModalVisible}
-				data={modalData}
-				finishHandler={props.pendingAuthHandler}
-			/>
+			{/* Forcing modal to re-render after modalVisible set true to pick up updated modalData state} */}
+			{modalVisible && (
+				<SubmitModal
+					visible={true}
+					setVisible={setModalVisible}
+					data={modalData}
+					finishHandler={props.pendingAuthHandler}
+				/>
+			)}
 		</>
 	)
 }

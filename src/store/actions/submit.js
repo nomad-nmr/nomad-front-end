@@ -78,10 +78,10 @@ export const bookExperimentsSuccess = () => ({
 	type: actionTypes.BOOK_EXPERIMENTS_SUCCESS
 })
 
-export const bookExperiments = (token, formData) => {
+export const bookExperiments = (token, formData, userId) => {
 	return dispatch => {
 		axios
-			.post('/submit/experiments', formData, {
+			.post('/submit/experiments/' + userId, formData, {
 				headers: { Authorization: 'Bearer ' + token }
 			})
 			.then(res => {

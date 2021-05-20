@@ -196,14 +196,13 @@ const BookExperimentsForm = props => {
 								values[sampleKey].night = true
 							}
 						}
-						props.bookExpsHandler(props.token, values)
+						props.bookExpsHandler(props.token, values, props.submittingUserId)
 						history.push('/')
 					}
 				})
 			}
 		}
-
-		props.bookExpsHandler(props.token, values)
+		props.bookExpsHandler(props.token, values, props.submittingUserId)
 		history.push('/')
 	}
 

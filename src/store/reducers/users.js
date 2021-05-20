@@ -4,6 +4,7 @@ import { message } from 'antd'
 
 const initialState = {
 	usersTableData: [],
+	userList: [],
 	pagination: { current: 1, pageSize: 20 },
 	total: 0,
 	filters: {},
@@ -101,6 +102,12 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				searchUserValue: action.payload
+			}
+
+		case actionTypes.FETCH_USER_LIST_SUCCESS:
+			return {
+				...state,
+				userList: action.payload
 			}
 
 		default:
