@@ -114,3 +114,21 @@ export const searchUser = payload => ({
 	type: actionTypes.SEARCH_USER,
 	payload
 })
+
+export const fetchUserListSuccess = payload => ({
+	type: actionTypes.FETCH_USER_LIST_SUCCESS,
+	payload
+})
+
+export const fetchUserList = (token, groupId, showInactive) => {
+	return dispatch => {
+		axios
+			.get('admin/users/?list=true&group=' + groupId + '&showInactive=' + showInactive, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
+			.then(res => dispatch(fetchUserListSuccess(res.data)))
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}

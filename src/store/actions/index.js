@@ -37,6 +37,7 @@ export {
 
 export {
 	fetchUsers,
+	fetchUserList,
 	toggleUserForm,
 	addUser,
 	updateUser,
