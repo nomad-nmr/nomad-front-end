@@ -1,7 +1,13 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchStatusSummary, fetchStatusTable, closeDashDrawer, statusUpdate } from '../../store/actions'
+import {
+	fetchStatusSummary,
+	fetchStatusTable,
+	closeDashDrawer,
+	statusUpdate,
+	toggleAvailableSwitchSuccess
+} from '../../store/actions'
 import socket from '../../socketConnection'
 
 import Animate from 'rc-animate'
@@ -48,6 +54,10 @@ const Dashboard = props => {
 			if (instrId === data.instrId) {
 				fetchStatusTable(activeTab)
 			}
+		})
+
+		socket.on('availableUpdate', data => {
+			props.toggleAvailableSuccess(data)
 		})
 		return () => {
 			socket.removeAllListeners('statusUpdate')
@@ -100,7 +110,8 @@ const mapDispatchToProps = dispatch => {
 		fetchStatusSum: () => dispatch(fetchStatusSummary()),
 		onCloseDrawer: () => dispatch(closeDashDrawer()),
 		fetchStatusTable: key => dispatch(fetchStatusTable(key)),
-		statUpdate: data => dispatch(statusUpdate(data))
+		statUpdate: data => dispatch(statusUpdate(data)),
+		toggleAvailableSuccess: payload => dispatch(toggleAvailableSwitchSuccess(payload))
 	}
 }
 

@@ -49,7 +49,9 @@ const ParamSets = props => {
 
 	const renderParams = record => {
 		const paramArr = record.map(param => (
-			<Tag key={param.name} color={param.value && param.value !== '00:00:00' ? 'green' : 'red'}>
+			<Tag
+				key={param.name}
+				color={(param.value && param.value !== '00:00:00') || param.value === 0 ? 'green' : 'red'}>
 				<span>
 					{param.name}: {param.value}
 				</span>

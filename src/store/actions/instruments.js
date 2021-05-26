@@ -80,29 +80,6 @@ export const updateInstruments = (formData, token) => {
 	}
 }
 
-export const toggleAvailableSwitchSuccess = payload => {
-	return {
-		type: actionTypes.TOGGLE_AVAILABLE_SWITCH_SUCCESS,
-		data: payload
-	}
-}
-
-export const toggleAvailableInTable = (id, token) => {
-	return dispatch => {
-		dispatch(fetchInstrumentsStart())
-		axios
-			.patch(`/admin/instruments/toggle-available/${id}`, null, {
-				headers: { Authorization: 'Bearer ' + token }
-			})
-			.then(res => {
-				dispatch(toggleAvailableSwitchSuccess(res.data))
-			})
-			.catch(err => {
-				dispatch(errorHandler(err))
-			})
-	}
-}
-
 export const toggleShowForm = payload => {
 	return {
 		type: actionTypes.TOGGLE_INSTRUMENT_FORM,

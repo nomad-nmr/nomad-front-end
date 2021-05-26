@@ -70,13 +70,6 @@ const reducer = (state = initialState, action) => {
 				editing: false
 			}
 
-		case actionTypes.TOGGLE_AVAILABLE_SWITCH_SUCCESS:
-			return {
-				...state,
-				instrumentsTableData: updateTableSwitch(state.instrumentsTableData, 'available', action.data._id),
-				tableIsLoading: false
-			}
-
 		case actionTypes.TOGGLE_ACTIVE_INSTRUMENTS_SUCCESS:
 			let updatedTableData = updateTableSwitch(state.instrumentsTableData, 'isActive', action.data._id)
 			if (!state.showInactive) {

@@ -4,11 +4,10 @@ import {
 	fetchInstruments,
 	updateInstruments,
 	toggleActiveInstr,
-	toggleAvailableInTable,
 	toggleShowForm,
 	addInstrument
 } from '../../store/actions/index'
-import { Table, Space, Switch, Button, Tag, Tooltip, message, Avatar } from 'antd'
+import { Table, Space, Button, Tag, Tooltip, message, Avatar } from 'antd'
 import Animate from 'rc-animate'
 import InstrumentForm from '../../components/Forms/InstrumentForm/InstrumentForm'
 import { CopyTwoTone } from '@ant-design/icons'
@@ -50,19 +49,6 @@ const Instruments = props => {
 			dataIndex: 'connected',
 			align: 'center',
 			render: record => <Avatar size='small' style={{ backgroundColor: record ? '#389e0d' : '#cf1322' }} />
-		},
-		{
-			title: 'Available',
-			align: 'center',
-			render: record => (
-				<Switch
-					checked={record.available}
-					checkedChildren='On'
-					unCheckedChildren='Off'
-					size='small'
-					onChange={() => props.toggleAvailable(record._id, props.authToken)}
-				/>
-			)
 		},
 		{
 			title: 'Actions',
@@ -150,7 +136,6 @@ const mapDispatchToProps = dispatch => {
 		fetchInstr: (token, showInactive) => dispatch(fetchInstruments(token, showInactive)),
 		addInstr: (payload, token) => dispatch(addInstrument(payload, token)),
 		updateInstr: (payload, token) => dispatch(updateInstruments(payload, token)),
-		toggleAvailable: (payload, token) => dispatch(toggleAvailableInTable(payload, token)),
 		toggleActive: (payload, token) => dispatch(toggleActiveInstr(payload, token)),
 		toggleForm: editing => dispatch(toggleShowForm(editing))
 	}

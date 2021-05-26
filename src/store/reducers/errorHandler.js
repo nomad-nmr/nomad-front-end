@@ -29,14 +29,18 @@ const reducer = (state = initialState, action) => {
 			return state
 
 		case actionTypes.HTTP_400_ERROR:
-			message.error({ content: action.error.response.data, style: { color: 'red' } })
+			console.log(action)
+			Modal.error({
+				title: action.error.message,
+				content: action.error.response.data.toString()
+			})
 			return state
 
 		case actionTypes.HTTP_OTHER_ERROR:
 			console.log(action)
 			Modal.error({
-				title: 'Error message',
-				content: action.error.toString()
+				title: action.error.message,
+				content: action.error.response.data.toString()
 			})
 			return state
 
