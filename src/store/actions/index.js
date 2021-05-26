@@ -21,6 +21,7 @@ export {
 	updatePendingChecked,
 	postPending,
 	postPendingAuth,
+	toggleAvailableSwitchSuccess,
 	deleteExperiments
 } from './dashboard'
 
@@ -29,7 +30,6 @@ export {
 	addInstrument,
 	updateInstruments,
 	toggleActiveInstr,
-	toggleAvailableInTable,
 	toggleShowForm,
 	toggleShowInactiveInstruments,
 	fetchInstrumentList

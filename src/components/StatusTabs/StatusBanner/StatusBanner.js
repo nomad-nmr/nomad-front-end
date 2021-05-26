@@ -65,14 +65,14 @@ const StatusBanner = props => {
 			type={bannerType}
 			message={
 				<Row className={classes.Banner}>
-					<Col className={classes.Switch} span={4}>
+					<Col className={classes.Switch} span={5}>
 						<Space size='large'>
 							{accessLvl && cancelButton}
 							{accessLvl === 'admin' && resetButton}
 							{accessLvl === 'admin' && switchElement}
 						</Space>
 					</Col>
-					<Col span={16} offset={2}>
+					<Col span={14}>
 						<ul>
 							<li>
 								<strong>Busy until: </strong>
@@ -96,7 +96,7 @@ const StatusBanner = props => {
 						</ul>
 					</Col>
 
-					<Col span={2}>
+					<Col span={5}>
 						<div className={classes.TrafficLights}>
 							<TrafficLights type='horizontal' data={props.data} />
 						</div>

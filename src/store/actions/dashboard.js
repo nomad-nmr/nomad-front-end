@@ -90,7 +90,8 @@ export const toggleAvailableOnDash = (id, token) => {
 				headers: { Authorization: 'Bearer ' + token }
 			})
 			.then(res => {
-				dispatch(toggleAvailableSwitchSuccess(res.data))
+				// dispatch(toggleAvailableSwitchSuccess(res.data))
+				//state gets updated through sockets calling toggleAvailableSwitchSuccess
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))
