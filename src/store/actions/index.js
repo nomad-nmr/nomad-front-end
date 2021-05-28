@@ -69,3 +69,5 @@ export {
 } from './paramSets'
 
 export { bookHolders, cancelHolder, cancelBookedHolders, bookExperiments } from './submit'
+
+export { sendMessage } from './message'

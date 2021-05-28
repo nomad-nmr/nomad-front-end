@@ -15,6 +15,7 @@ import groupsReducer from './store/reducers/groups'
 import expHistoryReducer from './store/reducers/expHistory'
 import paramSetsReducer from './store/reducers/paramSets'
 import submitReducer from './store/reducers/submit'
+import messageReducer from './store/reducers/message'
 
 import './index.css'
 import App from './App'
@@ -35,7 +36,8 @@ const rootReducer = combineReducers({
 	groups: groupsReducer,
 	expHistory: expHistoryReducer,
 	paramSets: paramSetsReducer,
-	submit: submitReducer
+	submit: submitReducer,
+	message: messageReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))

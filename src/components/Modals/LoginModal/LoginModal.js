@@ -40,9 +40,7 @@ const LoginModal = props => {
 			title={
 				<div style={{ color: '#096dd9' }}>
 					<UserOutlined />
-					<span style={{ marginLeft: '10px' }}>
-						{resetting ? 'Register or Reset Password' : 'Sign In'}
-					</span>
+					<span style={{ marginLeft: '10px' }}>{resetting ? 'Reset Password' : 'Sign In'}</span>
 				</div>
 			}
 			visible={props.visible}
@@ -74,7 +72,7 @@ const LoginModal = props => {
 					</Form.Item>
 					<div style={{ textAlign: 'center' }}>
 						<Button type='link' onClick={() => setResetting(!resetting)}>
-							{resetting ? 'Sign in' : 'Register or reset password'}
+							{resetting ? 'Sign in' : 'Reset password'}
 						</Button>
 					</div>
 				</Form>
