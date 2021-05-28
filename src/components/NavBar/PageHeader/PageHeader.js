@@ -31,6 +31,7 @@ import magnetIcon from '../../../assets/magnet.svg'
 import experimentIcon from '../../../assets/lab.svg'
 import historyIcon from '../../../assets/history-icon.webp'
 import submitIcon from '../../../assets/submit.png'
+import messageIcon from '../../../assets/email.png'
 
 const PageHeaderEl = props => {
 	const { Search } = Input
@@ -128,6 +129,11 @@ const PageHeaderEl = props => {
 					</div>
 				</div>
 			)
+			break
+
+		case '/admin/message':
+			headerTitle = 'Send Message'
+			avatarSrc = messageIcon
 			break
 
 		case '/admin/instruments':

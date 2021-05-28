@@ -68,7 +68,8 @@ export const checkAuthTimeout = (expirationTime, token) => {
 	return dispatch => {
 		setTimeout(() => {
 			dispatch(signOutHandler(token))
-		}, expirationTime * 1000)
+			//time out has to be shorter then token expiration otherwise server responds 403
+		}, expirationTime * 1000 - 60000)
 	}
 }
 

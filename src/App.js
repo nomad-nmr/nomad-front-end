@@ -42,6 +42,7 @@ const App = props => {
 	const Users = React.lazy(() => import('./containers/Users/Users'))
 	const Instruments = React.lazy(() => import('./containers/Instruments/Instruments'))
 	const Groups = React.lazy(() => import('./containers/Groups/Groups'))
+	const Message = React.lazy(() => import('./containers/Message/Message'))
 	const ExpHistory = React.lazy(() => import('./containers/ExpHistory/ExpHistory'))
 	const ParameterSets = React.lazy(() => import('./containers/ParameterSets/ParameterSets'))
 	const Submit = React.lazy(() => import('./containers/Submit/Submit'))
@@ -101,6 +102,12 @@ const App = props => {
 								path='/admin/groups'
 								render={() => {
 									return accessLevel === 'admin' ? <Groups /> : <Redirect to='/dashboard' />
+								}}
+							/>
+							<Route
+								path='/admin/message'
+								render={() => {
+									return accessLevel === 'admin' ? <Message /> : <Redirect to='/dashboard' />
 								}}
 							/>
 							<Route

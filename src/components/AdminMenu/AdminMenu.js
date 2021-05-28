@@ -11,14 +11,15 @@ import {
 	SettingOutlined,
 	ExperimentOutlined,
 	DeploymentUnitOutlined,
-	BarChartOutlined
+	BarChartOutlined,
+	MailOutlined
 } from '@ant-design/icons'
 
 const { SubMenu } = Menu
 
 const adminMenu = props => {
 	const handleClick = e => {
-		props.history.push({ pathname: e.keyPath[0] })
+		props.history.push({ pathname: e.key })
 	}
 
 	return (
@@ -50,6 +51,10 @@ const adminMenu = props => {
 					<Menu.Item key='/admin/groups'>
 						<TeamOutlined />
 						<span>Manage Groups</span>
+					</Menu.Item>
+					<Menu.Item key='/admin/message'>
+						<MailOutlined />
+						<span>Send Message</span>
 					</Menu.Item>
 				</SubMenu>
 				<SubMenu

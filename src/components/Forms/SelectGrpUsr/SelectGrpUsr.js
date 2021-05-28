@@ -20,13 +20,13 @@ const SelectGrpUsr = props => {
 	))
 
 	return (
-		<Space>
+		<Space size='large'>
 			<Form.Item label='Group' name='groupId'>
 				<Select
 					style={{ width: 150 }}
 					onChange={value => {
 						props.formRef.current.setFieldsValue({ userId: undefined })
-						onGrpChange(token, value)
+						onGrpChange(token, value, false)
 					}}>
 					{grpOptions}
 				</Select>
