@@ -24,7 +24,7 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.FETCH_GROUPS_TABLE_SUCCESS:
 			const newTableData = action.data.map(grp => ({
 				...grp,
-				createdAt: moment(grp.createdAt).format('DD MMM YYYY, h:mm')
+				createdAt: moment(grp.createdAt).format('DD MMM YYYY, HH:mm')
 			}))
 			return {
 				...state,
@@ -35,7 +35,7 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.ADD_GROUP_SUCCESS:
 			const updatedGroup = {
 				...action.data,
-				createdAt: moment(action.data.createdAt).format('DD MMM YYYY, h:mm')
+				createdAt: moment(action.data.createdAt).format('DD MMM YYYY, HH:mm')
 			}
 			const newGroupTable = state.groupsTableData.concat([updatedGroup])
 			message.success('Group was successfully added to database')
@@ -53,7 +53,7 @@ const reducer = (state = initialState, action) => {
 			)
 			updatedGroupTable[groupIndex] = {
 				...action.data,
-				createdAt: moment(action.data.createdAt).format('DD MMM YYYY, h:mm')
+				createdAt: moment(action.data.createdAt).format('DD MMM YYYY, HH:mm')
 			}
 			message.success('Group was successfully updated in database')
 			return {
