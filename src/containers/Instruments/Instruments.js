@@ -46,7 +46,7 @@ const Instruments = props => {
 		},
 		{
 			title: 'Connected',
-			dataIndex: 'connected',
+			dataIndex: 'isConnected',
 			align: 'center',
 			render: record => <Avatar size='small' style={{ backgroundColor: record ? '#389e0d' : '#cf1322' }} />
 		},
