@@ -47,10 +47,10 @@ export const signInFail = () => {
 	}
 }
 
-export const signOutHandler = token => {
+export const signOutHandler = (token, timeOut) => {
 	return dispatch => {
 		axios
-			.post('/auth/logout', null, { headers: { Authorization: 'Bearer ' + token } })
+			.post('/auth/logout', timeOut, { headers: { Authorization: 'Bearer ' + token } })
 			.then(() => {
 				localStorage.removeItem('user')
 				dispatch(signOutSuccess())
@@ -67,7 +67,10 @@ export const signOutHandler = token => {
 export const checkAuthTimeout = (expirationTime, token) => {
 	return dispatch => {
 		setTimeout(() => {
-			dispatch(signOutHandler(token))
+			//timeOut sent in req.body to mark that request is coming from checkAuthTimeout
+			//to avoid 403 error from auth middleware if user has already signed out
+			dispatch(signOutHandler(token, { timeOut: true }))
+			console.log('authTimeout - token:', token)
 			//time out has to be shorter then token expiration otherwise server responds 403
 		}, expirationTime * 1000 - 60000)
 	}
