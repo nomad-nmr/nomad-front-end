@@ -4,7 +4,7 @@ import { Alert, Row, Col, Tag, Switch, Button, Space, Modal } from 'antd'
 
 import TrafficLights from '../../TrafficLights/TrafficLights'
 
-import { deleteExperiments, toggleAvailableOnDash } from '../../../store/actions'
+import { deleteExperiments, resetQueue, toggleAvailableOnDash } from '../../../store/actions'
 
 import classes from './StatusBanner.module.css'
 
@@ -51,10 +51,7 @@ const StatusBanner = props => {
 		<Button
 			danger
 			onClick={() => {
-				const holders = tabData
-					.filter(row => row.status === 'Completed' || row.status === 'Error')
-					.map(row => row.holder)
-				props.deleteHoldersHandler(authToken, instrId, holders)
+				props.resetInstr(authToken, instrId)
 			}}>
 			Reset
 		</Button>
@@ -122,7 +119,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		toggleAvailable: (instrId, token) => dispatch(toggleAvailableOnDash(instrId, token)),
-		deleteHoldersHandler: (token, instrId, holders) => dispatch(deleteExperiments(token, instrId, holders))
+		deleteHoldersHandler: (token, instrId, holders) => dispatch(deleteExperiments(token, instrId, holders)),
+		resetInstr: (token, instrId) => dispatch(resetQueue(token, instrId))
 	}
 }
 

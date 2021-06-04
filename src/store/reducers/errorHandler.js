@@ -25,7 +25,7 @@ const reducer = (state = initialState, action) => {
 
 		case actionTypes.HTTP_403_ERROR:
 			history.push('/403')
-			window.location.reload()
+			// window.location.reload()
 			return state
 
 		case actionTypes.HTTP_400_ERROR:
