@@ -93,6 +93,10 @@ const Users = props => {
 						tagColor = 'blue'
 						break
 
+					case 'user-a':
+						tagColor = 'green'
+						break
+
 					default:
 						break
 				}

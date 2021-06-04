@@ -86,6 +86,7 @@ const UserForm = props => {
 					<Select style={{ width: '60%' }}>
 						<Option value='admin'>admin</Option>
 						<Option value='user'>user</Option>
+						<Option value='user-a'>user-a</Option>
 					</Select>
 				</Form.Item>
 				<Form.Item name='isActive' label='Active' valuePropName='checked'>

@@ -78,12 +78,13 @@ const Submit = props => {
 
 	const [submittingUser, setSubmittingUser] = useState(undefined)
 
-	const availableInstrList = accessLvl === 'admin' ? instrList : instrList.filter(i => i.available)
+	const availableInstrList =
+		accessLvl === 'admin' || accessLvl === 'user-a' ? instrList : instrList.filter(i => i.available)
 
 	const onCardClick = key => {
 		let instrId = key
 		//Users without admin access level can't select unavailable instruments
-		if (accessLvl !== 'admin' && !props.statusSummary.find(card => card.key === key).available) {
+		if (accessLvl === 'user' && !props.statusSummary.find(card => card.key === key).available) {
 			instrId = ''
 		}
 		bookHoldersFormRef.current.setFieldsValue({ instrumentId: instrId })

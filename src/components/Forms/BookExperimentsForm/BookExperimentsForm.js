@@ -157,7 +157,7 @@ const BookExperimentsForm = props => {
 	}
 
 	const onFinishHandler = values => {
-		if (props.accessLevel !== 'admin') {
+		if (props.accessLevel === 'user') {
 			//accumulator is an object total expt for each instrument in the form
 			const accumulator = {}
 			for (let sampleKey in totalExptState) {
