@@ -22,7 +22,8 @@ export {
 	postPending,
 	postPendingAuth,
 	toggleAvailableSwitchSuccess,
-	deleteExperiments
+	deleteExperiments,
+	resetQueue
 } from './dashboard'
 
 export {

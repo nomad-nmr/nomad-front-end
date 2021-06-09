@@ -156,27 +156,36 @@ const BookExperimentsForm = props => {
 		setModalVisible(false)
 	}
 
+	const expRejectError = {
+		title: 'Maximum allowance exceeded',
+		content: 'Total experimental time for at least one instrument has exceeded maximum allowance'
+	}
+
 	const onFinishHandler = values => {
-		if (props.accessLevel !== 'admin') {
-			//accumulator is an object total expt for each instrument in the form
+		if (props.accessLevel === 'user') {
+			//accumulator is an object total expt of day classified experiments for each instrument in the form
 			const accumulator = {}
+			let nightExp = undefined
 			for (let sampleKey in totalExptState) {
 				const instrId = sampleKey.split('-')[0]
-				if (accumulator[instrId]) {
-					accumulator[instrId] += totalExptState[sampleKey]
+				if (totalExptState[sampleKey] < 1200) {
+					if (accumulator[instrId]) {
+						accumulator[instrId] += totalExptState[sampleKey]
+					} else {
+						accumulator[instrId] = totalExptState[sampleKey]
+					}
+				} else if (totalExptState[sampleKey] > 1200 && totalExptState[sampleKey] < 7200) {
+					values[sampleKey].night = true
+					nightExp = true
 				} else {
-					accumulator[instrId] = totalExptState[sampleKey]
+					return Modal.error(expRejectError)
 				}
 			}
 
 			const nightInstrId = []
 			for (let instrId in accumulator) {
 				if (accumulator[instrId] > 7200) {
-					return Modal.error({
-						title: 'Maximum allowance exceeded',
-						content:
-							'Total experimental time for at least one instrument has exceeded maximum allowance'
-					})
+					return Modal.error(expRejectError)
 				}
 
 				if (accumulator[instrId] > 1200 && accumulator[instrId] < 7200) {
@@ -184,7 +193,7 @@ const BookExperimentsForm = props => {
 				}
 			}
 
-			if (nightInstrId.length > 0) {
+			if (nightInstrId.length > 0 || nightExp) {
 				return Modal.confirm({
 					title: 'Maximum allowance exceeded',
 					content:

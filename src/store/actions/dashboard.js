@@ -127,6 +127,22 @@ export const deleteExperiments = (token, instrId, holders) => {
 	}
 }
 
+export const resetQueue = (token, instrId) => {
+	return dispatch => {
+		console.log(token)
+		axios
+			.put('/submit/reset/' + instrId, null, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
+			.then(res => {
+				dispatch(deleteHoldersSuccess(res.data))
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}
+
 export const updatePendingChecked = payload => ({
 	type: actionTypes.UPDATE_PENDING_CHECKED,
 	payload

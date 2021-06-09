@@ -19,11 +19,21 @@ const AuthAvatar = props => {
 
 	let avatarEl
 	if (props.username) {
-		if (props.accessLevel === 'admin') {
-			assignedClasses.push(classes.Admin)
-		} else {
-			assignedClasses.push(classes.User)
+		switch (props.accessLevel) {
+			case 'admin':
+				assignedClasses.push(classes.Admin)
+				break
+			case 'user':
+				assignedClasses.push(classes.User)
+				break
+			case 'user-a':
+				assignedClasses.push(classes.UserA)
+				break
+
+			default:
+				break
 		}
+
 		avatarEl = (
 			<Popover
 				placement='bottomRight'
