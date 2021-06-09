@@ -108,7 +108,6 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case actionTypes.TOGGLE_AVAILABLE_SUCCESS_DASH:
-			console.log(action.data._id)
 			return {
 				...state,
 				statusSummaryData: updateTableSwitch(state.statusSummaryData, 'available', action.data._id),

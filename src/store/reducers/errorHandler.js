@@ -40,7 +40,7 @@ const reducer = (state = initialState, action) => {
 			console.log(action)
 			Modal.error({
 				title: action.error.message,
-				content: action.error.response.data.toString()
+				content: action.error.response && action.error.response.data.toString()
 			})
 			return state
 
