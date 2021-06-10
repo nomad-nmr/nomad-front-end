@@ -70,7 +70,6 @@ export const checkAuthTimeout = (expirationTime, token) => {
 			//timeOut sent in req.body to mark that request is coming from checkAuthTimeout
 			//to avoid 403 error from auth middleware if user has already signed out
 			dispatch(signOutHandler(token, { timeOut: true }))
-			console.log('authTimeout - token:', token)
 			//time out has to be shorter then token expiration otherwise server responds 403
 		}, expirationTime * 1000 - 60000)
 	}

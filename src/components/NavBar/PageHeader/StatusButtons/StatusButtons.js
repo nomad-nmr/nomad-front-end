@@ -14,7 +14,6 @@ const statusButtons = props => {
 		const assignedClasses = [classes.Button]
 
 		if (button[1] !== 0 && button[0] !== 'running') {
-			assignedClasses.push(classes.Active)
 			animationObj = {
 				opacity: 0.3,
 				yoyo: true,
@@ -22,6 +21,10 @@ const statusButtons = props => {
 				duration: 500,
 				delay: 250 * index
 			}
+		}
+
+		if (button[1] !== 0) {
+			assignedClasses.push(classes.Active)
 		}
 
 		switch (button[0]) {

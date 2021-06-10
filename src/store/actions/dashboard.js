@@ -25,6 +25,7 @@ export const openDashDrawer = id => {
 			.get('/dash/drawer-table/' + id)
 			.then(res => {
 				dispatch(openDashDrawerSuccess(res.data))
+				dispatch(autoCloseModal())
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))
@@ -35,6 +36,12 @@ export const openDashDrawer = id => {
 export const closeDashDrawer = () => ({
 	type: actionTypes.CLOSE_DASH_DRAWER
 })
+
+export const autoCloseModal = () => {
+	return dispatch => {
+		setTimeout(() => dispatch(closeDashDrawer()), 120000)
+	}
+}
 
 export const fetchStatusSummarySuccess = payload => ({
 	type: actionTypes.FETCH_STATUS_SUMMARY_SUCCESS,
@@ -129,7 +136,6 @@ export const deleteExperiments = (token, instrId, holders) => {
 
 export const resetQueue = (token, instrId) => {
 	return dispatch => {
-		console.log(token)
 		axios
 			.put('/submit/reset/' + instrId, null, {
 				headers: { Authorization: 'Bearer ' + token }
