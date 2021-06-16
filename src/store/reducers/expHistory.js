@@ -24,7 +24,8 @@ const reducer = (state = initialState, { type, payload }) => {
 					...i,
 					username: i.user.username,
 					group: i.group.name,
-					finishedAt: moment(i.finishedAt).format('H:mm')
+					createdAt: i.createdAt && moment(i.createdAt).format('DD MMM YYYY - HH:mm'),
+					updatedAt: i.updatedAt && moment(i.updatedAt).format('HH:mm')
 				}
 			})
 			return { ...state, tableData: highlightRows(addKey(newTableData)), isLoading: false }

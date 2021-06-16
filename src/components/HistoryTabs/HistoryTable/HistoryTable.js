@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
-import { Table, Tag, Badge, Tooltip } from 'antd'
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
+import { Table, Tag, Badge, Tooltip, Space } from 'antd'
+import { CheckCircleOutlined, CloseCircleOutlined, DownOutlined } from '@ant-design/icons'
+import nightIcon from '../../../assets/night-mode.svg'
+import dayIcon from '../../../assets/sunny-day.svg'
 
 import classes from './HistoryTable.module.css'
 
@@ -58,8 +60,18 @@ const HistoryTable = props => {
 			align: 'center'
 		},
 		{
+			title: 'Solvent',
+			dataIndex: 'solvent',
+			align: 'center'
+		},
+		{
 			title: 'Parameter Set',
 			dataIndex: 'parameterSet',
+			align: 'center'
+		},
+		{
+			title: 'Parameters',
+			dataIndex: 'parameters',
 			align: 'center'
 		},
 		{
@@ -67,15 +79,29 @@ const HistoryTable = props => {
 			dataIndex: 'title'
 		},
 		{
-			title: 'Finished At',
-			dataIndex: 'finishedAt',
+			title: 'Updated At',
+			dataIndex: 'updatedAt',
 			align: 'center',
-			sorter: (a, b) => a.finishedAt.localeCompare(b.finishedAt)
+			sorter: (a, b) => a.updatedAt.localeCompare(b.updatedAt)
 		},
 		{
 			title: 'ExpT',
 			dataIndex: 'expTime',
 			align: 'center'
+		},
+		{
+			title: 'D/N',
+			dataIndex: 'night',
+			align: 'center',
+			render: text => {
+				if (text === undefined) {
+					return null
+				} else if (text) {
+					return <img src={nightIcon} style={{ height: '18px' }} alt='night icon' />
+				} else {
+					return <img src={dayIcon} style={{ height: '18px' }} alt='day icon' />
+				}
+			}
 		},
 		{
 			title: 'Status',
@@ -95,16 +121,17 @@ const HistoryTable = props => {
 								{text}
 							</Tag>
 						)
+					case 'Booked':
+						return (
+							<Tag icon={<DownOutlined />} color='gold'>
+								{text}
+							</Tag>
+						)
 
 					default:
 						return <Badge status='default' text={text} />
 				}
 			}
-		},
-		{
-			title: 'Remarks',
-			dataIndex: 'remarks',
-			width: 400
 		}
 	]
 
@@ -123,17 +150,28 @@ const HistoryTable = props => {
 	}
 
 	const expandElement = record => (
-		<div>
-			<Tag color={setTagColor(record.load)}>Load</Tag>
-			<Tag color={setTagColor(record.atma)}>ATMA</Tag>
-			<Tag color={setTagColor(record.spin)}>Spin</Tag>
-			<Tag color={setTagColor(record.lock)}>Lock</Tag>
-			<Tag color={setTagColor(record.shim)}>Shim</Tag>
-			<Tag color={setTagColor(record.acq)}>Acq</Tag>
-			<Tag color={setTagColor(record.proc)}>Proc</Tag>
+		<div className={classes.Expand}>
+			<Space>
+				<div>
+					<Tag color={setTagColor(record.load)}>Load</Tag>
+					<Tag color={setTagColor(record.atma)}>ATMA</Tag>
+					<Tag color={setTagColor(record.spin)}>Spin</Tag>
+					<Tag color={setTagColor(record.lock)}>Lock</Tag>
+					<Tag color={setTagColor(record.shim)}>Shim</Tag>
+					<Tag color={setTagColor(record.acq)}>Acq</Tag>
+					<Tag color={setTagColor(record.proc)}>Proc</Tag>
+				</div>
+				<div className={classes.TimeStamp}>
+					<span>Created at: </span>
+					{record.createdAt}
+				</div>
+			</Space>
+			<div className={classes.Remarks}>
+				<span>Remarks: </span>
+				{record.remarks}
+			</div>
 		</div>
 	)
-
 	return (
 		<div style={{ marginBottom: '40px' }}>
 			<Table
