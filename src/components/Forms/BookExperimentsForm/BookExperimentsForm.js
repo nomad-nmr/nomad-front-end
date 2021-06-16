@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message, Modal } from 'antd'
+import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message, Modal, Checkbox } from 'antd'
 import moment from 'moment'
 
 import solvents from '../../../misc/solvents'
 import EditParamsModal from '../../Modals/EditParamsModal/EditPramsModal'
+import nightIcon from '../../../assets/night-mode.svg'
 
 import classes from './BookExperimentsForm.module.css'
 
@@ -161,8 +162,10 @@ const BookExperimentsForm = props => {
 		content: 'Total experimental time for at least one instrument has exceeded maximum allowance'
 	}
 
+	const { accessLevel } = props
+
 	const onFinishHandler = values => {
-		if (props.accessLevel === 'user') {
+		if (accessLevel === 'user') {
 			//accumulator is an object total expt of day classified experiments for each instrument in the form
 			const accumulator = {}
 			let nightExp = undefined
@@ -247,10 +250,17 @@ const BookExperimentsForm = props => {
 			totalExptClass.push(classes.TotalExptWarning)
 		}
 
+		const nightCheckBox = (
+			<Col span={1}>
+				<Form.Item name={[key, 'night']} initialValue={false} valuePropName='checked'>
+					<Checkbox />
+				</Form.Item>
+			</Col>
+		)
+
 		return (
 			<div key={key}>
 				<Row gutter={16}>
-					{/* <Form.Item name={[key, 'night']} hidden initialValue={false}></Form.Item> */}
 					<Col span={2}>
 						<Form.Item name={[key, 'instrumentName']} initialValue={sample.instrument}>
 							<Input
@@ -297,7 +307,7 @@ const BookExperimentsForm = props => {
 							</Select>
 						</Form.Item>
 					</Col>
-					<Col span={7}>
+					<Col span={accessLevel !== 'user' ? 6 : 7}>
 						<Form.Item
 							name={[key, 'title']}
 							rules={[
@@ -373,6 +383,8 @@ const BookExperimentsForm = props => {
 							</Row>
 						))}
 					</Col>
+					{accessLevel !== 'user' && nightCheckBox}
+
 					<Col span={1}>
 						<button
 							className={classes.CancelButton}
@@ -387,7 +399,10 @@ const BookExperimentsForm = props => {
 					</Col>
 				</Row>
 				<Row gutter={16}>
-					<Col span={3} offset={20} style={{ textAlign: 'right', marginBottom: 10 }}>
+					<Col
+						span={3}
+						offset={accessLevel !== 'user' ? 19 : 20}
+						style={{ textAlign: 'right', marginBottom: 10 }}>
 						<span className={totalExptClass.join(' ')}>
 							Total ExpT:
 							{'  ' +
@@ -400,13 +415,19 @@ const BookExperimentsForm = props => {
 		)
 	})
 
+	const nightIconElement = (
+		<Col span={1}>
+			<img src={nightIcon} style={{ height: '18px' }} alt='night icon' />
+		</Col>
+	)
+
 	return (
 		<div style={{ margin: '20px 40px' }}>
 			<Row gutter={16} className={classes.Header}>
 				<Col span={2}>Instrument</Col>
 				<Col span={1}>Holder</Col>
 				<Col span={2}>Solvent</Col>
-				<Col span={7}>Title</Col>
+				<Col span={accessLevel !== 'user' ? 6 : 7}>Title</Col>
 				<Col span={1}>
 					<span style={{ marginLeft: 20 }}>ExpNo</span>
 				</Col>
@@ -419,6 +440,7 @@ const BookExperimentsForm = props => {
 				<Col span={2}>
 					<span style={{ marginLeft: 15 }}>ExpT</span>
 				</Col>
+				{accessLevel !== 'user' && nightIconElement}
 			</Row>
 			{props.loading ? (
 				<Spin size='large' style={{ margin: 30 }} />
