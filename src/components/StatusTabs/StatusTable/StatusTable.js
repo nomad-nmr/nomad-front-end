@@ -154,7 +154,7 @@ const statusTable = props => {
 			render: record => (record.submittedAt ? moment(record.submittedAt).format('ddd HH:mm') : '-'),
 			defaultSortOrder: 'descend',
 			sorter: (a, b) => {
-				if (a.submittedAt && b.submittedAt) {
+				if (a.submittedAt) {
 					return a.submittedAt.localeCompare(b.submittedAt)
 				}
 			}

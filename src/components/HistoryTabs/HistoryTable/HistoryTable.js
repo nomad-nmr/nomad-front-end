@@ -15,6 +15,7 @@ import classes from './HistoryTable.module.css'
 
 const HistoryTable = props => {
 	const [usernameFilters, setUsernameFilters] = useState([])
+	// const [statusFilters, setStatusFilters] = useState([])
 
 	useEffect(() => {
 		const usernameSet = new Set()
@@ -32,7 +33,8 @@ const HistoryTable = props => {
 		{
 			title: 'Holder',
 			dataIndex: 'holder',
-			align: 'center'
+			align: 'center',
+			width: 50
 		},
 		{
 			title: 'User',
@@ -141,7 +143,27 @@ const HistoryTable = props => {
 					default:
 						return <Badge status='default' text={text} />
 				}
-			}
+			},
+			filters: [
+				{
+					text: 'Submitted',
+					value: 'Submitted'
+				},
+				{
+					text: 'Running',
+					value: 'Running'
+				},
+				{
+					text: 'Error',
+					value: 'Error'
+				},
+				{
+					text: 'Completed',
+					value: 'Completed'
+				}
+			],
+			onFilter: (value, record) => record.status === value,
+			defaultFilteredValue: ['Completed', 'Error']
 		}
 	]
 
