@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
 
 import { Table, Tag, Badge, Tooltip, Space } from 'antd'
-import { CheckCircleOutlined, CloseCircleOutlined, DownOutlined } from '@ant-design/icons'
-import nightIcon from '../../../assets/night-mode.svg'
-import dayIcon from '../../../assets/sunny-day.svg'
+import {
+	CheckCircleOutlined,
+	CloseCircleOutlined,
+	DownCircleOutlined,
+	ClockCircleOutlined,
+	SyncOutlined
+} from '@ant-design/icons'
+
+import NightDay from '../../NightDay/NightDay'
 
 import classes from './HistoryTable.module.css'
 
@@ -93,15 +99,7 @@ const HistoryTable = props => {
 			title: 'D/N',
 			dataIndex: 'night',
 			align: 'center',
-			render: text => {
-				if (text === undefined) {
-					return null
-				} else if (text) {
-					return <img src={nightIcon} style={{ height: '18px' }} alt='night icon' />
-				} else {
-					return <img src={dayIcon} style={{ height: '18px' }} alt='day icon' />
-				}
-			}
+			render: text => <NightDay night={text} />
 		},
 		{
 			title: 'Status',
@@ -123,7 +121,19 @@ const HistoryTable = props => {
 						)
 					case 'Booked':
 						return (
-							<Tag icon={<DownOutlined />} color='gold'>
+							<Tag icon={<DownCircleOutlined />} color='gold'>
+								{text}
+							</Tag>
+						)
+					case 'Submitted':
+						return (
+							<Tag icon={<ClockCircleOutlined />} color='default'>
+								{text}
+							</Tag>
+						)
+					case 'Running':
+						return (
+							<Tag icon={<SyncOutlined spin />} color='processing'>
 								{text}
 							</Tag>
 						)
@@ -172,6 +182,7 @@ const HistoryTable = props => {
 			</div>
 		</div>
 	)
+
 	return (
 		<div style={{ marginBottom: '40px' }}>
 			<Table

@@ -1,4 +1,8 @@
 import React from 'react'
+import moment from 'moment'
+// eslint-disable-next-line
+import momentDurationFormatSetup from 'moment-duration-format'
+
 import { connect } from 'react-redux'
 import { Table, Badge, Tag } from 'antd'
 import {
@@ -8,11 +12,12 @@ import {
 	ClockCircleOutlined
 } from '@ant-design/icons'
 
+import NightDay from '../../NightDay/NightDay'
 import { updateCheckboxStatusTab } from '../../../store/actions'
 
 import classes from './StatusTable.module.css'
 
-const renderStatus = text => {
+const renderStatus = (text, record) => {
 	switch (text) {
 		case 'Running':
 			return (
@@ -67,6 +72,12 @@ const expandedRowRender = record => {
 			align: 'center'
 		},
 		{
+			title: 'Parameters',
+			dataIndex: 'parameters',
+			key: 'params',
+			align: 'center'
+		},
+		{
 			title: 'Title',
 			dataIndex: 'title',
 			key: 'title',
@@ -78,6 +89,7 @@ const expandedRowRender = record => {
 			key: 'expT',
 			align: 'center'
 		},
+
 		{
 			title: 'Status',
 			dataIndex: 'status',
@@ -102,7 +114,8 @@ const statusTable = props => {
 			title: 'Holder',
 			dataIndex: 'holder',
 			key: 'holder',
-			align: 'center'
+			align: 'center',
+			sorter: (a, b) => a.holder - b.holder
 		},
 		{
 			title: 'User',
@@ -122,6 +135,7 @@ const statusTable = props => {
 			key: 'name',
 			align: 'center'
 		},
+
 		{
 			title: 'Exp Count',
 			key: 'expCount',
@@ -129,10 +143,34 @@ const statusTable = props => {
 			render: record => <span>{record.exps.length}</span>
 		},
 		{
+			title: 'Solvent',
+			dataIndex: 'solvent',
+			key: 'solvent',
+			align: 'center'
+		},
+		{
+			title: 'Submitted At',
+			align: 'center',
+			render: record => (record.submittedAt ? moment(record.submittedAt).format('ddd HH:mm') : '-'),
+			defaultSortOrder: 'descend',
+			sorter: (a, b) => {
+				if (a.submittedAt && b.submittedAt) {
+					return a.submittedAt.localeCompare(b.submittedAt)
+				}
+			}
+		},
+		{
 			title: 'ExpT',
 			dataIndex: 'time',
 			key: 'time',
 			align: 'center'
+		},
+		{
+			title: 'D/N',
+			dataIndex: 'night',
+			key: 'night',
+			align: 'center',
+			render: text => <NightDay night={text} />
 		},
 		{
 			title: 'Status',
