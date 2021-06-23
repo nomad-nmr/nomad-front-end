@@ -1,7 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Table } from 'antd'
+import moment from 'moment'
+// eslint-disable-next-line
+import momentDurationFormatSetup from 'moment-duration-format'
 
+import NightDay from '../../NightDay/NightDay'
 import classes from './DrawerTable.module.css'
 import { updatePendingChecked } from '../../../store/actions'
 
@@ -12,14 +16,14 @@ const DrawerTable = props => {
 			dataIndex: 'instrument',
 			key: 'instrument',
 			align: 'center',
-			width: 200
+			width: 100
 		},
 		{
 			title: 'Holder',
 			dataIndex: 'holder',
 			key: 'holder',
 			align: 'center',
-			width: 100
+			width: 75
 		},
 		{
 			title: 'User',
@@ -40,12 +44,19 @@ const DrawerTable = props => {
 			dataIndex: 'datasetName',
 			key: 'name',
 			align: 'center',
-			width: 250
+			width: 200
 		},
 		{
 			title: 'Exp Count',
 			dataIndex: 'expCount',
 			key: 'expCount',
+			align: 'center',
+			width: 100
+		},
+		{
+			title: 'Solvent',
+			dataIndex: 'solvent',
+			key: 'solvent',
 			align: 'center',
 			width: 100
 		},
@@ -59,29 +70,65 @@ const DrawerTable = props => {
 	if (props.id !== 'pending') {
 		columns = [
 			...columns,
-			{
-				title: 'ExpNo',
-				dataIndex: 'expNo',
-				key: 'expno',
-				align: 'center',
-				width: 100
-			},
+
 			{
 				title: 'Parameter Set',
 				dataIndex: 'parameterSet',
 				key: 'exp',
-				width: 200
+				align: 'center',
+				width: 150
+			},
+			{
+				title: 'Params',
+				dataIndex: 'parameters',
+				key: 'parameters',
+				align: 'center',
+				width: 100
 			},
 			{
 				title: 'ExpT',
 				dataIndex: 'time',
 				key: 'time',
-				align: 'center'
+				align: 'center',
+				width: 75
 			}
 		]
 		//removing expCount
-		columns.splice(5, 1)
+		columns.splice(5, 1, {
+			title: 'ExpNo',
+			dataIndex: 'expNo',
+			key: 'expno',
+			align: 'center',
+			width: 75
+		})
 	}
+
+	if (props.id === 'running') {
+		columns.push({
+			title: 'Remaining',
+			align: 'center',
+			width: 100,
+			render: (text, record) => {
+				const timeRemaining =
+					record.time && record.updatedAt
+						? moment
+								.duration(record.time)
+								.subtract(moment().diff(record.updatedAt))
+								.format('HH:mm:ss', { trim: false })
+						: ''
+				return <span>{timeRemaining}</span>
+			}
+		})
+	}
+
+	columns.push({
+		title: 'D/N',
+		dataIndex: 'night',
+		key: 'night',
+		align: 'center',
+		width: 50,
+		render: text => <NightDay night={text} />
+	})
 
 	const expandConfig =
 		props.id === 'errors'

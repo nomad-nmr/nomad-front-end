@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react'
 
-import { Table, Tag, Badge, Tooltip } from 'antd'
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
+import { Table, Tag, Badge, Tooltip, Space } from 'antd'
+import {
+	CheckCircleOutlined,
+	CloseCircleOutlined,
+	DownCircleOutlined,
+	ClockCircleOutlined,
+	SyncOutlined
+} from '@ant-design/icons'
+
+import NightDay from '../../NightDay/NightDay'
 
 import classes from './HistoryTable.module.css'
 
 const HistoryTable = props => {
 	const [usernameFilters, setUsernameFilters] = useState([])
+	// const [statusFilters, setStatusFilters] = useState([])
 
 	useEffect(() => {
 		const usernameSet = new Set()
@@ -24,7 +33,8 @@ const HistoryTable = props => {
 		{
 			title: 'Holder',
 			dataIndex: 'holder',
-			align: 'center'
+			align: 'center',
+			width: 50
 		},
 		{
 			title: 'User',
@@ -58,8 +68,18 @@ const HistoryTable = props => {
 			align: 'center'
 		},
 		{
+			title: 'Solvent',
+			dataIndex: 'solvent',
+			align: 'center'
+		},
+		{
 			title: 'Parameter Set',
 			dataIndex: 'parameterSet',
+			align: 'center'
+		},
+		{
+			title: 'Parameters',
+			dataIndex: 'parameters',
 			align: 'center'
 		},
 		{
@@ -67,15 +87,21 @@ const HistoryTable = props => {
 			dataIndex: 'title'
 		},
 		{
-			title: 'Finished At',
-			dataIndex: 'finishedAt',
+			title: 'Updated At',
+			dataIndex: 'updatedAt',
 			align: 'center',
-			sorter: (a, b) => a.finishedAt.localeCompare(b.finishedAt)
+			sorter: (a, b) => a.updatedAt.localeCompare(b.updatedAt)
 		},
 		{
 			title: 'ExpT',
 			dataIndex: 'expTime',
 			align: 'center'
+		},
+		{
+			title: 'D/N',
+			dataIndex: 'night',
+			align: 'center',
+			render: text => <NightDay night={text} />
 		},
 		{
 			title: 'Status',
@@ -95,16 +121,49 @@ const HistoryTable = props => {
 								{text}
 							</Tag>
 						)
+					case 'Booked':
+						return (
+							<Tag icon={<DownCircleOutlined />} color='gold'>
+								{text}
+							</Tag>
+						)
+					case 'Submitted':
+						return (
+							<Tag icon={<ClockCircleOutlined />} color='default'>
+								{text}
+							</Tag>
+						)
+					case 'Running':
+						return (
+							<Tag icon={<SyncOutlined spin />} color='processing'>
+								{text}
+							</Tag>
+						)
 
 					default:
 						return <Badge status='default' text={text} />
 				}
-			}
-		},
-		{
-			title: 'Remarks',
-			dataIndex: 'remarks',
-			width: 400
+			},
+			filters: [
+				{
+					text: 'Submitted',
+					value: 'Submitted'
+				},
+				{
+					text: 'Running',
+					value: 'Running'
+				},
+				{
+					text: 'Error',
+					value: 'Error'
+				},
+				{
+					text: 'Completed',
+					value: 'Completed'
+				}
+			],
+			onFilter: (value, record) => record.status === value,
+			defaultFilteredValue: ['Completed', 'Error']
 		}
 	]
 
@@ -123,14 +182,26 @@ const HistoryTable = props => {
 	}
 
 	const expandElement = record => (
-		<div>
-			<Tag color={setTagColor(record.load)}>Load</Tag>
-			<Tag color={setTagColor(record.atma)}>ATMA</Tag>
-			<Tag color={setTagColor(record.spin)}>Spin</Tag>
-			<Tag color={setTagColor(record.lock)}>Lock</Tag>
-			<Tag color={setTagColor(record.shim)}>Shim</Tag>
-			<Tag color={setTagColor(record.acq)}>Acq</Tag>
-			<Tag color={setTagColor(record.proc)}>Proc</Tag>
+		<div className={classes.Expand}>
+			<Space>
+				<div>
+					<Tag color={setTagColor(record.load)}>Load</Tag>
+					<Tag color={setTagColor(record.atma)}>ATMA</Tag>
+					<Tag color={setTagColor(record.spin)}>Spin</Tag>
+					<Tag color={setTagColor(record.lock)}>Lock</Tag>
+					<Tag color={setTagColor(record.shim)}>Shim</Tag>
+					<Tag color={setTagColor(record.acq)}>Acq</Tag>
+					<Tag color={setTagColor(record.proc)}>Proc</Tag>
+				</div>
+				<div className={classes.TimeStamp}>
+					<span>Created at: </span>
+					{record.createdAt}
+				</div>
+			</Space>
+			<div className={classes.Remarks}>
+				<span>Remarks: </span>
+				{record.remarks}
+			</div>
 		</div>
 	)
 
