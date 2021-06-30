@@ -103,8 +103,9 @@ const Users = props => {
 				return <Tag color={tagColor}>{record.accessLevel}</Tag>
 			},
 			filters: [
-				{ text: 'Admin', value: 'admin' },
-				{ text: 'User', value: 'user' }
+				{ text: 'admin', value: 'admin' },
+				{ text: 'user', value: 'user' },
+				{ text: 'user', value: 'user-a' }
 			],
 			filteredValue: filters.accessLevel || null
 		},

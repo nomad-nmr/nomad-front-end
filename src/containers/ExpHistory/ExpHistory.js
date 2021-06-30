@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
-import { fetchInstrumentList, fetchHistory } from '../../store/actions'
+import { fetchInstrumentList, fetchHistory, setExpHistoryDate } from '../../store/actions'
 
 import HistoryTabs from '../../components/HistoryTabs/HistoryTabs'
 
 const ExpHistory = props => {
-	const { getInstrList, authToken, fetchHist, instrList, expHistoryDate } = props
+	const { getInstrList, authToken, fetchHist, instrList, expHistoryDate, setDate } = props
 
 	const [activeTab, setActiveTab] = useState('0')
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
 		getInstrList(authToken)
-	}, [getInstrList, authToken])
+		setDate(moment().format('YYYY-MM-DD'))
+	}, [getInstrList, authToken, setDate])
 
 	useEffect(() => {
 		if (instrList.length > 0) {
@@ -49,7 +51,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		getInstrList: token => dispatch(fetchInstrumentList(token)),
-		fetchHist: (token, instrId, date) => dispatch(fetchHistory(token, instrId, date))
+		fetchHist: (token, instrId, date) => dispatch(fetchHistory(token, instrId, date)),
+		setDate: date => dispatch(setExpHistoryDate(date))
 	}
 }
 
