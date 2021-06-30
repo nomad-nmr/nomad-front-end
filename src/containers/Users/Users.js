@@ -105,7 +105,7 @@ const Users = props => {
 			filters: [
 				{ text: 'admin', value: 'admin' },
 				{ text: 'user', value: 'user' },
-				{ text: 'user', value: 'user-a' }
+				{ text: 'user-a', value: 'user-a' }
 			],
 			filteredValue: filters.accessLevel || null
 		},
