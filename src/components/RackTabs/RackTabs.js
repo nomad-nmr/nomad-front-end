@@ -8,7 +8,7 @@ const { TabPane } = Tabs
 const RackTabs = props => {
 	const { data, setActiveTabId } = props
 
-	//Hook setting active tabId when page is reloaded
+	//Hook setting active tabId when tabs are reloaded
 	useEffect(() => {
 		if (data.length > 0) {
 			setActiveTabId(data[0]._id)
