@@ -60,9 +60,14 @@ const GroupForm = props => {
 							<Input disabled={props.editing} />
 						</Form.Item>
 					</Col>
-					<Col span={11}>
+					<Col span={8}>
 						<Form.Item name='description' label='Description'>
 							<Input />
+						</Form.Item>
+					</Col>
+					<Col span={3}>
+						<Form.Item name='isBatch' label='Batch Submit' valuePropName='checked'>
+							<Checkbox />
 						</Form.Item>
 					</Col>
 					<Col span={3}>

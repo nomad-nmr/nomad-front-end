@@ -88,6 +88,9 @@ const Users = props => {
 					case 'admin':
 						tagColor = 'red'
 						break
+					case 'admin-b':
+						tagColor = 'orange'
+						break
 
 					case 'user':
 						tagColor = 'blue'
@@ -97,14 +100,21 @@ const Users = props => {
 						tagColor = 'green'
 						break
 
+					case 'user-b':
+						tagColor = 'cyan'
+						break
+
 					default:
 						break
 				}
 				return <Tag color={tagColor}>{record.accessLevel}</Tag>
 			},
 			filters: [
-				{ text: 'Admin', value: 'admin' },
-				{ text: 'User', value: 'user' }
+				{ text: 'admin', value: 'admin' },
+				{ text: 'admin-b', value: 'admin-b' },
+				{ text: 'user', value: 'user' },
+				{ text: 'user-a', value: 'user-a' },
+				{ text: 'user-b', value: 'user-b' }
 			],
 			filteredValue: filters.accessLevel || null
 		},

@@ -123,7 +123,7 @@ export const fetchGroupListSuccess = data => ({
 	data
 })
 
-export const fetchGroupList = (token, showInactive) => {
+export const fetchGroupList = (token, showInactive, batch) => {
 	return dispatch => {
 		axios
 			.get('admin/groups/?list=true&showInactive=' + showInactive, {

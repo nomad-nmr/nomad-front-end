@@ -1,9 +1,7 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { PageHeader, Switch, Button, DatePicker, Input, Select } from 'antd'
-
-import moment from 'moment'
+import { PageHeader } from 'antd'
 
 import {
 	toggleCards,
@@ -18,11 +16,21 @@ import {
 	searchUser,
 	setInstrumentId,
 	searchParamSets,
-	toggleParamsForm
+	toggleParamsForm,
+	toggleAddRack,
+	closeRack,
+	deleteRack
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
-import StatusButtons from './StatusButtons/StatusButtons'
+
+import BatchSubmitControls from './Controls/BatchSubmitControls'
+import ExpHistControls from './Controls/ExpHistControls'
+import ParamSetControls from './Controls/ParamSetControls'
+import InstrumentsTabControls from './Controls/InstrumentsTabControls'
+import GroupsTabControls from './Controls/GroupsTabControls'
+import UsersTabControls from './Controls/UsersTabControls'
+import DashControls from './Controls/DashControls'
 
 import dashIcon from '../../../assets/dashboard.svg'
 import userIcon from '../../../assets/user.svg'
@@ -32,41 +40,36 @@ import experimentIcon from '../../../assets/lab.svg'
 import historyIcon from '../../../assets/history-icon.webp'
 import submitIcon from '../../../assets/submit.png'
 import messageIcon from '../../../assets/email.png'
+import batchSubmitIcon from '../../../assets/batch-submit.png'
 
 const PageHeaderEl = props => {
-	const { Search } = Input
-	const { Option } = Select
 	const {
 		toggleCards,
 		cardSwitchOn,
 		statusButtonsData,
 		statusButtonClicked,
-		showInactiveUsr,
-		switchShowInactiveUsr
+		username,
+		accessLevel,
+		authToken
 	} = props
 
 	let headerTitle = ''
 	let avatarSrc
 	let extra = null
 
-	switch (props.location.pathname) {
+	const location = useLocation()
+
+	switch (location.pathname) {
 		case '/dashboard':
 			headerTitle = 'Dashboard'
 			avatarSrc = dashIcon
 			extra = (
-				<div className={classes.ExtraContainer}>
-					<div className={classes.SwitchElement}>
-						<label>Cards</label>
-						<Switch
-							size='small'
-							checked={cardSwitchOn}
-							checkedChildren='On'
-							unCheckedChildren='Off'
-							onChange={toggleCards}
-						/>
-					</div>
-					<StatusButtons data={statusButtonsData} click={statusButtonClicked} />
-				</div>
+				<DashControls
+					buttonsData={statusButtonsData}
+					onButtonClick={statusButtonClicked}
+					switchOn={cardSwitchOn}
+					toggleCards={toggleCards}
+				/>
 			)
 			break
 
@@ -74,34 +77,13 @@ const PageHeaderEl = props => {
 			headerTitle = 'Manage Users'
 			avatarSrc = userIcon
 			extra = (
-				<div className={classes.ExtraContainer}>
-					<Button
-						className={classes.Button}
-						type='primary'
-						onClick={() => {
-							props.toggleUsrDrawer(false)
-						}}
-						disabled={props.formVisible}>
-						Add
-					</Button>
-					<Search
-						placeholder='search name'
-						allowClear
-						onSearch={props.userSearchHandler}
-						style={{ width: 160, marginLeft: '20px' }}
-						defaultValue={props.usrSearchValue}
-					/>
-					<div className={classes.SwitchElement}>
-						<label>Show Inactive</label>
-						<Switch
-							size='small'
-							checked={showInactiveUsr}
-							checkedChildren='On'
-							unCheckedChildren='Off'
-							onChange={switchShowInactiveUsr}
-						/>
-					</div>
-				</div>
+				<UsersTabControls
+					toggleDrawer={props.toggleUsrDrawer}
+					searchHandler={props.userSearchHandler}
+					searchDefValue={props.usrSearchValue}
+					showInactive={props.showInactiveUsr}
+					switchShowInactive={props.switchShowInactiveUsr}
+				/>
 			)
 			break
 
@@ -109,25 +91,12 @@ const PageHeaderEl = props => {
 			headerTitle = 'Manage Groups'
 			avatarSrc = groupIcon
 			extra = (
-				<div className={classes.ExtraContainer}>
-					<Button
-						className={classes.Button}
-						type='primary'
-						onClick={() => props.toggleGrpForm(false)}
-						disabled={props.grpFormVisible}>
-						Add
-					</Button>
-					<div className={classes.SwitchElement}>
-						<label>Show Inactive</label>
-						<Switch
-							size='small'
-							checked={props.showInactiveGrps}
-							checkedChildren='On'
-							unCheckedChildren='Off'
-							onChange={props.toggleShowInactiveGrps}
-						/>
-					</div>
-				</div>
+				<GroupsTabControls
+					formHandler={props.toggleGrpForm}
+					formVisible={props.grpFormVisible}
+					showInactive={props.showInactiveGrps}
+					toggleShowInactive={props.toggleShowInactiveGrps}
+				/>
 			)
 			break
 
@@ -140,85 +109,58 @@ const PageHeaderEl = props => {
 			headerTitle = 'Instruments Settings'
 			avatarSrc = magnetIcon
 			extra = (
-				<div className={classes.ExtraContainer}>
-					<Button
-						className={classes.Button}
-						type='primary'
-						onClick={() => props.toggleInstForm(false)}
-						disabled={props.instFormVisible}>
-						Add
-					</Button>
-					<div className={classes.SwitchElement}>
-						<label>Show Inactive</label>
-						<Switch
-							size='small'
-							checked={props.showInactiveInst}
-							checkedChildren='On'
-							unCheckedChildren='Off'
-							onChange={props.toggleShowInactiveInstr}
-						/>
-					</div>
-				</div>
+				<InstrumentsTabControls
+					formHandler={props.toggleInstForm}
+					formVisible={props.instFormVisible}
+					showInactive={props.showInactiveInst}
+					toggleShowInactive={props.toggleShowInactiveInstr}
+				/>
 			)
 			break
 
 		case '/admin/parameter-sets':
 			headerTitle = 'Parameter Sets'
 			avatarSrc = experimentIcon
-
-			const instrOptionArr = props.instrList.map(i => (
-				<Option value={i.id} key={i.id}>
-					{i.name}
-				</Option>
-			))
-			instrOptionArr.unshift(
-				<Option key='all' value={null}>
-					All instruments
-				</Option>
-			)
 			extra = (
-				<div className={classes.ExtraContainer}>
-					<Button
-						className={classes.Button}
-						type='primary'
-						onClick={() => props.tglParamsForm(false)}
-						disabled={props.paramsFormVisible}>
-						Add
-					</Button>
-					<Select
-						defaultValue={props.instrId}
-						style={{ width: 140, marginLeft: '15px' }}
-						onChange={props.setInstrId}>
-						{instrOptionArr}
-					</Select>
-					<Search
-						placeholder='search name'
-						allowClear
-						onSearch={props.onSearchHandler}
-						style={{ width: 155, marginLeft: '15px' }}
-						defaultValue={props.paramsSearchValue}
-					/>
-				</div>
+				<ParamSetControls
+					data={props.instrList}
+					toggleForm={props.tglParamsForm}
+					formVisible={props.paramsFormVisible}
+					instrId={props.instrId}
+					setInstrId={props.setInstrId}
+					searchHandler={props.paramSetSearchHandler}
+					searchDefValue={props.paramsSearchValue}
+				/>
 			)
 			break
 
 		case '/admin/history':
 			headerTitle = 'Experiment History'
 			avatarSrc = historyIcon
-			extra = (
-				<DatePicker
-					style={{ marginLeft: '10px' }}
-					defaultValue={moment()}
-					allowClear={false}
-					format='DD MMM YYYY'
-					onChange={date => props.setExpHistoryDate(moment(date).format('YYYY-MM-DD'))}
-				/>
-			)
+			extra = <ExpHistControls dateHandler={props.setExpHistoryDate} />
 			break
 
 		case '/submit':
 			headerTitle = 'Book New Job'
 			avatarSrc = submitIcon
+			break
+
+		case '/batch-submit':
+			headerTitle = 'Batch Submit'
+			avatarSrc = batchSubmitIcon
+			extra = (
+				<BatchSubmitControls
+					user={{ username, accessLevel, authToken }}
+					toggleAddRackModal={props.tglAddRack}
+					closeRackHandler={props.closeRackHandler}
+					deleteRackHandler={props.deleteRackHandler}
+					activeRackId={props.activeRackId}
+					closeRackLoading={props.closeRackLoading}
+					deleteRackLoading={props.deleteRackLoading}
+					racksData={props.racksData}
+				/>
+			)
+
 			break
 
 		default:
@@ -249,7 +191,15 @@ const mapStateToProps = state => {
 		instrId: state.paramSets.instrumentId,
 		paramsSearchValue: state.paramSets.searchValue,
 		usrSearchValue: state.users.searchUserValue,
-		paramsFormVisible: state.paramSets.formVisible
+		paramsFormVisible: state.paramSets.formVisible,
+		username: state.auth.username,
+		accessLevel: state.auth.accessLevel,
+		authToken: state.auth.token,
+		addRackModalVisible: state.batchSubmit.addRackVisible,
+		activeRackId: state.batchSubmit.activeRackId,
+		closeRackLoading: state.batchSubmit.closeRackLoading,
+		deleteRackLoading: state.batchSubmit.deleteRackLoading,
+		racksData: state.batchSubmit.racks
 	}
 }
 
@@ -266,9 +216,12 @@ const mapDispatchToProps = dispatch => {
 		setExpHistoryDate: date => dispatch(setExpHistoryDate(date)),
 		userSearchHandler: value => dispatch(searchUser(value)),
 		setInstrId: id => dispatch(setInstrumentId(id)),
-		onSearchHandler: value => dispatch(searchParamSets(value)),
-		tglParamsForm: editing => dispatch(toggleParamsForm(editing))
+		paramSetSearchHandler: value => dispatch(searchParamSets(value)),
+		tglParamsForm: editing => dispatch(toggleParamsForm(editing)),
+		tglAddRack: () => dispatch(toggleAddRack()),
+		closeRackHandler: (rackId, token) => dispatch(closeRack(rackId, token)),
+		deleteRackHandler: (rackId, token) => dispatch(deleteRack(rackId, token))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PageHeaderEl))
+export default connect(mapStateToProps, mapDispatchToProps)(PageHeaderEl)

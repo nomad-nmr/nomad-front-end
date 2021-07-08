@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Input, Button, Select, Checkbox } from 'antd'
 
 import classes from '../Form.module.css'
@@ -24,6 +24,20 @@ const tailLayout = {
 const UserForm = props => {
 	const [form] = Form.useForm()
 
+	const [isBatchState, setIsBatchState] = useState(false)
+	const [formValues, setFormValues] = useState({ accessLevel: 'user', isActive: true, groupName: 'default' })
+
+	const checkBatchHandler = grpName => {
+		const { isBatch } = props.groupList.find(grp => grp.name === grpName)
+		if (isBatch) {
+			setIsBatchState(true)
+			setFormValues({ ...form.getFieldsValue(), accessLevel: 'user-b' })
+		} else {
+			setIsBatchState(false)
+			setFormValues({ ...form.getFieldsValue(), accessLevel: 'user' })
+		}
+	}
+
 	useEffect(() => {
 		form.resetFields()
 	})
@@ -31,6 +45,7 @@ const UserForm = props => {
 	const onReset = () => {
 		form.resetFields()
 		props.toggleDrawer()
+		setFormValues({ accessLevel: 'user', isActive: true, groupName: 'default' })
 	}
 
 	const onFinish = values => {
@@ -50,13 +65,31 @@ const UserForm = props => {
 		)
 	})
 
+	let accessLevelOptions = (
+		<>
+			<Option value='admin'>admin</Option>
+			<Option value='admin-b'>admin-b</Option>
+			<Option value='user'>user</Option>
+			<Option value='user-a'>user-a</Option>
+		</>
+	)
+
+	if (isBatchState) {
+		accessLevelOptions = (
+			<>
+				<Option value='user-b'>user-b</Option>
+				<Option value='admin-b'>admin-b</Option>
+			</>
+		)
+	}
+
 	return (
 		<div className={classes.formInDrawer}>
 			<Form
 				{...layout}
 				form={form}
 				ref={props.formReference}
-				initialValues={{ accessLevel: 'user', isActive: true, groupName: 'default' }}
+				initialValues={formValues}
 				onFinish={onFinish}>
 				<Form.Item
 					name='username'
@@ -80,14 +113,12 @@ const UserForm = props => {
 					<Input />
 				</Form.Item>
 				<Form.Item name='groupName' label='Group'>
-					<Select style={{ width: '60%' }}>{groupSelectOptions}</Select>
+					<Select style={{ width: '60%' }} onChange={value => checkBatchHandler(value)}>
+						{groupSelectOptions}
+					</Select>
 				</Form.Item>
 				<Form.Item name='accessLevel' label='Access Level'>
-					<Select style={{ width: '60%' }}>
-						<Option value='admin'>admin</Option>
-						<Option value='user'>user</Option>
-						<Option value='user-a'>user-a</Option>
-					</Select>
+					<Select style={{ width: '60%' }}>{accessLevelOptions}</Select>
 				</Form.Item>
 				<Form.Item name='isActive' label='Active' valuePropName='checked'>
 					<Checkbox />
@@ -95,7 +126,7 @@ const UserForm = props => {
 				<Form.Item hidden name='_id'>
 					<Input />
 				</Form.Item>
-				<Form.Item {...tailLayout} style>
+				<Form.Item {...tailLayout}>
 					<Button className={classes.Button} type='primary' htmlType='submit'>
 						Submit
 					</Button>

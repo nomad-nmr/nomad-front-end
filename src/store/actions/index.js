@@ -72,3 +72,5 @@ export {
 export { bookHolders, cancelHolder, cancelBookedHolders, bookExperiments } from './submit'
 
 export { sendMessage } from './message'
+
+export { toggleAddRack, addRack, getRacks, closeRack, setActiveRackId, deleteRack } from './batchSubmit'

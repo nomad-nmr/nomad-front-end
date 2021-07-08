@@ -46,6 +46,7 @@ const App = props => {
 	const ExpHistory = React.lazy(() => import('./containers/ExpHistory/ExpHistory'))
 	const ParameterSets = React.lazy(() => import('./containers/ParameterSets/ParameterSets'))
 	const Submit = React.lazy(() => import('./containers/Submit/Submit'))
+	const BatchSubmit = React.lazy(() => import('./containers/BatchSubmit/BatchSubmit'))
 
 	//Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
 	let authModal = null
@@ -134,8 +135,25 @@ const App = props => {
 								exact
 								path='/submit'
 								render={() => {
-									return username ? <Submit /> : <Redirect to='/dashboard' />
+									return username &&
+										process.env.REACT_APP_SUBMIT_ON === 'true' &&
+										accessLevel !== 'user-b' ? (
+										<Submit />
+									) : (
+										<Redirect to='/dashboard' />
+									)
 								}}
+							/>
+							<Route
+								exact
+								path='/batch-submit'
+								render={() =>
+									process.env.REACT_APP_BATCH_SUBMIT_ON === 'true' ? (
+										<BatchSubmit />
+									) : (
+										<Redirect to='/dashboard' />
+									)
+								}
 							/>
 							<Route path='/500' component={Error500} />
 							<Route path='/404' component={Error404} />

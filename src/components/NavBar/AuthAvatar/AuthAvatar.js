@@ -23,11 +23,17 @@ const AuthAvatar = props => {
 			case 'admin':
 				assignedClasses.push(classes.Admin)
 				break
+			case 'admin-b':
+				assignedClasses.push(classes.AdminB)
+				break
 			case 'user':
 				assignedClasses.push(classes.User)
 				break
 			case 'user-a':
 				assignedClasses.push(classes.UserA)
+				break
+			case 'user-b':
+				assignedClasses.push(classes.UserB)
 				break
 
 			default:
@@ -43,11 +49,11 @@ const AuthAvatar = props => {
 					</>
 				}
 				content={
-					<span className={classes.Popover} onClick={() => props.onClick('/')}>
+					<span className={classes.Popover} onClick={() => props.onClick(null)}>
 						Sign out
 					</span>
 				}>
-				<Avatar size='large' className={assignedClasses.join(' ')} onClick={() => props.onClick('/')}>
+				<Avatar size='large' className={assignedClasses.join(' ')} onClick={() => props.onClick(null)}>
 					{props.username[0].toUpperCase()}
 				</Avatar>
 			</Popover>
