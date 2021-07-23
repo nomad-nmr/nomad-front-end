@@ -1,5 +1,8 @@
 import React from 'react'
 import { Table, Space, Divider } from 'antd'
+import moment from 'moment'
+
+import { addKey } from '../../../utils/tableUtils'
 
 const RackTable = props => {
 	const columns = [
@@ -11,13 +14,13 @@ const RackTable = props => {
 		},
 		{
 			title: 'Username',
-			dataIndex: 'username',
+			dataIndex: ['user', 'username'],
 			align: 'center',
 			width: 75
 		},
 		{
 			title: 'Full Name',
-			dataIndex: 'fullName',
+			dataIndex: ['user', 'fullName'],
 			align: 'center'
 		},
 		{
@@ -32,14 +35,20 @@ const RackTable = props => {
 		},
 		{
 			title: 'Exp Count',
-			dataIndex: 'experiments',
+			dataIndex: 'exps',
 			align: 'center',
 			render: value => value.length
+		},
+		{
+			title: 'Added at',
+			dataIndex: 'addedAt',
+			align: 'center',
+			render: value => moment(value).format('HH:mm')
 		}
 	]
 
 	const expandElement = record => {
-		const expElement = record.experiments.map((exp, index) => (
+		const expElement = record.exps.map((exp, index) => (
 			<div key={index}>
 				{index !== 0 && <Divider type='vertical' />}
 				{exp}
@@ -56,7 +65,7 @@ const RackTable = props => {
 	return (
 		<Table
 			columns={columns}
-			dataSource={props.data}
+			dataSource={addKey(props.data)}
 			pagination={false}
 			size='small'
 			expandable={{ expandedRowRender: expandElement }}

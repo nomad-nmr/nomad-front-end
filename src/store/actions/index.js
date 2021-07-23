@@ -73,4 +73,13 @@ export { bookHolders, cancelHolder, cancelBookedHolders, bookExperiments } from 
 
 export { sendMessage } from './message'
 
-export { toggleAddRack, addRack, getRacks, closeRack, setActiveRackId, deleteRack } from './batchSubmit'
+export {
+	toggleAddRack,
+	toggleAddSample,
+	addRack,
+	getRacks,
+	closeRack,
+	setActiveRackId,
+	deleteRack,
+	addSample
+} from './batchSubmit'

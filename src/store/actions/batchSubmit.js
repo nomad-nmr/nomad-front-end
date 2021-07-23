@@ -5,6 +5,9 @@ import errorHandler from './errorHandler'
 export const toggleAddRack = () => ({
 	type: actionTypes.TOGGLE_ADD_RACK
 })
+export const toggleAddSample = () => ({
+	type: actionTypes.TOGGLE_ADD_SAMPLE
+})
 
 export const setActiveRackId = rackId => ({
 	type: actionTypes.SET_ACTIVE_RACK_ID,
@@ -54,13 +57,9 @@ export const closeRackSuccess = payload => ({
 	payload
 })
 
-export const closeRackStart = () => ({
-	type: actionTypes.CLOSE_RACK_START
-})
-
 export const closeRack = (rackId, token) => {
 	return dispatch => {
-		dispatch(closeRackStart())
+		dispatch(loadingStart())
 		axios
 			.patch('/batch-submit/racks/' + rackId, null, {
 				headers: { Authorization: 'Bearer ' + token }
@@ -74,8 +73,8 @@ export const closeRack = (rackId, token) => {
 	}
 }
 
-export const deleteRackStart = () => ({
-	type: actionTypes.DELETE_RACK_START
+export const loadingStart = () => ({
+	type: actionTypes.LOADING_START
 })
 
 export const deleteRackSuccess = payload => ({
@@ -85,13 +84,34 @@ export const deleteRackSuccess = payload => ({
 
 export const deleteRack = (rackId, token) => {
 	return dispatch => {
-		dispatch(deleteRackStart())
+		dispatch(loadingStart())
 		axios
 			.delete('/batch-submit/racks/' + rackId, {
 				headers: { Authorization: 'Bearer ' + token }
 			})
 			.then(res => {
 				dispatch(deleteRackSuccess(res.data))
+			})
+			.catch(err => {
+				dispatch(errorHandler(err))
+			})
+	}
+}
+
+export const addSampleSuccess = payload => ({
+	type: actionTypes.ADD_SAMPLE_SUCCESS,
+	payload
+})
+
+export const addSample = (data, rackId, token) => {
+	return dispatch => {
+		dispatch(loadingStart())
+		axios
+			.post('/batch-submit/add/' + rackId, data, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
+			.then(res => {
+				dispatch(addSampleSuccess(res.data))
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))

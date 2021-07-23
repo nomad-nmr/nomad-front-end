@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Form, Input, Select, Button, Space } from 'antd'
+import { Modal, Form, Input, Select, Button, Space, InputNumber } from 'antd'
 import { TableOutlined } from '@ant-design/icons'
 import moment from 'moment'
 
@@ -51,8 +51,9 @@ const AddRackModal = props => {
 			}>
 			<Form
 				form={form}
-				labelCol={{ span: 4 }}
-				wrapperCol={{ span: 20 }}
+				labelCol={{ span: 6 }}
+				wrapperCol={{ span: 18 }}
+				initialValues={{ slotsNumber: 72 }}
 				onFinish={values => submitForm(values)}>
 				<Form.Item name='group' label='Group' rules={[{ required: true }]}>
 					<Select style={{ width: '50%' }} onSelect={value => setRackTitle(value)}>
@@ -64,6 +65,9 @@ const AddRackModal = props => {
 					label='Rack Title'
 					rules={[{ required: true, whitespace: true, message: 'Rack title is required' }]}>
 					<Input />
+				</Form.Item>
+				<Form.Item name='slotsNumber' label='Number of Slots' rules={[{ required: true }]}>
+					<InputNumber min={1} />
 				</Form.Item>
 				<Form.Item style={{ textAlign: 'center' }} {...tailLayout}>
 					<Space size='large'>

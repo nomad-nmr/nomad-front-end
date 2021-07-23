@@ -10,7 +10,7 @@ import PageHeader from './PageHeader/PageHeader'
 import AuthAvatar from './AuthAvatar/AuthAvatar'
 import MainMenu from './MainMenu/MainMenu'
 
-import { openAuthModal } from '../../store/actions'
+import { openAuthModal, toggleAddSample } from '../../store/actions'
 
 import classes from './NavBar.module.css'
 
@@ -67,6 +67,7 @@ const NavBar = props => {
 						username={props.username}
 						accessLevel={props.accessLevel}
 						redirectTo={props.followPath}
+						toggleAddSample={props.tglAddSample}
 					/>
 				</div>
 			</div>
@@ -84,6 +85,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
+		tglAddSample: () => dispatch(toggleAddSample()),
 		openModalHandler: path => dispatch(openAuthModal(path))
 		//openModalHandler takes path as an argument to be used for redirecting after successful login
 		//Redirecting is done by useEffect hook in AuthAvatar which gets rerendered after successful login

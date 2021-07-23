@@ -3,13 +3,22 @@ import { useHistory } from 'react-router-dom'
 import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message, Modal, Checkbox } from 'antd'
 import moment from 'moment'
 
-import solvents from '../../../misc/solvents'
+// import solvents from '../../../misc/solvents'
+import SolventSelect from './SolventSelect/SolventSelect'
+import TitleInput from './TitleInput/TitleInput'
 import EditParamsModal from '../../Modals/EditParamsModal/EditPramsModal'
 import nightIcon from '../../../assets/night-mode.svg'
 
 import classes from './BookExperimentsForm.module.css'
 
 const { Option } = Select
+
+const disabledStyle = {
+	textAlign: 'center',
+	color: '#389e0d',
+	fontWeight: 600,
+	backgroundColor: '#f0f5ff'
+}
 
 const BookExperimentsForm = props => {
 	const [form] = Form.useForm()
@@ -263,64 +272,19 @@ const BookExperimentsForm = props => {
 				<Row gutter={16}>
 					<Col span={2}>
 						<Form.Item name={[key, 'instrumentName']} initialValue={sample.instrument}>
-							<Input
-								size='small'
-								disabled
-								style={{
-									textAlign: 'center',
-									color: '#389e0d',
-									fontWeight: 600,
-									backgroundColor: '#f0f5ff'
-								}}
-							/>
+							<Input size='small' disabled style={disabledStyle} />
 						</Form.Item>
 					</Col>
 					<Col span={1}>
 						<Form.Item name={[key, 'holder']} initialValue={sample.holder}>
-							<Input
-								size='small'
-								disabled
-								style={{
-									textAlign: 'center',
-									color: '#389e0d',
-									fontWeight: 600,
-									backgroundColor: '#f0f5ff'
-								}}
-							/>
+							<Input size='small' disabled style={disabledStyle} />
 						</Form.Item>
 					</Col>
 					<Col span={2}>
-						<Form.Item
-							name={[key, 'solvent']}
-							rules={[
-								{
-									required: true,
-									message: 'Solvent is required'
-								}
-							]}>
-							<Select>
-								{solvents.map((solvent, i) => (
-									<Option value={solvent} key={i}>
-										{solvent}
-									</Option>
-								))}
-							</Select>
-						</Form.Item>
+						<SolventSelect nameKey={key} />
 					</Col>
 					<Col span={accessLevel !== 'user' ? 6 : 7}>
-						<Form.Item
-							name={[key, 'title']}
-							rules={[
-								{
-									required: true,
-									whitespace: true,
-
-									message: 'Title is required'
-								},
-								{ min: 5, message: 'Title must have minimum 5 characters' }
-							]}>
-							<Input size='small' />
-						</Form.Item>
+						<TitleInput nameKey={key} />
 					</Col>
 					<Col span={1}>
 						<Space>
@@ -362,14 +326,7 @@ const BookExperimentsForm = props => {
 								<Col span={7}>
 									<Space align='start'>
 										<Form.Item name={[key, 'exps', expNo, 'params']}>
-											<Input
-												disabled
-												style={{
-													color: '#fa8c16',
-													fontWeight: 600,
-													backgroundColor: '#f0f5ff'
-												}}
-											/>
+											<Input disabled style={disabledStyle} />
 										</Form.Item>
 										<button
 											className={classes.ActionButton}

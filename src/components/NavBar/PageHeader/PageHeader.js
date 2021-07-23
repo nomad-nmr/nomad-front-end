@@ -19,7 +19,9 @@ import {
 	toggleParamsForm,
 	toggleAddRack,
 	closeRack,
-	deleteRack
+	deleteRack,
+	toggleAddSample,
+	openAuthModal
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -152,12 +154,12 @@ const PageHeaderEl = props => {
 				<BatchSubmitControls
 					user={{ username, accessLevel, authToken }}
 					toggleAddRackModal={props.tglAddRack}
+					toggleAddSample={props.tglAddSample}
 					closeRackHandler={props.closeRackHandler}
 					deleteRackHandler={props.deleteRackHandler}
 					activeRackId={props.activeRackId}
-					closeRackLoading={props.closeRackLoading}
-					deleteRackLoading={props.deleteRackLoading}
 					racksData={props.racksData}
+					openAuthModal={props.openAuthModal}
 				/>
 			)
 
@@ -197,8 +199,6 @@ const mapStateToProps = state => {
 		authToken: state.auth.token,
 		addRackModalVisible: state.batchSubmit.addRackVisible,
 		activeRackId: state.batchSubmit.activeRackId,
-		closeRackLoading: state.batchSubmit.closeRackLoading,
-		deleteRackLoading: state.batchSubmit.deleteRackLoading,
 		racksData: state.batchSubmit.racks
 	}
 }
@@ -220,7 +220,9 @@ const mapDispatchToProps = dispatch => {
 		tglParamsForm: editing => dispatch(toggleParamsForm(editing)),
 		tglAddRack: () => dispatch(toggleAddRack()),
 		closeRackHandler: (rackId, token) => dispatch(closeRack(rackId, token)),
-		deleteRackHandler: (rackId, token) => dispatch(deleteRack(rackId, token))
+		deleteRackHandler: (rackId, token) => dispatch(deleteRack(rackId, token)),
+		tglAddSample: () => dispatch(toggleAddSample()),
+		openAuthModal: redirectTo => dispatch(openAuthModal(redirectTo))
 	}
 }
 

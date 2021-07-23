@@ -33,11 +33,16 @@ const BatchSubmitControls = props => {
 		})
 	}
 
+	const addSampleHandler = () => {
+		if (!authToken) {
+			props.openAuthModal('addSampleDrawer')
+		} else {
+			props.toggleAddSample()
+		}
+	}
+
 	return (
 		<div className={classes.ExtraContainer}>
-			<Button className={classes.Button} type='primary'>
-				Add Sample
-			</Button>
 			{(accessLevel === 'admin' || accessLevel === 'admin-b') && (
 				<Button
 					className={classes.Button}
@@ -48,11 +53,18 @@ const BatchSubmitControls = props => {
 					Open New Rack
 				</Button>
 			)}
+			<Button
+				className={classes.Button}
+				type='primary'
+				onClick={() => addSampleHandler()}
+				disabled={!activeRack.isOpen}>
+				Add Sample
+			</Button>
+
 			{(accessLevel === 'admin' || accessLevel === 'admin-b') && (
 				<Button
 					className={classes.Button}
 					onClick={() => onCloseRack()}
-					loading={props.closeRackLoading}
 					disabled={closeRackBtnInactive || !props.activeRackId}
 					danger>
 					Close Rack
@@ -63,7 +75,6 @@ const BatchSubmitControls = props => {
 					className={classes.Button}
 					type='primary'
 					onClick={onDeleteRack}
-					loading={props.deleteRackLoading}
 					disabled={!closeRackBtnInactive}
 					danger>
 					Delete Rack

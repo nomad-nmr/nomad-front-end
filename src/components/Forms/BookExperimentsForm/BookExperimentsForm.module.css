@@ -18,6 +18,24 @@
 
 .CircleButtonMinus {
 	padding: 0 7px;
+	color: grey;
+	background-color: white;
+	border: 1px solid grey;
+}
+
+.CircleButtonMinus:hover {
+	background-color: white;
+	color: #096dd9;
+	border: 1px solid#096dd9;
+}
+
+.LargeButton {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.AddSample {
+	font-size: large;
 }
 
 .ActionButton {
@@ -57,6 +75,7 @@
 	padding: 10px 0;
 	font-weight: 600;
 	margin-bottom: 25px;
+	text-align: center;
 }
 
 .TotalExptBasic {

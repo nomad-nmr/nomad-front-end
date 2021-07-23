@@ -26,7 +26,9 @@ const UserForm = props => {
 
 	const [isBatchState, setIsBatchState] = useState(false)
 	const [formValues, setFormValues] = useState({ accessLevel: 'user', isActive: true, groupName: 'default' })
+	const [currentGroup, setCurrentGroup] = useState(undefined)
 
+	//Helper function that check whether the current groups is for batch submit
 	const checkBatchHandler = grpName => {
 		const { isBatch } = props.groupList.find(grp => grp.name === grpName)
 		if (isBatch) {
@@ -37,6 +39,19 @@ const UserForm = props => {
 			setFormValues({ ...form.getFieldsValue(), accessLevel: 'user' })
 		}
 	}
+
+	// STO needs to be used on form reference that is also defined with STO 200ms
+	setTimeout(() => {
+		setCurrentGroup(props.formReference.current.getFieldValue('groupName'))
+	}, 220)
+
+	useEffect(() => {
+		if (currentGroup) {
+			checkBatchHandler(currentGroup)
+		}
+		// adding checkBatchHandler to dependency array is not necessary and would complicate the things
+		// eslint-disable-next-line
+	}, [currentGroup])
 
 	useEffect(() => {
 		form.resetFields()

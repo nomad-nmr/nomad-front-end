@@ -8,14 +8,16 @@ const AuthAvatar = props => {
 	const assignedClasses = [classes.AuthAvatar]
 
 	const history = useHistory()
-	const { username, redirectTo } = props
+	const { username, redirectTo, toggleAddSample } = props
 
 	//Hook that redirects after successful login
 	useEffect(() => {
-		if (username && redirectTo) {
+		if (username && redirectTo === 'addSampleDrawer') {
+			toggleAddSample()
+		} else if (username && redirectTo) {
 			history.push(redirectTo)
 		}
-	}, [username, redirectTo, history])
+	}, [username, redirectTo, toggleAddSample, history])
 
 	let avatarEl
 	if (props.username) {
