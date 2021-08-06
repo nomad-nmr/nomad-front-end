@@ -9,7 +9,9 @@ const AddSampleDrawer = props => {
 			title={`Add Samples to rack ${props.rackTitle}`}
 			placement='top'
 			visible={props.visible}
-			closable={false}
+			closable={props.error}
+			maskClosable={props.error}
+			onClose={props.error ? props.toggleHandler : null}
 			mask={true}
 			keyboard
 			height='auto'>

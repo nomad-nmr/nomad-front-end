@@ -30,6 +30,8 @@ const BatchSubmit = props => {
 		fetchParamSets
 	} = props
 
+	const user = { username, accessLevel, authToken }
+
 	useEffect(() => {
 		if (authToken && (accessLevel === 'admin' || accessLevel === 'admin-b')) {
 			fetchGrpList(authToken)
@@ -65,6 +67,7 @@ const BatchSubmit = props => {
 	if (accessLevel !== 'admin' && accessLevel !== 'admin-b') {
 		drawerError = activeRack ? activeRack.group.groupName !== props.grpName : true
 	}
+	
 
 	return (
 		<div>
@@ -88,7 +91,7 @@ const BatchSubmit = props => {
 				toggleHandler={props.tglAddSample}
 				rackTitle={activeRack && activeRack.title}
 				error={drawerError}
-				user={{ username, accessLevel, authToken }}
+				user={user}
 				signOutHandler={props.logOutHandler}
 				paramSets={props.paramSetsList}
 				activeRackId={activeTabId}

@@ -7,11 +7,11 @@ const BatchSubmitControls = props => {
 	const { accessLevel, authToken } = props.user
 
 	let activeRack = {}
-	let closeRackBtnInactive = false
+	let activeRackOpen = true
 
 	if (props.activeRackId) {
 		activeRack = props.racksData.find(rack => rack._id === props.activeRackId)
-		closeRackBtnInactive = activeRack.isOpen ? false : true
+		activeRackOpen = activeRack.isOpen ? true : false
 	}
 
 	const onCloseRack = () => {
@@ -53,33 +53,29 @@ const BatchSubmitControls = props => {
 					Open New Rack
 				</Button>
 			)}
-			<Button
-				className={classes.Button}
-				type='primary'
-				onClick={() => addSampleHandler()}
-				disabled={!activeRack.isOpen}>
-				Add Sample
-			</Button>
+			{activeRack.isOpen && (
+				<Button className={classes.Button} type='primary' onClick={() => addSampleHandler()}>
+					Add Sample
+				</Button>
+			)}
 
-			{(accessLevel === 'admin' || accessLevel === 'admin-b') && (
-				<Button
-					className={classes.Button}
-					onClick={() => onCloseRack()}
-					disabled={closeRackBtnInactive || !props.activeRackId}
-					danger>
+			{(accessLevel === 'admin' || accessLevel === 'admin-b') && activeRackOpen ? (
+				<Button className={classes.Button} onClick={() => onCloseRack()} danger>
 					Close Rack
 				</Button>
-			)}
-			{(accessLevel === 'admin' || accessLevel === 'admin-b') && (
-				<Button
-					className={classes.Button}
-					type='primary'
-					onClick={onDeleteRack}
-					disabled={!closeRackBtnInactive}
-					danger>
+			) : null}
+
+			{(accessLevel === 'admin' || accessLevel === 'admin-b') && !activeRackOpen ? (
+				<Button className={classes.Button} onClick={e => console.log(e.target)}>
+					Book Selected
+				</Button>
+			) : null}
+
+			{(accessLevel === 'admin' || accessLevel === 'admin-b') && !activeRackOpen ? (
+				<Button className={classes.Button} type='primary' onClick={onDeleteRack} danger>
 					Delete Rack
 				</Button>
-			)}
+			) : null}
 		</div>
 	)
 }

@@ -116,6 +116,7 @@ const PageHeaderEl = props => {
 					formVisible={props.instFormVisible}
 					showInactive={props.showInactiveInst}
 					toggleShowInactive={props.toggleShowInactiveInstr}
+					toggleInstForm={props.toggleInstForm}
 				/>
 			)
 			break

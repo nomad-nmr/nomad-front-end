@@ -103,15 +103,45 @@ export const addSampleSuccess = payload => ({
 	payload
 })
 
+export const rackFull = payload => ({
+	type: actionTypes.RACK_FULL,
+	payload
+})
+
 export const addSample = (data, rackId, token) => {
 	return dispatch => {
 		dispatch(loadingStart())
 		axios
-			.post('/batch-submit/add/' + rackId, data, {
+			.post('/batch-submit/sample/' + rackId, data, {
 				headers: { Authorization: 'Bearer ' + token }
 			})
 			.then(res => {
 				dispatch(addSampleSuccess(res.data))
+			})
+			.catch(err => {
+				if (err.response.status === 406) {
+					dispatch(rackFull(err.response.data.rackId))
+				} else {
+					dispatch(errorHandler(err))
+				}
+			})
+	}
+}
+
+export const deleteSampleSuccess = payload => ({
+	type: actionTypes.DELETE_SAMPLE_SUCCESS,
+	payload
+})
+
+export const deleteSample = (rackId, slot, token) => {
+	return dispatch => {
+		dispatch(loadingStart())
+		axios
+			.delete('/batch-submit/sample/' + rackId + '/' + slot, {
+				headers: { Authorization: 'Bearer ' + token }
+			})
+			.then(res => {
+				dispatch(deleteSampleSuccess(res.data))
 			})
 			.catch(err => {
 				dispatch(errorHandler(err))

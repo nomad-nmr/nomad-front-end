@@ -1,4 +1,6 @@
 import * as actionTypes from '../actions/actionTypes'
+import { Modal } from 'antd'
+
 
 const initialState = {
 	addRackVisible: false,
@@ -33,7 +35,7 @@ const reducer = (state = initialState, { type, payload }) => {
 		case actionTypes.CLOSE_RACK_SUCCESS:
 			const updatedRacks = [...state.racks]
 			const rackIndex = updatedRacks.findIndex(rack => rack._id === payload)
-			updatedRacks[rackIndex].isOpen = false
+			updatedRacks[rackIndex] = {...updatedRacks[rackIndex], isOpen: false}
 			return { ...state, racks: updatedRacks, loading: false }
 
 		case actionTypes.DELETE_RACK_SUCCESS:
@@ -41,8 +43,37 @@ const reducer = (state = initialState, { type, payload }) => {
 			return { ...state, racks: newRacks, loading: false, activeRackId: undefined }
 
 		case actionTypes.ADD_SAMPLE_SUCCESS:
-			console.log('Success')
+			const racksNew = [...state.racks]
+			const rIndex = racksNew.findIndex(rack => rack._id === payload.rackId)
+			const slots = payload.data.map(sample => sample.slot)
+			const newSamples = racksNew[rIndex].samples.concat(payload.data)
+			const updatedRack = {...racksNew[rIndex], samples: newSamples }
+			racksNew[rIndex] = updatedRack
+			Modal.success({
+				title: 'Add sample to rack success',
+				content: (
+					<div>
+						Put your sample(s) into rack{' '}
+						<span style={{ fontWeight: 600 }}>{racksNew[rIndex].title}</span> in slot(s){' '}
+						<span style={{ fontWeight: 600 }}>{slots.join(', ')}</span>
+					</div>
+				)
+			})
+			return { ...state, loading: false, racks: racksNew }
+
+		case actionTypes.RACK_FULL:
+			const fullRack = state.racks.find(rack => rack._id === payload)
+			Modal.error({ title: `Rack ${fullRack.title} is full!` })
 			return { ...state, loading: false }
+
+		case actionTypes.DELETE_SAMPLE_SUCCESS:
+			const racksUpdated = [...state.racks]
+			const rackI = racksUpdated.findIndex(rack => rack._id === payload.rackId)
+			const filtSamples = racksUpdated[rackI].samples.filter(sample => sample.slot.toString() !== payload.slot)
+			const newRack = {...racksUpdated[rackI], samples: filtSamples}
+			racksUpdated[rackI] = newRack 
+			return { ...state, loading: false, racks: racksUpdated }
+
 		default:
 			return state
 	}

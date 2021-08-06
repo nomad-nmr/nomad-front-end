@@ -15,7 +15,7 @@ const RackTabs = props => {
 				tab={<div style={{ fontSize: '1rem', color: fontColor, padding: '0px 5px' }}>{rack.title}</div>}
 				key={rack._id}>
 				<div>
-					<RackTable data={rack.samples} />
+					<RackTable rackData={rack} />
 				</div>
 			</TabPane>
 		)

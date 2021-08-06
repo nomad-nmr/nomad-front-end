@@ -81,5 +81,6 @@ export {
 	closeRack,
 	setActiveRackId,
 	deleteRack,
-	addSample
+	addSample,
+	deleteSample
 } from './batchSubmit'
