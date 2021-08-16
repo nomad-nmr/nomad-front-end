@@ -24,7 +24,7 @@ const AddSampleForm = props => {
 		if (accessLevel !== 'admin' && accessLevel !== 'admin-b') {
 			setTimeout(() => {
 				props.signOutHandler(authToken)
-			}, 500)
+			}, 2500)
 			
 			
 		}
