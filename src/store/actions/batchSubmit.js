@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-instance'
 import errorHandler from './errorHandler'
+import {signOutHandler} from './auth'
 
 export const toggleAddRack = () => ({
 	type: actionTypes.TOGGLE_ADD_RACK
@@ -117,6 +118,7 @@ export const addSample = (data, rackId, token) => {
 			})
 			.then(res => {
 				dispatch(addSampleSuccess(res.data))
+				dispatch(signOutHandler(token))
 			})
 			.catch(err => {
 				if (err.response.status === 406) {
