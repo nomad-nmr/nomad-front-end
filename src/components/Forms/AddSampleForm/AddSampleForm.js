@@ -22,7 +22,11 @@ const AddSampleForm = props => {
 		setFormState([1])
 		props.toggleHandler()
 		if (accessLevel !== 'admin' && accessLevel !== 'admin-b') {
-			props.signOutHandler(authToken)
+			setTimeout(() => {
+				props.signOutHandler(authToken)
+			}, 500)
+			
+			
 		}
 	}
 
