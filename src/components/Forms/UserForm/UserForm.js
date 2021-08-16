@@ -30,8 +30,8 @@ const UserForm = props => {
 
 	//Helper function that check whether the current groups is for batch submit
 	const checkBatchHandler = grpName => {
-		const { isBatch } = props.groupList.find(grp => grp.name === grpName)
-		if (isBatch) {
+		const group = props.groupList.find(grp => grp.name === grpName)
+		if (group.isBatch) {
 			setIsBatchState(true)
 			setFormValues({ ...form.getFieldsValue(), accessLevel: 'user-b' })
 		} else {
