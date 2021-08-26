@@ -85,6 +85,10 @@ const BatchSubmitControls = props => {
     if (!areAllSamplesBooked()) {
       return message.error('You can only cancel samples with "Booked" status')
     }
+    Modal.warning({
+      title: 'Warning',
+      content: <p>Canceled holders will be available to reuse after shor delay of about 2 minutes</p>
+    })
     props.cancelSamplesHandler({ rackId: props.activeRackId, slots: props.selectedSlots }, authToken)
   }
 

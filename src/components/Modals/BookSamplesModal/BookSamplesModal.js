@@ -45,7 +45,7 @@ const BookSamplesModal = props => {
         <Form.Item style={{ textAlign: 'center', margin: 0 }} {...tailLayout}>
           <Space size='large'>
             <Button type='primary' htmlType='submit'>
-              Submit
+              Continue
             </Button>
             <Button onClick={() => props.toggleHandler()}>Cancel</Button>
           </Space>
