@@ -45,8 +45,11 @@ const BatchSubmit = props => {
     if (authToken) {
       fetchParamSets(authToken, { instrumentId: null, searchValue: '', list: true })
     }
+  }, [fetchGrpList, fetchInstrList, authToken, accessLevel, fetchParamSets])
+
+  useEffect(() => {
     fetchRacks()
-  }, [fetchGrpList, fetchInstrList, fetchRacks, authToken, accessLevel, fetchParamSets])
+  }, [fetchRacks, activeTabId])
 
   //Hook setting active tabId when tabs are reloaded
   useEffect(() => {
