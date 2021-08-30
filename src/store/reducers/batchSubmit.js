@@ -16,7 +16,10 @@ const reducer = (state = initialState, { type, payload }) => {
   const updateRacks = () => {
     const updRacks = [...state.racks]
     const indexOfRack = updRacks.findIndex(rack => rack._id === payload.rackId)
-    updRacks[indexOfRack].samples = payload.samples
+    payload.samples.forEach(sample => {
+      const indexOfSample = updRacks[indexOfRack].samples.findIndex(i => sample.slot === i.slot)
+      updRacks[indexOfRack].samples[indexOfSample] = sample
+    })
     return updRacks
   }
 
