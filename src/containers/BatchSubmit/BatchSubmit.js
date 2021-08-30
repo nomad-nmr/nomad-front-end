@@ -47,6 +47,7 @@ const BatchSubmit = props => {
     }
   }, [fetchGrpList, fetchInstrList, authToken, accessLevel, fetchParamSets])
 
+  //Racks data are getting fetch if the tab changes in order to get updated status
   useEffect(() => {
     fetchRacks()
   }, [fetchRacks, activeTabId])

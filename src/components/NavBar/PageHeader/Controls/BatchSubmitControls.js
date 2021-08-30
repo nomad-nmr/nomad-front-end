@@ -29,13 +29,22 @@ const BatchSubmitControls = props => {
     })
   }
   const onDeleteRack = () => {
-    Modal.confirm({
-      title: `Delete Rack ${activeRack.title}`,
-      content: <p>{`Are you sure that you want to delete the rack`}</p>,
-      onOk() {
-        props.deleteRackHandler(props.activeRackId, authToken)
-      }
-    })
+    const rackNotCompleted = activeRack.samples.find(sample => sample.status !== 'Completed')
+    if (rackNotCompleted) {
+      return Modal.confirm({
+        title: `Delete Rack ${activeRack.title}`,
+        content: (
+          <>
+            <p>The rack still contains sample that have not been completed!</p>
+            <p style={{ fontWeight: 600 }}>Are you sure that you want to delete it?</p>
+          </>
+        ),
+        onOk() {
+          props.deleteRackHandler(props.activeRackId, authToken)
+        }
+      })
+    }
+    props.deleteRackHandler(props.activeRackId, authToken)
   }
 
   const addSampleHandler = () => {
