@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Table, Tag, Space, Button, Popconfirm } from 'antd'
 import Animate from 'rc-animate'
 
-import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
 
 import GroupForm from '../../components/Forms/GroupForm/GroupForm'
 
@@ -97,6 +97,13 @@ const Groups = props => {
 					{record.activeUserCount}/{record.totalUserCount}
 				</div>
 			)
+		},
+		{
+			title: 'Batch Submit',
+			align: 'center',
+			render: record => {
+				return record.isBatch && <CheckCircleOutlined style={{ color: '#52c41a' }} />
+			}
 		},
 		{
 			title: 'Actions',

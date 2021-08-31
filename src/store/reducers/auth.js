@@ -69,6 +69,7 @@ const reducer = (state = initialState, action) => {
 				username: null,
 				userId: null,
 				token: null,
+				groupName: null,
 				accessLevel: false,
 				authModalVisible: false
 			}

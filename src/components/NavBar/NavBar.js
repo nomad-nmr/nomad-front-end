@@ -1,5 +1,5 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Tooltip } from 'antd'
 
@@ -10,11 +10,13 @@ import PageHeader from './PageHeader/PageHeader'
 import AuthAvatar from './AuthAvatar/AuthAvatar'
 import MainMenu from './MainMenu/MainMenu'
 
-import { openAuthModal } from '../../store/actions'
+import { openAuthModal, toggleAddSample } from '../../store/actions'
 
 import classes from './NavBar.module.css'
 
 const NavBar = props => {
+	const location = useLocation()
+
 	// Setting up components for left side of NavBar. Components dynamically change with state of admin sider menu.
 	const toggleButton = props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
 	const navLeft =
@@ -30,7 +32,13 @@ const NavBar = props => {
 					src={logoWideLight}
 					alt='NOMAD logo wide'
 					className={classes.Logo}
-					onClick={() => props.history.push('/dashboard')}
+					onClick={() => {
+						if (props.accessLevel) {
+							if (props.accessLevel.includes('admin') || location.pathname !== '/bath-submit') {
+								props.history.push('/dashboard')
+							}
+						}
+					}}
 				/>
 			</div>
 		)
@@ -38,7 +46,13 @@ const NavBar = props => {
 	let menuElement = null
 
 	if (props.accessLevel === 'admin' || props.location.pathname === '/dashboard') {
-		menuElement = <MainMenu openAuthModal={props.openModalHandler} username={props.username} />
+		menuElement = (
+			<MainMenu
+				openAuthModal={props.openModalHandler}
+				username={props.username}
+				accessLevel={props.accessLevel}
+			/>
+		)
 	}
 
 	return (
@@ -47,12 +61,15 @@ const NavBar = props => {
 			<PageHeader />
 			<div className={classes.MainMenu}>
 				{menuElement}
-				<AuthAvatar
-					onClick={props.openModalHandler}
-					username={props.username}
-					accessLevel={props.accessLevel}
-					redirectTo={props.followPath}
-				/>
+				<div className={!menuElement ? classes.Avatar : undefined}>
+					<AuthAvatar
+						onClick={props.openModalHandler}
+						username={props.username}
+						accessLevel={props.accessLevel}
+						redirectTo={props.followPath}
+						toggleAddSample={props.tglAddSample}
+					/>
+				</div>
 			</div>
 		</nav>
 	)
@@ -68,6 +85,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
+		tglAddSample: () => dispatch(toggleAddSample()),
 		openModalHandler: path => dispatch(openAuthModal(path))
 		//openModalHandler takes path as an argument to be used for redirecting after successful login
 		//Redirecting is done by useEffect hook in AuthAvatar which gets rerendered after successful login

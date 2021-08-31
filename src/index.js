@@ -16,6 +16,7 @@ import expHistoryReducer from './store/reducers/expHistory'
 import paramSetsReducer from './store/reducers/paramSets'
 import submitReducer from './store/reducers/submit'
 import messageReducer from './store/reducers/message'
+import batchSubmitReducer from './store/reducers/batchSubmit'
 
 import './index.css'
 import App from './App'
@@ -37,7 +38,8 @@ const rootReducer = combineReducers({
 	expHistory: expHistoryReducer,
 	paramSets: paramSetsReducer,
 	submit: submitReducer,
-	message: messageReducer
+	message: messageReducer,
+	batchSubmit: batchSubmitReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
