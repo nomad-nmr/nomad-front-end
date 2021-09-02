@@ -49,6 +49,7 @@ const BatchSubmit = props => {
 
   //Racks data are getting fetch if the tab changes in order to get updated status
   useEffect(() => {
+    window.scrollTo(0, 0)
     fetchRacks()
   }, [fetchRacks, activeTabId])
 
