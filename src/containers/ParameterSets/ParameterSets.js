@@ -88,12 +88,12 @@ const ParamSets = props => {
     {
       title: 'Default Parameters',
       dataIndex: 'defaultParams',
-      render: record => renderParams(record)
+      render: record => record && renderParams(record)
     },
     {
       title: 'Custom Parameters',
       dataIndex: 'customParams',
-      render: record => renderParams(record)
+      render: record => record && renderParams(record)
     },
     {
       title: 'Usage Count',

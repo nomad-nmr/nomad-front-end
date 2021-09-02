@@ -19,10 +19,10 @@ import classes from '../Form.module.css'
 
 const layout = {
   labelCol: {
-    span: 4
+    span: 5
   },
   wrapperCol: {
-    span: 20
+    span: 19
   }
 }
 
@@ -93,13 +93,19 @@ const ParamSetForm = props => {
             <Row>{availableOnGroup}</Row>
           </Checkbox.Group>
         </Form.Item>
-        <Form.Item name='hidden' label='Hidden' valuePropName='checked'>
-          <Space>
-            <Checkbox />
-            <Tooltip title='Parameter set available only for access level admin'>
-              <QuestionCircleOutlined className={classes.Hint} />
-            </Tooltip>
-          </Space>
+        <Form.Item
+          name='hidden'
+          label={
+            <div>
+              <Tooltip title='Parameter set available only for access level admin'>
+                <QuestionCircleOutlined className={classes.Hint} />
+              </Tooltip>
+              <span>Hidden</span>
+            </div>
+          }
+          valuePropName='checked'
+        >
+          <Checkbox />
         </Form.Item>
 
         <Divider>
@@ -169,7 +175,7 @@ const ParamSetForm = props => {
                   }
                 ]}
               >
-                <InputNumber min={1} placeholder='Number of points' style={{ width: 160 }} />
+                <InputNumber min={1} placeholder='Number of points' style={{ width: 140 }} />
               </Form.Item>
               <Tooltip title='Number of point in indirect dimension (1 for 1D experiments)'>
                 <QuestionCircleOutlined style={{ color: '#1890ff', marginLeft: 5 }} />
