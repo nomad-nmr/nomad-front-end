@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import { Table, Tag, Space, Button, Popconfirm } from 'antd'
+import { Table, Tag, Space, Button, Popconfirm, Tooltip, Upload, Modal } from 'antd'
 import Animate from 'rc-animate'
 
 import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
@@ -13,7 +13,8 @@ import {
   addGroup,
   updateGroup,
   toggleGroupForm,
-  toggleActiveGroup
+  toggleActiveGroup,
+  addUsers
 } from '../../store/actions/index'
 
 import './Groups.css'
@@ -31,6 +32,33 @@ const Groups = props => {
     fetchGrps(authToken, showInactive)
     getParamSetsList(authToken, { instrumentId: null, searchValue: '', list: true })
   }, [fetchGrps, authToken, showInactive, getParamSetsList])
+
+  const addUsersfromCSV = (file, record) => {
+    const reader = new FileReader()
+    reader.onload = e => {
+      const resultArr = e.target.result.split('\n').map(row => row.substr(0, row.length - 1))
+      let usernamesCount = 0
+      resultArr.forEach(i => {
+        if (i.length > 0) {
+          usernamesCount++
+        }
+      })
+      Modal.confirm({
+        title: `Add users from CSV file to group ${record.groupName}`,
+        content: (
+          <div style={{ marginTop: 10 }}>
+            <span>CSV file contains {usernamesCount} usernames</span>
+            <p style={{ fontWeight: 600, marginTop: 5 }}>Do you want to proceed?</p>
+          </div>
+        ),
+        onOk() {
+          props.addUsrs(resultArr, record._id, authToken, showInactive)
+        }
+      })
+    }
+    reader.readAsText(file)
+    return false
+  }
 
   const renderActions = record => {
     let popConfirmMsg = (
@@ -76,6 +104,17 @@ const Groups = props => {
         >
           Edit
         </Button>
+        <Tooltip title='Add users from csv file' placement='topLeft'>
+          <Upload
+            accept='.csv'
+            showUploadList={false}
+            beforeUpload={file => addUsersfromCSV(file, record)}
+          >
+            <Button size='small' type='link'>
+              Add users
+            </Button>
+          </Upload>
+        </Tooltip>
       </Space>
     )
   }
@@ -167,7 +206,9 @@ const mapDispatchToProps = dispatch => {
     addGrp: (data, token) => dispatch(addGroup(data, token)),
     updateGrp: (data, token) => dispatch(updateGroup(data, token)),
     toggleGrpForm: editing => dispatch(toggleGroupForm(editing)),
-    toggleActive: (groupId, token) => dispatch(toggleActiveGroup(groupId, token))
+    toggleActive: (groupId, token) => dispatch(toggleActiveGroup(groupId, token)),
+    addUsrs: (users, groupId, token, showInactive) =>
+      dispatch(addUsers(users, groupId, token, showInactive))
   }
 }
 

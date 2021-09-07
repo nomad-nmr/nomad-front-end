@@ -54,7 +54,8 @@ export {
   toggleGroupForm,
   toggleShowInactiveGroups,
   toggleActiveGroup,
-  fetchGroupList
+  fetchGroupList,
+  addUsers
 } from './groups'
 
 export { fetchHistory, setExpHistoryDate } from './expHistory'
