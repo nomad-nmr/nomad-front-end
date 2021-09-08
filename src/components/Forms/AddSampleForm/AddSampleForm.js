@@ -101,9 +101,6 @@ const AddSampleForm = props => {
         <Col span={10}>
           <TitleInput nameKey={i} />
         </Col>
-<<<<<<< HEAD
-
-=======
         <Col span={2}>
           <Form.Item
             name={[i, 'tubeId']}
@@ -120,14 +117,17 @@ const AddSampleForm = props => {
             <Input />
           </Form.Item>
         </Col>
->>>>>>> exp-list
         <Col span={3}>
           <SolventSelect nameKey={i} />
         </Col>
 
         <Col span={1} offset={1}>
           <Space>
-            <button className={classes.CircleButton} value={i} onClick={event => addExpHandler(event)}>
+            <button
+              className={classes.CircleButton}
+              value={i}
+              onClick={event => addExpHandler(event)}
+            >
               +
             </button>
             <button
@@ -158,12 +158,8 @@ const AddSampleForm = props => {
       </div>
 
       <Row gutter={16} className={classes.Header}>
-<<<<<<< HEAD
-        <Col span={10}>Title</Col>
-=======
         <Col span={8}>Title</Col>
         <Col span={2}>Tube ID</Col>
->>>>>>> exp-list
         <Col span={3}>Solvent</Col>
 
         <Col span={1} offset={1}>

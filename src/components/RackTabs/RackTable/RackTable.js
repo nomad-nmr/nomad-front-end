@@ -130,14 +130,11 @@ was rejected for the following reason: ${form.getFieldValue('reason')}
       align: 'center'
     },
     {
-<<<<<<< HEAD
-=======
       title: 'Sample ID',
       dataIndex: 'tubeId',
       align: 'center'
     },
     {
->>>>>>> exp-list
       title: 'Exp Count',
       dataIndex: 'exps',
       align: 'center',
