@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Row, Col, Form, Space, Button, Select, Input } from 'antd'
+import { Row, Col, Form, Space, Button, Select } from 'antd'
 
 import SolventSelect from '../BookExperimentsForm/SolventSelect/SolventSelect'
 import TitleInput from '../BookExperimentsForm/TitleInput/TitleInput'
@@ -98,36 +98,17 @@ const AddSampleForm = props => {
 
     return (
       <Row gutter={16} key={i}>
-        <Col span={8}>
+        <Col span={10}>
           <TitleInput nameKey={i} />
         </Col>
-        <Col span={2}>
-          <Form.Item
-            name={[i, 'idCode']}
-            rules={[
-              {
-                required: true,
-                whitespace: true,
 
-                message: 'Sample ID is required'
-              },
-              { min: 4, message: 'Title must have minimum 4 characters' }
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
         <Col span={3}>
           <SolventSelect nameKey={i} />
         </Col>
 
         <Col span={1} offset={1}>
           <Space>
-            <button
-              className={classes.CircleButton}
-              value={i}
-              onClick={event => addExpHandler(event)}
-            >
+            <button className={classes.CircleButton} value={i} onClick={event => addExpHandler(event)}>
               +
             </button>
             <button
@@ -158,8 +139,7 @@ const AddSampleForm = props => {
       </div>
 
       <Row gutter={16} className={classes.Header}>
-        <Col span={8}>Title</Col>
-        <Col span={2}>Sample ID</Col>
+        <Col span={10}>Title</Col>
         <Col span={3}>Solvent</Col>
 
         <Col span={1} offset={1}>
