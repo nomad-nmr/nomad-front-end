@@ -131,7 +131,7 @@ was rejected for the following reason: ${form.getFieldValue('reason')}
     },
     {
       title: 'Sample ID',
-      dataIndex: 'idCode',
+      dataIndex: 'tubeId',
       align: 'center'
     },
     {
