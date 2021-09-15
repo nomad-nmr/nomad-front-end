@@ -191,7 +191,6 @@ const Users = props => {
         placement='right'
         onClose={() => {
           props.toggleUsrDrawer(false)
-          formRef.current.resetFields()
         }}
       >
         <UserForm

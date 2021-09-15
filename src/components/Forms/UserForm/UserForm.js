@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import { Form, Input, Button, Select, Checkbox } from 'antd'
 
 import classes from '../Form.module.css'
@@ -25,12 +25,15 @@ const UserForm = props => {
   const [form] = Form.useForm()
 
   const [isBatchState, setIsBatchState] = useState(false)
-  const [formValues, setFormValues] = useState({ accessLevel: 'user', isActive: true, groupName: 'default' })
+  const [formValues, setFormValues] = useState({
+    accessLevel: 'user',
+    isActive: true
+  })
   const [currentGroup, setCurrentGroup] = useState(undefined)
 
   //Helper function that check whether the current groups is for batch submit
-  const checkBatchHandler = grpName => {
-    const group = props.groupList.find(grp => grp.name === grpName)
+  const checkBatchHandler = grpId => {
+    const group = props.groupList.find(grp => grp.id === grpId)
     const isBatch = group ? group.isBatch : false
     if (isBatch) {
       setIsBatchState(true)
@@ -41,11 +44,6 @@ const UserForm = props => {
     }
   }
 
-  // STO needs to be used on form reference that is also defined with STO 200ms
-  setTimeout(() => {
-    setCurrentGroup(props.formReference.current.getFieldValue('groupName'))
-  }, 220)
-
   useEffect(() => {
     if (currentGroup) {
       checkBatchHandler(currentGroup)
@@ -54,14 +52,14 @@ const UserForm = props => {
     // eslint-disable-next-line
   }, [currentGroup])
 
+  //Enables to control from through setFormValues.Don't move or remove!!!
   useEffect(() => {
     form.resetFields()
   })
 
   const onReset = () => {
-    form.resetFields()
     props.toggleDrawer()
-    setFormValues({ accessLevel: 'user', isActive: true, groupName: 'default' })
+    setFormValues({ accessLevel: 'user', isActive: true })
   }
 
   const onFinish = values => {
@@ -71,6 +69,7 @@ const UserForm = props => {
     } else {
       props.addUsrHandler(values, props.authToken)
     }
+    setFormValues({ accessLevel: 'user', isActive: true })
   }
 
   const groupSelectOptions = props.groupList.map(grp => {
@@ -82,26 +81,32 @@ const UserForm = props => {
   })
 
   let accessLevelOptions = (
-    <>
+    <Fragment>
       <Option value='admin'>admin</Option>
       <Option value='admin-b'>admin-b</Option>
       <Option value='user'>user</Option>
       <Option value='user-a'>user-a</Option>
-    </>
+    </Fragment>
   )
 
   if (isBatchState) {
     accessLevelOptions = (
-      <>
+      <Fragment>
         <Option value='user-b'>user-b</Option>
         <Option value='admin-b'>admin-b</Option>
-      </>
+      </Fragment>
     )
   }
 
   return (
     <div className={classes.formInDrawer}>
-      <Form {...layout} form={form} ref={props.formReference} initialValues={formValues} onFinish={onFinish}>
+      <Form
+        {...layout}
+        form={form}
+        ref={props.formReference}
+        initialValues={formValues}
+        onFinish={onFinish}
+      >
         <Form.Item
           name='username'
           label='Username'
@@ -126,8 +131,8 @@ const UserForm = props => {
         >
           <Input />
         </Form.Item>
-        <Form.Item name='groupId' label='Group'>
-          <Select style={{ width: '60%' }} onChange={value => checkBatchHandler(value)}>
+        <Form.Item name='groupId' label='Group' rules={[{ required: true }]}>
+          <Select style={{ width: '60%' }} onChange={value => setCurrentGroup(value)}>
             {groupSelectOptions}
           </Select>
         </Form.Item>
