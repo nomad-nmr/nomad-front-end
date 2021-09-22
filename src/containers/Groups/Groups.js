@@ -23,7 +23,7 @@ import classes from './Groups.module.css'
 const { CheckableTag } = Tag
 
 const Groups = props => {
-  const { fetchGrps, authToken, showInactive, getParamSetsList } = props
+  const { fetchGrps, authToken, showInactive, getParamSetsList, showForm } = props
 
   const formRef = useRef({})
 
@@ -32,6 +32,12 @@ const Groups = props => {
     fetchGrps(authToken, showInactive)
     getParamSetsList(authToken, { instrumentId: null, searchValue: '', list: true })
   }, [fetchGrps, authToken, showInactive, getParamSetsList])
+
+  useEffect(() => {
+    if (showForm) {
+      window.scrollTo(0, 0)
+    }
+  }, [showForm])
 
   const addUsersfromCSV = (file, record) => {
     const reader = new FileReader()
@@ -175,7 +181,7 @@ const Groups = props => {
 
   return (
     <div style={{ margin: '30px 50px 70px 50px' }}>
-      <Animate transitionName='fade-form'>{props.showForm && form}</Animate>
+      <Animate transitionName='fade-form'>{showForm && form}</Animate>
       <Table
         size='small'
         dataSource={props.tableData}
