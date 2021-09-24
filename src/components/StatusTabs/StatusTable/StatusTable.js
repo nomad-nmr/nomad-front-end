@@ -1,10 +1,11 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 // eslint-disable-next-line
 import momentDurationFormatSetup from 'moment-duration-format'
 
 import { connect } from 'react-redux'
-import { Table, Badge, Tag } from 'antd'
+import { Table, Badge, Tag, Button } from 'antd'
 import {
   CheckCircleOutlined,
   SyncOutlined,
@@ -108,7 +109,9 @@ const expandedRowRender = record => {
   )
 }
 
-const statusTable = props => {
+const StatusTable = props => {
+  const history = useHistory()
+
   const columns = [
     {
       title: 'Holder',
@@ -121,7 +124,15 @@ const statusTable = props => {
       title: 'User',
       dataIndex: 'username',
       key: 'user',
-      align: 'center'
+      align: 'center',
+      render: text =>
+        props.accessLvl === 'admin' ? (
+          <Button type='link' onClick={() => history.push(`/admin/users?username=${text}`)}>
+            {text}
+          </Button>
+        ) : (
+          <span>{text}</span>
+        )
     },
     {
       title: 'Group',
@@ -226,4 +237,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(statusTable)
+export default connect(mapStateToProps, mapDispatchToProps)(StatusTable)
