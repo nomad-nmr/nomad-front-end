@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button, Table, Drawer, Tag, Space, Pagination } from 'antd'
 
@@ -12,12 +13,15 @@ import {
   fetchGroupList
 } from '../../store/actions/index'
 
+import { MailOutlined } from '@ant-design/icons'
+
 const { CheckableTag } = Tag
 
 const Users = props => {
   const { fetchUsers, fetchGrpList, authToken, showInactive, grpList, searchUserValue } = props
 
   const formRef = useRef({})
+  const history = useHistory()
 
   //Local state for table and its pagination
   const [groupFilters, setGroupFilters] = useState([])
@@ -142,7 +146,12 @@ const Users = props => {
           >
             {record.isActive ? 'Active' : 'Inactive'}
           </CheckableTag>
-
+          <MailOutlined
+            style={{ color: '#1890ff' }}
+            onClick={() =>
+              history.push(`/admin/message?userId=${record._id}&username=${record.username}`)
+            }
+          />
           <Button
             size='small'
             type='link'

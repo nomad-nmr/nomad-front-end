@@ -70,7 +70,13 @@ export {
   deleteParamSet
 } from './paramSets'
 
-export { bookHolders, cancelHolder, cancelBookedHolders, bookExperiments } from './submit'
+export {
+  bookHolders,
+  cancelHolder,
+  cancelBookedHolders,
+  bookExperiments,
+  clearBookedHolders
+} from './submit'
 
 export { sendMessage } from './message'
 
