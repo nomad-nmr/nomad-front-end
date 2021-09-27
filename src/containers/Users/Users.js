@@ -148,7 +148,9 @@ const Users = props => {
           </CheckableTag>
           <MailOutlined
             style={{ color: '#1890ff' }}
-            onClick={() => history.push(`/admin/message?userId=${record._id}`)}
+            onClick={() =>
+              history.push(`/admin/message?userId=${record._id}&username=${record.username}`)
+            }
           />
           <Button
             size='small'

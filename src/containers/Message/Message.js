@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { Form, Button, Space, Tag, Divider, Input, Modal, message, Spin } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 
@@ -13,6 +14,7 @@ const Message = props => {
   const [formMessage] = Form.useForm()
 
   const formRef = useRef({})
+  const location = useLocation()
 
   const { fetchGrpList, authToken } = props
 
@@ -22,11 +24,14 @@ const Message = props => {
     fetchGrpList(authToken)
   }, [fetchGrpList, authToken])
 
-  // useEffect(() => {
-  //   const usernameQuery = new URLSearchParams(location.search).get('username')
-
-  //   }
-  // }, [input])
+  // Hook handles redirect from users table
+  useEffect(() => {
+    const query = new URLSearchParams(location.search).entries()
+    const { userId, username } = Object.fromEntries(query)
+    if (userId) {
+      setRecipients([{ name: username, type: 'user', id: userId }])
+    }
+  }, [location])
 
   const infoModal = () =>
     Modal.info({
