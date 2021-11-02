@@ -174,7 +174,7 @@ const Groups = props => {
   )
 
   return (
-    <div style={{ margin: '30px 50px 70px 50px' }}>
+    <div style={{ margin: '30px 50px 20px 50px' }}>
       <Animate transitionName='fade-form'>{props.showForm && form}</Animate>
       <Table
         size='small'

@@ -140,7 +140,7 @@ const ParamSets = props => {
   ]
 
   return (
-    <div style={{ margin: '30px 20px 70px 20px' }}>
+    <div style={{ margin: '30px 20px 20px 20px' }}>
       <Table
         size='small'
         columns={columns}

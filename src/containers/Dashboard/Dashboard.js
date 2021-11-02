@@ -78,7 +78,7 @@ const Dashboard = props => {
 					<InfoCards cardsData={props.statusSummary} clicked={tabChangeHandler} />
 				) : null}
 			</Animate>
-			<div style={{ marginBottom: '120px' }}>
+			<div>
 				<StatusTabs
 					activeTab={activeTab}
 					summaryData={props.statusSummary}

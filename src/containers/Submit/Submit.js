@@ -101,7 +101,7 @@ const Submit = props => {
   }
 
   return (
-    <div style={{ marginBottom: 70 }}>
+    <div>
       <InfoCards cardsData={props.statusSummary} clicked={onCardClick} />
       <BookHoldersForm
         instruments={availableInstrList}
