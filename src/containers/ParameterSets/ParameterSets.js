@@ -149,7 +149,7 @@ const ParamSets = props => {
         loading={props.loading}
       />
       <Drawer
-        width='600'
+        width='700'
         visible={props.showForm}
         placement='right'
         onClose={() => {
