@@ -19,10 +19,10 @@ import classes from '../Form.module.css'
 
 const layout = {
   labelCol: {
-    span: 5
+    span: 6
   },
   wrapperCol: {
-    span: 19
+    span: 18
   }
 }
 
@@ -95,14 +95,8 @@ const ParamSetForm = props => {
         </Form.Item>
         <Form.Item
           name='hidden'
-          label={
-            <div>
-              <Tooltip title='Parameter set available only for access level admin'>
-                <QuestionCircleOutlined className={classes.Hint} />
-              </Tooltip>
-              <span>Hidden</span>
-            </div>
-          }
+          label='Hidden'
+          tooltip='Parameter set available only for access level admin'
           valuePropName='checked'
         >
           <Checkbox />
@@ -162,35 +156,30 @@ const ParamSetForm = props => {
         </Row>
 
         <Row style={{ marginBottom: 25 }}>
-          <Col span={12} style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Form.Item
-                name={['defaultParams', 'td1']}
-                label='td1'
-                style={{ margin: '0 5px' }}
-                rules={[
-                  {
-                    type: 'integer',
-                    message: 'td1 has to be integer'
-                  }
-                ]}
-              >
-                <InputNumber min={1} placeholder='Number of points' style={{ width: 140 }} />
-              </Form.Item>
-              <Tooltip title='Number of point in indirect dimension (1 for 1D experiments)'>
-                <QuestionCircleOutlined style={{ color: '#1890ff', marginLeft: 5 }} />
-              </Tooltip>
-            </div>
+          <Col span={12}>
+            <Form.Item
+              name={['defaultParams', 'td1']}
+              label='td1'
+              tooltip='Number of point in indirect dimension (1 for 1D experiments)'
+              rules={[
+                {
+                  type: 'integer',
+                  message: 'td1 has to be integer'
+                }
+              ]}
+            >
+              <InputNumber min={1} placeholder='Number of points' style={{ width: 140 }} />
+            </Form.Item>
           </Col>
           <Col span={12} style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Form.Item name={['defaultParams', 'expt']} label={<span>expt</span>} style={{ margin: 0 }}>
-                <TimePicker showNow={false} style={{ marginLeft: 10 }} />
-              </Form.Item>
-              <Tooltip title='Default experimental time in HH,mm,ss format'>
-                <QuestionCircleOutlined style={{ color: '#1890ff', marginLeft: 5 }} />
-              </Tooltip>
-            </div>
+            <Form.Item
+              name={['defaultParams', 'expt']}
+              label='expt'
+              tooltip='Default experimental time in HH,mm,ss format'
+              style={{ margin: 0 }}
+            >
+              <TimePicker showNow={false} style={{ marginLeft: 10 }} />
+            </Form.Item>
           </Col>
         </Row>
         <Divider>
