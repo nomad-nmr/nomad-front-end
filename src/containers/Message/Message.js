@@ -21,6 +21,7 @@ const Message = props => {
   const [recipients, setRecipients] = useState([])
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     fetchGrpList(authToken)
   }, [fetchGrpList, authToken])
 
@@ -39,9 +40,7 @@ const Message = props => {
       content: (
         <div>
           <p>Add recipient with no group selected to address all active users</p>
-          <p>
-            Add recipient with no user selected to address all active users within selected group
-          </p>
+          <p>Add recipient with no user selected to address all active users within selected group</p>
         </div>
       )
     })
@@ -86,8 +85,7 @@ const Message = props => {
   }
 
   const recipientsElement = recipients.map((recipient, index) => {
-    const color =
-      recipient.type === 'group' ? 'cyan' : recipient.type === 'user' ? 'green' : 'orange'
+    const color = recipient.type === 'group' ? 'cyan' : recipient.type === 'user' ? 'green' : 'orange'
     return (
       <Tag
         key={index}
@@ -143,11 +141,7 @@ const Message = props => {
           <Divider />
         </div>
       </Form>
-      <Form
-        form={formMessage}
-        className={classes.Centered}
-        onFinish={values => formFinishHandler(values)}
-      >
+      <Form form={formMessage} className={classes.Centered} onFinish={values => formFinishHandler(values)}>
         <Form.Item name='subject'>
           <Input placeholder='Subject' />
         </Form.Item>
@@ -190,8 +184,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchGrpList: token => dispatch(fetchGroupList(token)),
-    fetchUsrList: (token, groupId, showInactive) =>
-      dispatch(fetchUserList(token, groupId, showInactive)),
+    fetchUsrList: (token, groupId, showInactive) => dispatch(fetchUserList(token, groupId, showInactive)),
     sendMsg: (token, data) => dispatch(sendMessage(token, data))
   }
 }
