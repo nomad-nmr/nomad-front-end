@@ -193,7 +193,7 @@ const BookExperimentsForm = props => {
 
         const { dayAllowance, nightAllowance, maxNight } = statSumInst
         const nightExpQueue = statSumInst.status.summary.nightExpt
-        console.log(totalExptState[sampleKey], dayAllowance * 60, nightAllowance * 60)
+
         if (totalExptState[sampleKey] < dayAllowance * 60) {
           if (accumulator[instrId]) {
             accumulator[instrId] += totalExptState[sampleKey]
@@ -219,7 +219,7 @@ const BookExperimentsForm = props => {
       for (let instrId in accumulator) {
         const { dayAllowance, nightAllowance } = props.statusSum.find(i => i._id === instrId)
 
-        if (accumulator[instrId] > nightAllowance) {
+        if (accumulator[instrId] > nightAllowance * 60) {
           return Modal.error(expRejectError)
         }
 
