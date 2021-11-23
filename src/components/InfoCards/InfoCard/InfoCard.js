@@ -42,7 +42,7 @@ const InfoCard = props => {
         </Row>
       }
     >
-      <div style={{ marginBottom: 15, textAlign: 'center' }}>
+      <div style={{ marginBottom: 10, textAlign: 'center' }}>
         <div>
           <strong>Busy until: </strong>
           {busyUntil === 'No Jobs' ? (
@@ -53,7 +53,7 @@ const InfoCard = props => {
             busyUntil
           )}
         </div>
-        <Row justify='center'>
+        <Row justify='center' align='middle'>
           <Col span={11} offset={2}>
             <strong>Expt Queue</strong>
           </Col>
@@ -61,14 +61,14 @@ const InfoCard = props => {
             <strong>Allowance</strong>
           </Col>
         </Row>
-        <Row justify='center'>
+        <Row justify='center' align='middle' style={{ marginTop: 2 }}>
           <Col span={2}>
             <img src={dayIcon} style={{ height: '18px' }} alt='day icon' />
           </Col>
           <Col span={11}>{dayExpt}</Col>
           <Col span={11}>{moment.duration(dayAllowance, 'm').format('HH:mm', { trim: false })}</Col>
         </Row>
-        <Row justify='center'>
+        <Row justify='center' align='middle' style={{ marginTop: 2 }}>
           <Col span={2}>
             <img src={nightIcon} style={{ height: '18px' }} alt='night icon' />
           </Col>
