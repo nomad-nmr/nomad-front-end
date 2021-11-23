@@ -194,15 +194,15 @@ const BookExperimentsForm = props => {
         const { dayAllowance, nightAllowance, maxNight } = statSumInst
         const nightExpQueue = statSumInst.status.summary.nightExpt
 
-        if (totalExptState[sampleKey] < dayAllowance * 60) {
+        if (totalExptState[sampleKey] < +dayAllowance * 60) {
           if (accumulator[instrId]) {
             accumulator[instrId] += totalExptState[sampleKey]
           } else {
             accumulator[instrId] = totalExptState[sampleKey]
           }
         } else if (
-          totalExptState[sampleKey] > dayAllowance * 60 &&
-          totalExptState[sampleKey] < nightAllowance * 60
+          totalExptState[sampleKey] > +dayAllowance * 60 &&
+          totalExptState[sampleKey] < +nightAllowance * 60
         ) {
           if (moment.duration(nightExpQueue, 'h').asSeconds() + totalExptState[sampleKey] > maxNight * 3600) {
             return Modal.error(maxNightRejectError)
