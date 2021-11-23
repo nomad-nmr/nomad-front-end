@@ -207,10 +207,7 @@ const BookExperimentsForm = props => {
           if (moment.duration(nightExpQueue, 'h').asSeconds() + totalExptState[sampleKey] > maxNight * 3600) {
             return Modal.error(maxNightRejectError)
           }
-          console.log(
-            moment.duration(nightExpQueue, 'h').asSeconds() + totalExptState[sampleKey],
-            maxNight * 3600
-          )
+
           values[sampleKey].night = true
           nightExp = true
         } else {
@@ -226,7 +223,7 @@ const BookExperimentsForm = props => {
           return Modal.error(expRejectError)
         }
 
-        if (accumulator[instrId] > dayAllowance * 60 && accumulator[instrId] < nightAllowance * 60) {
+        if (accumulator[instrId] > +dayAllowance * 60 && accumulator[instrId] < +nightAllowance * 60) {
           nightInstrId.push(instrId)
         }
       }
