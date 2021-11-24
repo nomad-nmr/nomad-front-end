@@ -109,12 +109,12 @@ const DrawerTable = props => {
       align: 'center',
       width: 100,
       render: (text, record) => {
-        // console.log(moment.duration(record.time))
+        //adding overhead time for expNo 10
         const totalExptMoment =
           record.expNo === '10'
             ? moment.duration(record.time).add(record.overheadTime, 's')
             : moment.duration(record.time)
-        // console.log(totalExpt.format('HH:mm:ss', { trim: false }))
+
         const timeRemaining =
           totalExptMoment && record.updatedAt
             ? totalExptMoment.subtract(moment().diff(record.updatedAt)).format('HH:mm:ss', { trim: false })

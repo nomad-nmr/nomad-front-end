@@ -97,7 +97,6 @@ const InstrumentsForm = props => {
               name='maxNight'
               label='Max Night [h]'
               tooltip='Maximum length of overnight queue'
-              rules={[{ type: 'integer', message: 'Night allowance has to be an integer' }]}
             >
               <InputNumber min={0} />
             </Form.Item>

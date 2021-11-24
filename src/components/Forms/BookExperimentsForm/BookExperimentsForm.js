@@ -174,6 +174,11 @@ const BookExperimentsForm = props => {
     title: 'Maximum allowance exceeded',
     content: 'Total experimental time for at least one instrument has exceeded maximum allowance'
   }
+  const maxNightRejectError = {
+    title: 'Total length of night experiments exceeded',
+    content: `The queue of night experiments exceeds maximum length and your experiment would not get executed. 
+    Please, try to submit your experiment to a different instrument`
+  }
 
   const { accessLevel } = props
 
@@ -184,13 +189,25 @@ const BookExperimentsForm = props => {
       let nightExp = undefined
       for (let sampleKey in totalExptState) {
         const instrId = sampleKey.split('-')[0]
-        if (totalExptState[sampleKey] < 1200) {
+        const statSumInst = props.statusSum.find(i => i._id === instrId)
+
+        const { dayAllowance, nightAllowance, maxNight } = statSumInst
+        const nightExpQueue = statSumInst.status.summary.nightExpt
+
+        if (totalExptState[sampleKey] < dayAllowance * 60) {
           if (accumulator[instrId]) {
             accumulator[instrId] += totalExptState[sampleKey]
           } else {
             accumulator[instrId] = totalExptState[sampleKey]
           }
-        } else if (totalExptState[sampleKey] > 1200 && totalExptState[sampleKey] < 7200) {
+        } else if (
+          totalExptState[sampleKey] > dayAllowance * 60 &&
+          totalExptState[sampleKey] < nightAllowance * 60
+        ) {
+          if (moment.duration(nightExpQueue, 'h').asSeconds() + totalExptState[sampleKey] > maxNight * 3600) {
+            return Modal.error(maxNightRejectError)
+          }
+
           values[sampleKey].night = true
           nightExp = true
         } else {
@@ -200,11 +217,13 @@ const BookExperimentsForm = props => {
 
       const nightInstrId = []
       for (let instrId in accumulator) {
-        if (accumulator[instrId] > 7200) {
+        const { dayAllowance, nightAllowance } = props.statusSum.find(i => i._id === instrId)
+
+        if (accumulator[instrId] > nightAllowance * 60) {
           return Modal.error(expRejectError)
         }
 
-        if (accumulator[instrId] > 1200 && accumulator[instrId] < 7200) {
+        if (accumulator[instrId] > dayAllowance * 60 && accumulator[instrId] < nightAllowance * 60) {
           nightInstrId.push(instrId)
         }
       }
@@ -253,11 +272,13 @@ const BookExperimentsForm = props => {
     ))
 
     const key = sample.key
+    const instrId = key.split('-')[0]
+    const { dayAllowance, nightAllowance } = props.statusSum.find(i => i._id === instrId)
 
     const totalExptClass = [classes.TotalExptBasic]
-    if (totalExptState[key] < 1200) {
+    if (totalExptState[key] < dayAllowance * 60) {
       totalExptClass.push(classes.TotalExptOk)
-    } else if (totalExptState[key] > 7200) {
+    } else if (totalExptState[key] > nightAllowance * 60) {
       totalExptClass.push(classes.TotalExptDanger)
     } else {
       totalExptClass.push(classes.TotalExptWarning)
