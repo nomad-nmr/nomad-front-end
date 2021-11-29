@@ -98,3 +98,26 @@ export const bookExperiments = (token, formData, userId) => {
 export const clearBookedHolders = () => ({
   type: actionTypes.CLEAR_BOOKED_HOLDERS
 })
+
+export const fetchAlloawanceSucces = payload => ({
+  type: actionTypes.FETCH_ALLOWANCE_SUCCESS,
+  payload
+})
+
+export const fetchAllowance = (token, instrIds) => {
+  return dispatch => {
+    axios
+      .get('/submit/allowance', {
+        params: { instrIds: Array.from(instrIds) },
+        headers: { Authorization: 'Bearer ' + token }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(fetchAlloawanceSucces(res.data))
+        }
+      })
+      .catch(err => {
+        dispatch(errorHandler(err))
+      })
+  }
+}

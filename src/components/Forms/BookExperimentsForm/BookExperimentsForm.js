@@ -32,11 +32,15 @@ const BookExperimentsForm = props => {
   const [exptState, setExptState] = useState({})
   const [totalExptState, setTotalExptState] = useState({})
 
+  const { inputData, allowanceData, fetchAllowance, token, accessLevel } = props
+
   //Hook to create state for dynamic ExpNo part of form from inputData
   //InputData gets updated every time new holder is booked
   useEffect(() => {
     const newFormState = []
-    props.inputData.forEach(i => {
+    const instrIds = new Set()
+    inputData.forEach(i => {
+      instrIds.add(i.instId)
       const found = formState.find(entry => entry.key === i.key)
       if (found) {
         newFormState.push(found)
@@ -48,9 +52,13 @@ const BookExperimentsForm = props => {
       }
     })
     setFormState(newFormState)
+    if (instrIds.size !== 0) {
+      fetchAllowance(token, Array.from(instrIds))
+    }
+
     // formState can't be dependency as it gets updated in the hook. That would trigger loop.
     // eslint-disable-next-line
-  }, [props.inputData])
+  }, [inputData])
 
   const addExpHandler = e => {
     e.preventDefault()
@@ -180,19 +188,18 @@ const BookExperimentsForm = props => {
     Please, try to submit your experiment to a different instrument`
   }
 
-  const { accessLevel } = props
-
-  const onFinishHandler = values => {
+  const onFinishHandler = async values => {
     if (accessLevel === 'user') {
       //accumulator is an object total expt of day classified experiments for each instrument in the form
       const accumulator = {}
       let nightExp = undefined
+
       for (let sampleKey in totalExptState) {
         const instrId = sampleKey.split('-')[0]
-        const statSumInst = props.statusSum.find(i => i._id === instrId)
 
-        const { dayAllowance, nightAllowance, maxNight } = statSumInst
-        const nightExpQueue = statSumInst.status.summary.nightExpt
+        const { dayAllowance, nightAllowance, maxNight, nightExpt } = allowanceData.find(
+          i => i.instrId === instrId
+        )
 
         if (totalExptState[sampleKey] < dayAllowance * 60) {
           if (accumulator[instrId]) {
@@ -204,7 +211,7 @@ const BookExperimentsForm = props => {
           totalExptState[sampleKey] > dayAllowance * 60 &&
           totalExptState[sampleKey] < nightAllowance * 60
         ) {
-          if (moment.duration(nightExpQueue, 'h').asSeconds() + totalExptState[sampleKey] > maxNight * 3600) {
+          if (moment.duration(nightExpt, 'hh:mm').asSeconds() + totalExptState[sampleKey] > maxNight * 3600) {
             return Modal.error(maxNightRejectError)
           }
 
@@ -217,7 +224,7 @@ const BookExperimentsForm = props => {
 
       const nightInstrId = []
       for (let instrId in accumulator) {
-        const { dayAllowance, nightAllowance } = props.statusSum.find(i => i._id === instrId)
+        const { dayAllowance, nightAllowance } = allowanceData.find(i => i.instrId === instrId)
 
         if (accumulator[instrId] > nightAllowance * 60) {
           return Modal.error(expRejectError)
@@ -240,13 +247,13 @@ const BookExperimentsForm = props => {
                 values[sampleKey].night = true
               }
             }
-            props.bookExpsHandler(props.token, values, props.submittingUserId)
+            props.bookExpsHandler(token, values, props.submittingUserId)
             history.push('/')
           }
         })
       }
     }
-    props.bookExpsHandler(props.token, values, props.submittingUserId)
+    props.bookExpsHandler(token, values, props.submittingUserId)
     history.push('/')
   }
 
@@ -271,17 +278,19 @@ const BookExperimentsForm = props => {
       </Option>
     ))
 
+    //canging style of totalExpt time according to allowance state
+    const totalExptClass = [classes.TotalExptBasic]
     const key = sample.key
     const instrId = key.split('-')[0]
-    const { dayAllowance, nightAllowance } = props.statusSum.find(i => i._id === instrId)
-
-    const totalExptClass = [classes.TotalExptBasic]
-    if (totalExptState[key] < dayAllowance * 60) {
-      totalExptClass.push(classes.TotalExptOk)
-    } else if (totalExptState[key] > nightAllowance * 60) {
-      totalExptClass.push(classes.TotalExptDanger)
-    } else {
-      totalExptClass.push(classes.TotalExptWarning)
+    if (allowanceData.length !== 0) {
+      const { dayAllowance, nightAllowance } = allowanceData.find(i => i.instrId === instrId)
+      if (totalExptState[key] < dayAllowance * 60) {
+        totalExptClass.push(classes.TotalExptOk)
+      } else if (totalExptState[key] > nightAllowance * 60) {
+        totalExptClass.push(classes.TotalExptDanger)
+      } else {
+        totalExptClass.push(classes.TotalExptWarning)
+      }
     }
 
     const nightCheckBox = (

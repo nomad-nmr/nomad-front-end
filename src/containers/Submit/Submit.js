@@ -18,7 +18,8 @@ import {
   bookExperiments,
   fetchGroupList,
   fetchUserList,
-  clearBookedHolders
+  clearBookedHolders,
+  fetchAllowance
 } from '../../store/actions'
 
 const Submit = props => {
@@ -124,7 +125,8 @@ const Submit = props => {
           accessLevel={props.accessLvl}
           bookExpsHandler={props.bookExpsHandler}
           submittingUserId={submittingUser}
-          statusSum={props.statusSummary}
+          fetchAllowance={props.fetchAllow}
+          allowanceData={props.allowance}
         />
       ) : null}
     </div>
@@ -141,7 +143,8 @@ const mapStateToProps = state => {
     loading: state.submit.loading,
     reservedHolders: state.submit.bookedHolders,
     grpList: state.groups.groupList,
-    usrList: state.users.userList
+    usrList: state.users.userList,
+    allowance: state.submit.allowance
   }
 }
 
@@ -157,7 +160,8 @@ const mapDispatchToProps = dispatch => {
     logoutHandler: token => dispatch(signOutHandler(token)),
     cancelBookedHoldersHandler: (token, keys) => dispatch(cancelBookedHolders(token, keys)),
     bookExpsHandler: (token, data, user) => dispatch(bookExperiments(token, data, user)),
-    clrBookedHolders: () => dispatch(clearBookedHolders())
+    clrBookedHolders: () => dispatch(clearBookedHolders()),
+    fetchAllow: (token, instrIds) => dispatch(fetchAllowance(token, instrIds))
   }
 }
 
