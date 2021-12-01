@@ -3,7 +3,8 @@ import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
   loading: false,
-  bookedHolders: []
+  bookedHolders: [],
+  allowance: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -52,6 +53,9 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case actionTypes.CLEAR_BOOKED_HOLDERS:
       return { ...state, bookedHolders: [] }
+
+    case actionTypes.FETCH_ALLOWANCE_SUCCESS:
+      return { ...state, allowance: payload }
 
     default:
       return state

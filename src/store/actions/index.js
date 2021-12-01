@@ -75,7 +75,8 @@ export {
   cancelHolder,
   cancelBookedHolders,
   bookExperiments,
-  clearBookedHolders
+  clearBookedHolders,
+  fetchAllowance
 } from './submit'
 
 export { sendMessage } from './message'
