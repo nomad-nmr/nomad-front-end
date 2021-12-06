@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message, Modal, Checkbox } from 'antd'
 import moment from 'moment'
 
@@ -22,7 +22,7 @@ const disabledStyle = {
 
 const BookExperimentsForm = props => {
   const [form] = Form.useForm()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [formState, setFormState] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
@@ -248,13 +248,13 @@ const BookExperimentsForm = props => {
               }
             }
             props.bookExpsHandler(token, values, props.submittingUserId)
-            history.push('/')
+            navigate('/')
           }
         })
       }
     }
     props.bookExpsHandler(token, values, props.submittingUserId)
-    history.push('/')
+    navigate('/')
   }
 
   //Generating form items from input data. inputData is array of objects.

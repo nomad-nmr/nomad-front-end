@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 // eslint-disable-next-line
 import momentDurationFormatSetup from 'moment-duration-format'
@@ -110,7 +110,7 @@ const expandedRowRender = record => {
 }
 
 const StatusTable = props => {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const columns = [
     {
@@ -127,7 +127,7 @@ const StatusTable = props => {
       align: 'center',
       render: text =>
         props.accessLvl === 'admin' ? (
-          <Button type='link' onClick={() => history.push(`/admin/users?username=${text}`)}>
+          <Button type='link' onClick={() => navigate(`/admin/users?username=${text}`)}>
             {text}
           </Button>
         ) : (
@@ -201,8 +201,7 @@ const StatusTable = props => {
       disabled:
         !props.accessLvl ||
         record.status === 'Running' ||
-        (props.accessLvl !== 'admin' &&
-          (record.status === 'Error' || record.username !== props.username))
+        (props.accessLvl !== 'admin' && (record.status === 'Error' || record.username !== props.username))
     }),
 
     onChange: selectedRowKeys => {

@@ -1,15 +1,14 @@
 import * as actionTypes from '../actions/actionTypes'
 import { Modal, message } from 'antd'
-import history from '../../utils/history'
+// import history from '../../utils/history'
+// import { useNavigate } from 'react-router-dom'
 
-const initialState = {}
+const initialState = { error: null }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.HTTP_500_ERROR:
-      history.push('/500')
-      window.location.reload()
-      return state
+      return { error: '500' }
 
     case actionTypes.HTTP_422_ERROR:
       action.error.response.data.errors.forEach(err => {
@@ -20,14 +19,10 @@ const reducer = (state = initialState, action) => {
       return state
 
     case actionTypes.HTTP_404_ERROR:
-      history.push('/404')
-      window.location.reload()
-      return state
+      return { error: '404' }
 
     case actionTypes.HTTP_403_ERROR:
-      history.push('/403')
-      window.location.reload()
-      return state
+      return { error: '403' }
 
     case actionTypes.HTTP_400_ERROR:
       console.log(action)

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-// import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import socket from '../../socketConnection'
@@ -35,8 +34,6 @@ const Submit = props => {
     logoutHandler,
     fetchGrpList
   } = props
-
-  // const history = useHistory()
 
   //Hook for socket.io to update status on InfoCards
   useEffect(() => {
