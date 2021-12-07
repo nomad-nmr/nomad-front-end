@@ -9,7 +9,7 @@ const { Option } = Select
 
 const BookHoldersForm = props => {
   const [form] = Form.useForm()
-  let navigate = useNavigate()
+  const navigate = useNavigate()
 
   //Generating Option list for Select element
   let instrOptions = []
@@ -55,7 +55,13 @@ const BookHoldersForm = props => {
               <Button type='primary' htmlType='submit' disabled={props.bookedCount >= 5}>
                 Book Slots
               </Button>
-              <Button onClick={() => navigate('/dashboard')}>Cancel & return</Button>
+              <Button
+                onClick={() => {
+                  navigate('/dashboard', { replace: true })
+                }}
+              >
+                Cancel & return
+              </Button>
             </Space>
           </Form.Item>
         </Space>

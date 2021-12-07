@@ -278,12 +278,14 @@ const BookExperimentsForm = props => {
       </Option>
     ))
 
-    //canging style of totalExpt time according to allowance state
+    //changing style of totalExpt time according to allowance state
     const totalExptClass = [classes.TotalExptBasic]
     const key = sample.key
     const instrId = key.split('-')[0]
-    if (allowanceData.length !== 0) {
-      const { dayAllowance, nightAllowance } = allowanceData.find(i => i.instrId === instrId)
+    console.log(allowanceData)
+    const allowanceDataInstr = allowanceData.find(i => i.instrId === instrId)
+    if (allowanceDataInstr) {
+      const { dayAllowance, nightAllowance } = allowanceDataInstr
       if (totalExptState[key] < dayAllowance * 60) {
         totalExptClass.push(classes.TotalExptOk)
       } else if (totalExptState[key] > nightAllowance * 60) {
