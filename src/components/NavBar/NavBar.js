@@ -35,7 +35,7 @@ const NavBar = props => {
           className={classes.Logo}
           onClick={() => {
             if (props.accessLevel) {
-              if (props.accessLevel.includes('admin') || location.pathname !== '/bath-submit') {
+              if (props.accessLevel.includes('admin') || location.pathname !== '/batch-submit') {
                 navigate('/dashboard')
               }
             }
@@ -89,7 +89,10 @@ const mapDispatchToProps = dispatch => {
     tglAddSample: () => dispatch(toggleAddSample()),
     openModalHandler: path => dispatch(openAuthModal(path))
     //openModalHandler takes path as an argument to be used for redirecting after successful login
+    // redirecting using openModalHandler became problematic with React Router 6
+
     //Redirecting is done by useEffect hook in AuthAvatar which gets rerendered after successful login
+    //tglAddSample is still in use with batch submission
   }
 }
 

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Avatar, Popover } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import classes from './AuthAvatar.module.css'
@@ -7,17 +6,14 @@ import classes from './AuthAvatar.module.css'
 const AuthAvatar = props => {
   const assignedClasses = [classes.AuthAvatar]
 
-  const navigate = useNavigate()
   const { username, redirectTo, toggleAddSample } = props
 
   //Hook that redirects after successful login
   useEffect(() => {
     if (username && redirectTo === 'addSampleDrawer') {
       toggleAddSample()
-    } else if (username && redirectTo) {
-      navigate(redirectTo)
     }
-  }, [username, redirectTo, toggleAddSample, navigate])
+  }, [username, redirectTo, toggleAddSample])
 
   let avatarEl
   if (props.username) {

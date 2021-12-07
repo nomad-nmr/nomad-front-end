@@ -28,11 +28,11 @@ const MainMenu = props => {
       style={{ marginRight: 30 }}
       selectedKeys={[location.pathname]}
     >
-      {process.env.REACT_APP_SUBMIT_ON === 'true' && (
+      {process.env.REACT_APP_SUBMIT_ON === 'true' && props.username ? (
         <Menu.Item key='/submit' icon={<DownloadOutlined style={{ fontSize: 20 }} />}>
           <span className={classes.MenuItem}>Book New Job</span>
         </Menu.Item>
-      )}
+      ) : null}
       {process.env.REACT_APP_BATCH_SUBMIT_ON === 'true' &&
       (accessLevel === 'admin' || accessLevel === 'admin-b') ? (
         <Menu.Item
