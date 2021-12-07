@@ -46,7 +46,7 @@ const NavBar = props => {
 
   let menuElement = null
 
-  if (props.accessLevel === 'admin' || location.pathname === '/dashboard') {
+  if (props.username) {
     menuElement = (
       <MainMenu
         openAuthModal={props.openModalHandler}
