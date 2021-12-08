@@ -25,6 +25,7 @@ const MainMenu = props => {
       mode='horizontal'
       onClick={handleClick}
       selectable={false}
+      disabledOverflow={true}
       style={{ marginRight: 30 }}
       selectedKeys={[location.pathname]}
     >
