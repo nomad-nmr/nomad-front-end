@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button, Table, Drawer, Tag, Space, Pagination } from 'antd'
 
@@ -21,7 +21,7 @@ const Users = props => {
   const { fetchUsers, fetchGrpList, authToken, showInactive, grpList, searchUserValue } = props
 
   const formRef = useRef({})
-  const history = useHistory()
+  const navigate = useNavigate()
 
   //Local state for table and its pagination
   const [groupFilters, setGroupFilters] = useState([])
@@ -148,9 +148,7 @@ const Users = props => {
           </CheckableTag>
           <MailOutlined
             style={{ color: '#1890ff' }}
-            onClick={() =>
-              history.push(`/admin/message?userId=${record._id}&username=${record.username}`)
-            }
+            onClick={() => navigate(`/admin/message?userId=${record._id}&username=${record.username}`)}
           />
           <Button
             size='small'

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-// import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import socket from '../../socketConnection'
@@ -36,8 +35,6 @@ const Submit = props => {
     fetchGrpList
   } = props
 
-  // const history = useHistory()
-
   //Hook for socket.io to update status on InfoCards
   useEffect(() => {
     socket.on('statusUpdate', data => {
@@ -57,12 +54,13 @@ const Submit = props => {
   useEffect(() => {
     return () => {
       const keysArr = reservedHoldersRef.current.map(i => i.key)
+
       cancelBookedHoldersHandler(authToken, keysArr)
 
       //set bookedHolders in redux store to [] to reset the form
       clrBookedHolders()
 
-      if (accessLvl !== 'admin') {
+      if (accessLvl !== 'admin' && authToken) {
         logoutHandler(authToken)
       }
     }

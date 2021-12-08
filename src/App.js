@@ -1,5 +1,5 @@
 import React, { useState, Suspense, useEffect } from 'react'
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
   closeAuthModal,
@@ -27,26 +27,24 @@ const { Header, Sider, Content, Footer } = Layout
 
 const App = props => {
   const [adminMenuCollapsed, setAdminMenuCollapsed] = useState(true)
+  const navigate = useNavigate()
 
   const toggleAdminMenu = () => {
     setAdminMenuCollapsed(!adminMenuCollapsed)
   }
 
-  const {
-    username,
-    accessLevel,
-    authModalVisible,
-    closeModal,
-    onSignIn,
-    onSignOut,
-    onTryAutoSignIn
-  } = props
+  const { username, accessLevel, authModalVisible, closeModal, onSignIn, onSignOut, onTryAutoSignIn, err } =
+    props
 
   useEffect(() => {
     onTryAutoSignIn()
-  }, [onTryAutoSignIn])
+    //Redirecting from Redux errorHandler
+    if (err) {
+      navigate('/' + err)
+    }
+  }, [onTryAutoSignIn, err, navigate])
 
-  // Lazy loading - TODO: add to other container imports to improve performance once app gets bigger
+  // Lazy loading
   const Users = React.lazy(() => import('./containers/Users/Users'))
   const Instruments = React.lazy(() => import('./containers/Instruments/Instruments'))
   const Groups = React.lazy(() => import('./containers/Groups/Groups'))
@@ -86,12 +84,7 @@ const App = props => {
     <Layout>
       {accessLevel === 'admin' ? (
         <Affix className={classes.AdminMenu}>
-          <Sider
-            trigger={null}
-            className={classes.Sider}
-            collapsible
-            collapsed={adminMenuCollapsed}
-          >
+          <Sider trigger={null} className={classes.Sider} collapsible collapsed={adminMenuCollapsed}>
             <AdminMenu collapsed={adminMenuCollapsed} />
           </Sider>
         </Affix>
@@ -105,76 +98,60 @@ const App = props => {
         </Affix>
         <Content className={classes.Content}>
           <Suspense fallback={<Spin size='large' tip='Loading ...' style={{ margin: '200px' }} />}>
-            <Switch>
+            <Routes>
               <Route
                 path='/admin/users'
-                render={() => {
-                  return accessLevel === 'admin' ? <Users /> : <Redirect to='/dashboard' />
-                }}
+                element={accessLevel === 'admin' ? <Users /> : <Navigate to='/dashboard' />}
               />
               <Route
                 path='/admin/groups'
-                render={() => {
-                  return accessLevel === 'admin' ? <Groups /> : <Redirect to='/dashboard' />
-                }}
+                element={accessLevel === 'admin' ? <Groups /> : <Navigate to='/dashboard' />}
               />
               <Route
                 path='/admin/message'
-                render={() => {
-                  return accessLevel === 'admin' ? <Message /> : <Redirect to='/dashboard' />
-                }}
+                element={accessLevel === 'admin' ? <Message /> : <Navigate to='/dashboard' />}
               />
               <Route
                 path='/admin/instruments'
-                render={() => {
-                  return accessLevel === 'admin' ? <Instruments /> : <Redirect to='/dashboard' />
-                }}
+                element={accessLevel === 'admin' ? <Instruments /> : <Navigate to='/dashboard' />}
               />
               <Route
                 path='/admin/history'
-                render={() => {
-                  return accessLevel === 'admin' ? <ExpHistory /> : <Redirect to='/dashboard' />
-                }}
+                element={accessLevel === 'admin' ? <ExpHistory /> : <Navigate to='/dashboard' />}
               />
               <Route
                 path='/admin/parameter-sets'
-                render={() => {
-                  return accessLevel === 'admin' ? <ParameterSets /> : <Redirect to='/dashboard' />
-                }}
+                element={accessLevel === 'admin' ? <ParameterSets /> : <Navigate to='/dashboard' />}
               />
-              <Route exact path='/dashboard' render={() => <Dashboard />} />
-              <Route exact path='/reset/:token' component={Reset} />
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/reset/:token' element={<Reset />} />
               <Route
-                exact
                 path='/submit'
-                render={() => {
-                  return username &&
-                    process.env.REACT_APP_SUBMIT_ON === 'true' &&
-                    accessLevel !== 'user-b' ? (
+                element={
+                  username && process.env.REACT_APP_SUBMIT_ON === 'true' && accessLevel !== 'user-b' ? (
                     <Submit />
                   ) : (
-                    <Redirect to='/dashboard' />
-                  )
-                }}
-              />
-              <Route
-                exact
-                path='/batch-submit'
-                render={() =>
-                  process.env.REACT_APP_BATCH_SUBMIT_ON === 'true' ? (
-                    <BatchSubmit />
-                  ) : (
-                    <Redirect to='/dashboard' />
+                    <Navigate to='/dashboard' />
                   )
                 }
               />
-              <Route path='/500' component={Error500} />
-              <Route path='/404' component={Error404} />
-              <Route path='/403' component={Error403} />
-              <Redirect from='/admin/dashboard' to='/dashboard' />
-              <Redirect exact from='/' to='/dashboard' />
-              <Route component={Error404} />
-            </Switch>
+              <Route
+                path='/batch-submit'
+                element={
+                  process.env.REACT_APP_BATCH_SUBMIT_ON === 'true' ? (
+                    <BatchSubmit />
+                  ) : (
+                    <Navigate to='/dashboard' />
+                  )
+                }
+              />
+              <Route path='/500' element={<Error500 />} />
+              <Route path='/404' element={<Error404 />} />
+              <Route path='/403' element={<Error403 />} />
+              <Route path='/admin/dashboard' element={<Navigate to='/dashboard' />} />
+              <Route path='/' element={<Navigate to='/dashboard' />} />
+              <Route path='*' element={<Error404 />} />
+            </Routes>
           </Suspense>
           {authModal}
           <BackTop visibilityHeight={200} style={{ marginBottom: '25px' }} />
@@ -194,7 +171,8 @@ const mapStateToProps = state => {
     accessLevel: state.auth.accessLevel,
     authModalVisible: state.auth.authModalVisible,
     authSpin: state.auth.loading,
-    followPath: state.auth.followTo
+    followPath: state.auth.followTo,
+    err: state.errors.error
   }
 }
 
@@ -208,4 +186,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App))
+export default connect(mapStateToProps, mapDispatchToProps)(App)

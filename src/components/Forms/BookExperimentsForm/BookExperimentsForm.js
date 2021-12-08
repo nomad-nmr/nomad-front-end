@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message, Modal, Checkbox } from 'antd'
 import moment from 'moment'
 
@@ -22,7 +22,7 @@ const disabledStyle = {
 
 const BookExperimentsForm = props => {
   const [form] = Form.useForm()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [formState, setFormState] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
@@ -248,13 +248,13 @@ const BookExperimentsForm = props => {
               }
             }
             props.bookExpsHandler(token, values, props.submittingUserId)
-            history.push('/')
+            navigate('/')
           }
         })
       }
     }
     props.bookExpsHandler(token, values, props.submittingUserId)
-    history.push('/')
+    navigate('/')
   }
 
   //Generating form items from input data. inputData is array of objects.
@@ -278,12 +278,14 @@ const BookExperimentsForm = props => {
       </Option>
     ))
 
-    //canging style of totalExpt time according to allowance state
+    //changing style of totalExpt time according to allowance state
     const totalExptClass = [classes.TotalExptBasic]
     const key = sample.key
     const instrId = key.split('-')[0]
-    if (allowanceData.length !== 0) {
-      const { dayAllowance, nightAllowance } = allowanceData.find(i => i.instrId === instrId)
+    console.log(allowanceData)
+    const allowanceDataInstr = allowanceData.find(i => i.instrId === instrId)
+    if (allowanceDataInstr) {
+      const { dayAllowance, nightAllowance } = allowanceDataInstr
       if (totalExptState[key] < dayAllowance * 60) {
         totalExptClass.push(classes.TotalExptOk)
       } else if (totalExptState[key] > nightAllowance * 60) {
