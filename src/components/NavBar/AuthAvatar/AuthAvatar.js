@@ -1,19 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Avatar, Popover } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import classes from './AuthAvatar.module.css'
 
 const AuthAvatar = props => {
   const assignedClasses = [classes.AuthAvatar]
-
-  const { username, redirectTo, toggleAddSample } = props
-
-  //Hook that redirects after successful login
-  useEffect(() => {
-    if (username && redirectTo === 'addSampleDrawer') {
-      toggleAddSample()
-    }
-  }, [username, redirectTo, toggleAddSample])
 
   let avatarEl
   if (props.username) {

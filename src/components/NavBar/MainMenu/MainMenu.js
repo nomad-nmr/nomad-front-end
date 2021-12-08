@@ -12,18 +12,10 @@ const MainMenu = props => {
   const location = useLocation()
   const { accessLevel } = props
 
-  const handleClick = e => {
-    if (!props.username) {
-      props.openAuthModal(e.keyPath[0])
-    } else {
-      navigate({ pathname: e.keyPath[0] })
-    }
-  }
-
   return (
     <Menu
       mode='horizontal'
-      onClick={handleClick}
+      onClick={e => navigate(e.keyPath[0])}
       selectable={false}
       disabledOverflow={true}
       style={{ marginRight: 30 }}

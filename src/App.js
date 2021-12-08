@@ -74,7 +74,6 @@ const App = props => {
           signInHandler={onSignIn}
           passwdResetHandler={props.onPasswdReset}
           loading={props.authSpin}
-          redirect={props.followPath}
         />
       )
     }
@@ -171,7 +170,6 @@ const mapStateToProps = state => {
     accessLevel: state.auth.accessLevel,
     authModalVisible: state.auth.authModalVisible,
     authSpin: state.auth.loading,
-    followPath: state.auth.followTo,
     err: state.errors.error
   }
 }

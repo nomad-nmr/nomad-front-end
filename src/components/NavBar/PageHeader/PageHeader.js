@@ -233,7 +233,7 @@ const mapDispatchToProps = dispatch => {
     closeRackHandler: (rackId, token) => dispatch(closeRack(rackId, token)),
     deleteRackHandler: (rackId, token) => dispatch(deleteRack(rackId, token)),
     tglAddSample: () => dispatch(toggleAddSample()),
-    openAuthModal: redirectTo => dispatch(openAuthModal(redirectTo)),
+    openAuthModal: () => dispatch(openAuthModal()),
     toggleBookSamples: () => dispatch(toggleBookSamplesModal()),
     submitSamples: (data, token) => dispatch(submitSamples(data, token)),
     cancelSamples: (data, token) => dispatch(cancelSamples(data, token))
