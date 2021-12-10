@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 // eslint-disable-next-line
 import momentDurationFormatSetup from 'moment-duration-format'
-
 import { connect } from 'react-redux'
 import { Table, Badge, Tag, Button } from 'antd'
 import {
   CheckCircleOutlined,
   SyncOutlined,
   CloseCircleOutlined,
-  ClockCircleOutlined
+  ClockCircleOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons'
 
 import NightDay from '../../NightDay/NightDay'
@@ -182,6 +182,12 @@ const StatusTable = props => {
       key: 'night',
       align: 'center',
       render: text => <NightDay night={text} />
+    },
+    {
+      title: 'P',
+      dataIndex: 'priority',
+      align: 'center',
+      render: text => text && <ExclamationCircleOutlined style={{ color: '#389e0d' }} />
     },
     {
       title: 'Status',
