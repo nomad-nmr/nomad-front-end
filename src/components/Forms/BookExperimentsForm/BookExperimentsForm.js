@@ -296,7 +296,6 @@ const BookExperimentsForm = props => {
     const totalExptClass = [classes.TotalExptBasic]
     const key = sample.key
     const instrId = key.split('-')[0]
-    console.log(allowanceData)
     const allowanceDataInstr = allowanceData.find(i => i.instrId === instrId)
     if (allowanceDataInstr) {
       const { dayAllowance, nightAllowance } = allowanceDataInstr

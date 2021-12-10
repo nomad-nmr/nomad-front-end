@@ -169,8 +169,6 @@ const HistoryTable = props => {
     </div>
   )
 
-  console.log(props.data)
-
   return (
     <div style={{ marginBottom: '40px' }}>
       <Table
