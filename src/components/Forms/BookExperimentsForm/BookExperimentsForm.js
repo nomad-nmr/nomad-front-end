@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Form, Select, Input, Row, Col, Spin, Button, Divider, Space, message, Modal, Checkbox } from 'antd'
+import {
+  Form,
+  Select,
+  Input,
+  Row,
+  Col,
+  Spin,
+  Button,
+  Divider,
+  Space,
+  message,
+  Modal,
+  Checkbox,
+  Tooltip
+} from 'antd'
 import moment from 'moment'
 
 // import solvents from '../../../misc/solvents'
@@ -282,7 +296,6 @@ const BookExperimentsForm = props => {
     const totalExptClass = [classes.TotalExptBasic]
     const key = sample.key
     const instrId = key.split('-')[0]
-    console.log(allowanceData)
     const allowanceDataInstr = allowanceData.find(i => i.instrId === instrId)
     if (allowanceDataInstr) {
       const { dayAllowance, nightAllowance } = allowanceDataInstr
@@ -295,9 +308,12 @@ const BookExperimentsForm = props => {
       }
     }
 
-    const nightCheckBox = (
-      <Col span={1}>
+    const checkBoxes = (
+      <Col span={1} className={classes.CheckBoxes}>
         <Form.Item name={[key, 'night']} initialValue={false} valuePropName='checked'>
+          <Checkbox />
+        </Form.Item>
+        <Form.Item name={[key, 'priority']} initialValue={false} valuePropName='checked'>
           <Checkbox />
         </Form.Item>
       </Col>
@@ -380,8 +396,7 @@ const BookExperimentsForm = props => {
               </Row>
             ))}
           </Col>
-          {accessLevel !== 'user' && nightCheckBox}
-
+          {accessLevel !== 'user' && checkBoxes}
           <Col span={1}>
             <button
               className={classes.CancelButton}
@@ -413,9 +428,14 @@ const BookExperimentsForm = props => {
     )
   })
 
-  const nightIconElement = (
-    <Col span={1}>
-      <img src={nightIcon} style={{ height: '18px' }} alt='night icon' />
+  const checkBoxesHeader = (
+    <Col span={1} className={classes.CheckBoxes}>
+      <Tooltip title='Sample submitted into night queue'>
+        <img src={nightIcon} style={{ height: '18px' }} alt='night icon' />
+      </Tooltip>
+      <Tooltip className={classes.Priority} title='Sample submitted with priority'>
+        P
+      </Tooltip>
     </Col>
   )
 
@@ -438,8 +458,9 @@ const BookExperimentsForm = props => {
         <Col span={2}>
           <span style={{ marginLeft: 15 }}>ExpT</span>
         </Col>
-        {accessLevel !== 'user' && nightIconElement}
+        {accessLevel !== 'user' && checkBoxesHeader}
       </Row>
+
       {props.loading ? (
         <Spin size='large' style={{ margin: 30 }} />
       ) : (

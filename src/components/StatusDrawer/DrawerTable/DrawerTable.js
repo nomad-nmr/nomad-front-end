@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Table } from 'antd'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
+
 // eslint-disable-next-line
 import momentDurationFormatSetup from 'moment-duration-format'
 
@@ -131,6 +133,15 @@ const DrawerTable = props => {
     align: 'center',
     width: 50,
     render: text => <NightDay night={text} />
+  })
+
+  columns.push({
+    title: 'P',
+    dataIndex: 'priority',
+    key: 'priority',
+    align: 'center',
+    width: 50,
+    render: text => text && <ExclamationCircleOutlined style={{ color: '#389e0d' }} />
   })
 
   const expandConfig =

@@ -105,7 +105,7 @@ const BatchSubmit = props => {
         submitBookingData={props.bookSamples}
       />
       <AddSampleDrawer
-        visible={props.addSampleVis}
+        visible={username && props.addSampleVis}
         toggleHandler={props.tglAddSample}
         rackTitle={activeRack && activeRack.title}
         error={drawerError}

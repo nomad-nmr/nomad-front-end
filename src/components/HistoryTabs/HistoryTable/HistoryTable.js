@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-
 import { Table, Tag, Tooltip, Space } from 'antd'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
 
 import NightDay from '../../NightDay/NightDay'
 import StatusTag from '../../StatusTag/StatusTag'
@@ -96,6 +96,12 @@ const HistoryTable = props => {
       dataIndex: 'night',
       align: 'center',
       render: text => <NightDay night={text} />
+    },
+    {
+      title: 'P',
+      dataIndex: 'priority',
+      align: 'center',
+      render: text => text && <ExclamationCircleOutlined style={{ color: '#389e0d' }} />
     },
     {
       title: 'Status',

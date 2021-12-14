@@ -10,7 +10,7 @@ import PageHeader from './PageHeader/PageHeader'
 import AuthAvatar from './AuthAvatar/AuthAvatar'
 import MainMenu from './MainMenu/MainMenu'
 
-import { openAuthModal, toggleAddSample } from '../../store/actions'
+import { openAuthModal } from '../../store/actions'
 
 import classes from './NavBar.module.css'
 
@@ -47,13 +47,7 @@ const NavBar = props => {
   let menuElement = null
 
   if (props.username) {
-    menuElement = (
-      <MainMenu
-        openAuthModal={props.openModalHandler}
-        username={props.username}
-        accessLevel={props.accessLevel}
-      />
-    )
+    menuElement = <MainMenu username={props.username} accessLevel={props.accessLevel} />
   }
 
   return (
@@ -67,7 +61,6 @@ const NavBar = props => {
             onClick={props.openModalHandler}
             username={props.username}
             accessLevel={props.accessLevel}
-            redirectTo={props.followPath}
             toggleAddSample={props.tglAddSample}
           />
         </div>
@@ -79,20 +72,13 @@ const NavBar = props => {
 const mapStateToProps = state => {
   return {
     username: state.auth.username,
-    accessLevel: state.auth.accessLevel,
-    followPath: state.auth.followTo
+    accessLevel: state.auth.accessLevel
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    tglAddSample: () => dispatch(toggleAddSample()),
-    openModalHandler: path => dispatch(openAuthModal(path))
-    //openModalHandler takes path as an argument to be used for redirecting after successful login
-    // redirecting using openModalHandler became problematic with React Router 6
-
-    //Redirecting is done by useEffect hook in AuthAvatar which gets rerendered after successful login
-    //tglAddSample is still in use with batch submission
+    openModalHandler: () => dispatch(openAuthModal())
   }
 }
 

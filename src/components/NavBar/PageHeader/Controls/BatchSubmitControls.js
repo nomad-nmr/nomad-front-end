@@ -34,10 +34,10 @@ const BatchSubmitControls = props => {
       return Modal.confirm({
         title: `Delete Rack ${activeRack.title}`,
         content: (
-          <>
+          <div>
             <p>The rack still contains sample that have not been completed!</p>
             <p style={{ fontWeight: 600 }}>Are you sure that you want to delete it?</p>
-          </>
+          </div>
         ),
         onOk() {
           props.deleteRackHandler(props.activeRackId, authToken)
@@ -49,10 +49,9 @@ const BatchSubmitControls = props => {
 
   const addSampleHandler = () => {
     if (!authToken) {
-      props.openAuthModal('addSampleDrawer')
-    } else {
-      props.toggleAddSample()
+      props.openAuthModal()
     }
+    props.toggleAddSample()
   }
 
   const bookHandler = () => {
