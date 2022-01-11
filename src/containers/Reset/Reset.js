@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Form, Spin, Button, Space, Input } from 'antd'
 
 import classes from './Reset.module.css'
@@ -27,7 +27,7 @@ const Reset = props => {
   const { getPassReset } = props
   const formRef = useRef({})
 
-  const token = props.match.params.token
+  const { token } = useParams()
 
   const { userName, fullName } = props
 
