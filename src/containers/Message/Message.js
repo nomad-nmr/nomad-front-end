@@ -19,6 +19,7 @@ const Message = props => {
   const { fetchGrpList, authToken } = props
 
   const [recipients, setRecipients] = useState([])
+  const [excludeRec, setExcludeRec] = useState([])
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -41,15 +42,25 @@ const Message = props => {
         <div>
           <p>Add recipient with no group selected to address all active users</p>
           <p>Add recipient with no user selected to address all active users within selected group</p>
+          <p>
+            Analogously you can creat a list of recipients that will be excluded and won't receive the message
+          </p>
         </div>
       )
     })
 
-  const isDuplicate = entry => recipients.find(recipient => recipient.id === entry.id)
-  const sendsToAll = () => recipients.find(recipient => recipient.id === 'all')
-
   const addRecipientHandler = formData => {
-    console.log(formData)
+    //console.log(formData)
+
+    const isDuplicate = entry => {
+      //Without this the function does not work for user as there property _id not id
+      if (entry._id) {
+        entry.id = entry._id
+      }
+      return recipients.find(recipient => recipient.id === entry.id)
+    }
+    const sendsToAll = () => recipients.find(recipient => recipient.id === 'all')
+
     //Validation to disable duplicate entries
     if (sendsToAll()) {
       return message.error(`The message is addressed to all active users already`)
@@ -79,34 +90,74 @@ const Message = props => {
     }
   }
 
-  const removeRecipientHandler = id => {
-    const updatedRecipients = recipients.filter(recipient => recipient.id !== id)
-    setRecipients(updatedRecipients)
+  const excludeRecipient = () => {
+    const isDuplicate = entry => excludeRec.find(recipient => recipient.id === entry.id)
+
+    const formRecipientsValues = formRecipients.getFieldsValue()
+    if (!formRecipientsValues.groupId && !formRecipientsValues.userId) {
+      return message.warning('No recipient selected!')
+    } else if (!formRecipientsValues.userId) {
+      const group = props.grpList.find(grp => grp.id === formRecipientsValues.groupId)
+      if (isDuplicate(group)) {
+        return message.error(`Group ${group.name} already in the list`)
+      }
+
+      const newRecipients = [...excludeRec, { name: group.name, type: 'group', id: group.id }]
+      setExcludeRec(newRecipients)
+    } else {
+      const user = props.usrList.find(usr => usr._id === formRecipientsValues.userId)
+      if (isDuplicate(user)) {
+        return message.error(`User ${user.username} already in the list`)
+      }
+
+      if (isDuplicate({ id: formRecipientsValues.groupId })) {
+        return message.error(`User ${user.username} in a group that is already in the list`)
+      }
+      const newRecipients = [...excludeRec, { name: user.username, type: 'user', id: user._id }]
+      setExcludeRec(newRecipients)
+    }
   }
 
-  const recipientsElement = recipients.map((recipient, index) => {
-    const color = recipient.type === 'group' ? 'cyan' : recipient.type === 'user' ? 'green' : 'orange'
-    return (
-      <Tag
-        key={index}
-        closable
-        className={classes.Tag}
-        color={color}
-        onClose={() => removeRecipientHandler(recipient.id)}
-      >
-        {recipient.name}
-      </Tag>
-    )
-  })
+  const getRecElement = (recList, exclude) => {
+    const removeRecipientHandler = id => {
+      const updatedRecipients = recList.filter(recipient => recipient.id !== id)
+      if (exclude) {
+        setExcludeRec(updatedRecipients)
+      } else {
+        setRecipients(updatedRecipients)
+      }
+    }
+    const recipientsElement = recList.map((recipient, index) => {
+      const color = recipient.type === 'group' ? 'cyan' : recipient.type === 'user' ? 'green' : 'orange'
+
+      return (
+        <Tag
+          key={index}
+          closable
+          className={classes.Tag}
+          color={color}
+          onClose={e => {
+            e.preventDefault()
+            removeRecipientHandler(recipient.id)
+          }}
+        >
+          {recipient.name}
+        </Tag>
+      )
+    })
+
+    return recipientsElement
+  }
 
   const formFinishHandler = formData => {
     if (recipients.length === 0) {
       return message.error('Message has no recipients!')
     }
-    props.sendMsg(authToken, { ...formData, recipients })
+    props.sendMsg(authToken, { ...formData, recipients, excludeRec })
     formMessage.resetFields()
     formRecipients.resetFields()
     setRecipients([])
+    setExcludeRec([])
   }
 
   return (
@@ -128,6 +179,9 @@ const Message = props => {
           <Button type='primary' style={{ marginBottom: 25 }} htmlType='submit'>
             Add Recipient
           </Button>
+          <Button danger type='dashed' style={{ marginBottom: 25 }} onClick={() => excludeRecipient()}>
+            Exclude Recipient
+          </Button>
           <Button style={{ marginBottom: 25 }} onClick={() => formRecipients.resetFields()}>
             Cancel
           </Button>
@@ -137,9 +191,16 @@ const Message = props => {
         </Space>
         <div className={classes.Centered}>
           <Divider>Recipients</Divider>
-          {recipientsElement}
-          <Divider />
+          {getRecElement(recipients)}
         </div>
+        {excludeRec.length === 0 && <Divider />}
+        {excludeRec.length > 0 && (
+          <div className={classes.Centered}>
+            <Divider>Exclude Recipients</Divider>
+            {getRecElement(excludeRec, true)}
+            <Divider />
+          </div>
+        )}
       </Form>
       <Form form={formMessage} className={classes.Centered} onFinish={values => formFinishHandler(values)}>
         <Form.Item name='subject'>
