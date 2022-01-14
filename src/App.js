@@ -11,6 +11,7 @@ import {
 
 import { Layout, Spin, BackTop, Affix } from 'antd'
 import classes from './App.module.css'
+import './App.less'
 
 import AdminMenu from './components/AdminMenu/AdminMenu'
 import NavBar from './components/NavBar/NavBar'
