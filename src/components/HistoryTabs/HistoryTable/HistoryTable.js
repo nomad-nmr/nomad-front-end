@@ -110,6 +110,10 @@ const HistoryTable = props => {
       render: text => <StatusTag text={text} />,
       filters: [
         {
+          text: 'Booked',
+          value: 'Booked'
+        },
+        {
           text: 'Submitted',
           value: 'Submitted'
         },
@@ -124,10 +128,14 @@ const HistoryTable = props => {
         {
           text: 'Completed',
           value: 'Completed'
+        },
+        {
+          text: 'Archived',
+          value: 'Archived'
         }
       ],
       onFilter: (value, record) => record.status === value,
-      defaultFilteredValue: ['Completed', 'Error']
+      defaultFilteredValue: ['Completed', 'Error', 'Archived']
     }
   ]
 

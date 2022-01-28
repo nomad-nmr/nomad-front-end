@@ -6,12 +6,19 @@ import {
   CloseCircleOutlined,
   DownCircleOutlined,
   ClockCircleOutlined,
-  SyncOutlined
+  SyncOutlined,
+  CloudServerOutlined
 } from '@ant-design/icons'
 
 const StatusTag = props => {
   const { text } = props
   switch (text) {
+    case 'Archived':
+      return (
+        <Tag icon={<CloudServerOutlined />} color='purple'>
+          {text}
+        </Tag>
+      )
     case 'Completed':
       return (
         <Tag icon={<CheckCircleOutlined />} color='success'>
