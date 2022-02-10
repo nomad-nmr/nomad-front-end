@@ -48,6 +48,8 @@ const BookExperimentsForm = props => {
 
   const { inputData, allowanceData, fetchAllowance, token, accessLevel } = props
 
+  const priorityAccess = accessLevel === 'user-a' || accessLevel === 'admin'
+
   //Hook to create state for dynamic ExpNo part of form from inputData
   //InputData gets updated every time new holder is booked
   useEffect(() => {
@@ -203,7 +205,7 @@ const BookExperimentsForm = props => {
   }
 
   const onFinishHandler = async values => {
-    if (accessLevel === 'user') {
+    if (!priorityAccess) {
       //accumulator is an object total expt of day classified experiments for each instrument in the form
       const accumulator = {}
       let nightExp = undefined
@@ -335,7 +337,7 @@ const BookExperimentsForm = props => {
           <Col span={2}>
             <SolventSelect nameKey={key} />
           </Col>
-          <Col span={accessLevel !== 'user' ? 6 : 7}>
+          <Col span={priorityAccess ? 6 : 7}>
             <TitleInput nameKey={key} />
           </Col>
           <Col span={1}>
@@ -396,7 +398,7 @@ const BookExperimentsForm = props => {
               </Row>
             ))}
           </Col>
-          {accessLevel !== 'user' && checkBoxes}
+          {priorityAccess && checkBoxes}
           <Col span={1}>
             <button
               className={classes.CancelButton}
@@ -412,11 +414,7 @@ const BookExperimentsForm = props => {
           </Col>
         </Row>
         <Row gutter={16}>
-          <Col
-            span={3}
-            offset={accessLevel !== 'user' ? 19 : 20}
-            style={{ textAlign: 'right', marginBottom: 10 }}
-          >
+          <Col span={3} offset={priorityAccess ? 19 : 20} style={{ textAlign: 'right', marginBottom: 10 }}>
             <span className={totalExptClass.join(' ')}>
               Total ExpT:
               {'  ' + moment.duration(totalExptState[key], 'seconds').format('HH:mm:ss', { trim: false })}
@@ -445,7 +443,7 @@ const BookExperimentsForm = props => {
         <Col span={2}>Instrument</Col>
         <Col span={1}>Holder</Col>
         <Col span={2}>Solvent</Col>
-        <Col span={accessLevel !== 'user' ? 6 : 7}>Title</Col>
+        <Col span={priorityAccess ? 6 : 7}>Title</Col>
         <Col span={1}>
           <span style={{ marginLeft: 20 }}>ExpNo</span>
         </Col>
@@ -458,7 +456,7 @@ const BookExperimentsForm = props => {
         <Col span={2}>
           <span style={{ marginLeft: 15 }}>ExpT</span>
         </Col>
-        {accessLevel !== 'user' && checkBoxesHeader}
+        {priorityAccess && checkBoxesHeader}
       </Row>
 
       {props.loading ? (
