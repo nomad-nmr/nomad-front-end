@@ -35,6 +35,8 @@ const Submit = props => {
     fetchGrpList
   } = props
 
+  const priorityAccess = accessLvl === 'user-a' || accessLvl === 'admin'
+
   //Hook for socket.io to update status on InfoCards
   useEffect(() => {
     socket.on('statusUpdate', data => {
@@ -79,13 +81,12 @@ const Submit = props => {
 
   const [submittingUser, setSubmittingUser] = useState(undefined)
 
-  const availableInstrList =
-    accessLvl === 'admin' || accessLvl === 'user-a' ? instrList : instrList.filter(i => i.available)
+  const availableInstrList = priorityAccess ? instrList : instrList.filter(i => i.available)
 
   const onCardClick = key => {
     let instrId = key
-    //Users without admin access level can't select unavailable instruments
-    if (accessLvl === 'user' && !props.statusSummary.find(card => card.key === key).available) {
+    //Users without priority access level can't select unavailable instruments
+    if (!priorityAccess && !props.statusSummary.find(card => card.key === key).available) {
       instrId = ''
     }
     bookHoldersFormRef.current.setFieldsValue({ instrumentId: instrId })
