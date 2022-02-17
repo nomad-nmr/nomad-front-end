@@ -118,7 +118,8 @@ const StatusTable = props => {
       dataIndex: 'holder',
       key: 'holder',
       align: 'center',
-      sorter: (a, b) => a.holder - b.holder
+      sorter: (a, b) => a.holder - b.holder,
+      multiple: 1
     },
     {
       title: 'User',
@@ -168,7 +169,8 @@ const StatusTable = props => {
         if (a.submittedAt) {
           return a.submittedAt.localeCompare(b.submittedAt)
         }
-      }
+      },
+      multiple: 2
     },
     {
       title: 'ExpT',
