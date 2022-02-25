@@ -42,9 +42,11 @@ const MainMenu = props => {
         </Menu.Item>
       ) : null}
 
-      <Menu.Item key='/search' disabled icon={<SearchOutlined style={{ fontSize: 20 }} />}>
-        <span className={classes.MenuItem}>Search</span>
-      </Menu.Item>
+      {process.env.REACT_APP_DATASTORE_ON === 'true' && props.username ? (
+        <Menu.Item key='/search' icon={<SearchOutlined style={{ fontSize: 20 }} />}>
+          <span className={classes.MenuItem}>Search</span>
+        </Menu.Item>
+      ) : null}
     </Menu>
   )
 }

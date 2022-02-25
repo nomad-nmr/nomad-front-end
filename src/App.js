@@ -54,6 +54,7 @@ const App = props => {
   const ParameterSets = React.lazy(() => import('./containers/ParameterSets/ParameterSets'))
   const Submit = React.lazy(() => import('./containers/Submit/Submit'))
   const BatchSubmit = React.lazy(() => import('./containers/BatchSubmit/BatchSubmit'))
+  const Search = React.lazy(() => import('./containers/Search/Search'))
 
   //Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
   let authModal = null
@@ -145,6 +146,13 @@ const App = props => {
                   )
                 }
               />
+              <Route
+                path='/search'
+                element={
+                  process.env.REACT_APP_DATASTORE_ON === 'true' ? <Search /> : <Navigate to='/dashboard' />
+                }
+              />
+
               <Route path='/500' element={<Error500 />} />
               <Route path='/404' element={<Error404 />} />
               <Route path='/403' element={<Error403 />} />

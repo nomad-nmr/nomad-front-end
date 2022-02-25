@@ -97,3 +97,11 @@ export {
   submitSamples,
   cancelSamples
 } from './batchSubmit'
+
+export {
+  fetchExperiments,
+  updateCheckedExps,
+  updateCheckedDatasets,
+  resetChecked,
+  downloadExps
+} from './search'

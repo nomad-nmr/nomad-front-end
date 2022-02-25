@@ -17,40 +17,42 @@ import paramSetsReducer from './store/reducers/paramSets'
 import submitReducer from './store/reducers/submit'
 import messageReducer from './store/reducers/message'
 import batchSubmitReducer from './store/reducers/batchSubmit'
+import searchReducer from './store/reducers/search'
 
 import './index.css'
 import App from './App'
 
 // Enabling Redux-Dev tools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-	? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-			// Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-	  })
-	: compose
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+    })
+  : compose
 
 const rootReducer = combineReducers({
-	auth: authReducer,
-	dash: dashReducer,
-	instruments: instrumentsReducer,
-	errors: errorHandlerReducer,
-	users: usersReducer,
-	groups: groupsReducer,
-	expHistory: expHistoryReducer,
-	paramSets: paramSetsReducer,
-	submit: submitReducer,
-	message: messageReducer,
-	batchSubmit: batchSubmitReducer
+  auth: authReducer,
+  dash: dashReducer,
+  instruments: instrumentsReducer,
+  errors: errorHandlerReducer,
+  users: usersReducer,
+  groups: groupsReducer,
+  expHistory: expHistoryReducer,
+  paramSets: paramSetsReducer,
+  submit: submitReducer,
+  message: messageReducer,
+  batchSubmit: batchSubmitReducer,
+  search: searchReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 
 ReactDOM.render(
-	<Provider store={store}>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	</Provider>,
-	document.getElementById('root')
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById('root')
 )
 
 // If you want your app to work offline and load faster, you can change
