@@ -118,7 +118,11 @@ const StatusTable = props => {
       dataIndex: 'holder',
       key: 'holder',
       align: 'center',
-      sorter: (a, b) => a.holder - b.holder
+      defaultSortOrder: 'descend',
+      sorter: {
+        compare: (a, b) => a.holder - b.holder,
+        multiple: 1
+      }
     },
     {
       title: 'User',
@@ -163,11 +167,10 @@ const StatusTable = props => {
       title: 'Submitted At',
       align: 'center',
       render: record => (record.submittedAt ? moment(record.submittedAt).format('ddd HH:mm') : '-'),
-      defaultSortOrder: 'descend',
-      sorter: (a, b) => {
-        if (a.submittedAt) {
-          return a.submittedAt.localeCompare(b.submittedAt)
-        }
+      // defaultSortOrder: 'descend',
+      sorter: {
+        compare: (a, b) => moment(a.submittedAt).valueOf() - moment(b.submittedAt).valueOf(),
+        multiple: 2
       }
     },
     {
