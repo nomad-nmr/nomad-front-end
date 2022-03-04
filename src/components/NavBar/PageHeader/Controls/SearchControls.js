@@ -18,14 +18,11 @@ const SearchControls = props => {
 
   return (
     <div className={classes.ExtraContainer}>
-      <Button
-        className={classes.Button}
-        type='primary'
-        onClick={() => console.log('NMRium')}
-        disabled={searchCheckedState.length === 0}
-      >
-        Open NMRium
-      </Button>
+      <a href={process.env.REACT_APP_NMRIUM_URL}>
+        <Button className={classes.Button} type='primary' disabled={searchCheckedState.length === 0}>
+          Open NMRium
+        </Button>
+      </a>
       <Button
         className={classes.Button}
         onClick={() => downloadHandler()}
