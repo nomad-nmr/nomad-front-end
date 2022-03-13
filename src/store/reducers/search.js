@@ -5,7 +5,8 @@ const initialState = {
   tableData: [],
   //checked holds state of checkboxes in search exps table
   //[{datasetName, exps: [_id]}]
-  checked: []
+  checked: [],
+  showDownloadModal: false
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -48,7 +49,10 @@ const reducer = (state = initialState, { type, payload }) => {
       return { ...state, loading: true }
 
     case actionTypes.DOWNLOAD_EXPS_SUCCESS:
-      return { ...state, loading: false, checked: [] }
+      return { ...state, loading: false, checked: [], showDownloadModal: false }
+
+    case actionTypes.TOGGLE_DOWNLOAD_MODAL:
+      return { ...state, showDownloadModal: !state.showDownloadModal }
 
     default:
       return state

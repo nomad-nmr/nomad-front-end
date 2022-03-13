@@ -50,7 +50,7 @@ export const downloadExpsSuccess = () => ({
   type: actionTypes.DOWNLOAD_EXPS_SUCCESS
 })
 
-export const downloadExps = (expIds, token) => {
+export const downloadExps = (expIds, fileName, token) => {
   return dispatch => {
     dispatch(downloadExpsStart())
     axios
@@ -59,7 +59,7 @@ export const downloadExps = (expIds, token) => {
         headers: { Authorization: 'Bearer ' + token }
       })
       .then(res => {
-        fileDownload(res.data, 'experiment.zip')
+        fileDownload(res.data, fileName + '.zip')
         dispatch(downloadExpsSuccess())
       })
       .catch(err => {
@@ -67,3 +67,7 @@ export const downloadExps = (expIds, token) => {
       })
   }
 }
+
+export const toggleDownloadModal = () => ({
+  type: actionTypes.TOGGLE_DOWNLOAD_MODAL
+})

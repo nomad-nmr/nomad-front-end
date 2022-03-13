@@ -25,7 +25,7 @@ import {
   toggleBookSamplesModal,
   submitSamples,
   cancelSamples,
-  downloadExps
+  toggleDownloadModal
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -181,13 +181,7 @@ const PageHeaderEl = props => {
     case '/search':
       headerTitle = 'Search'
       avatarSrc = searchIcon
-      extra = (
-        <SearchControls
-          searchCheckedState={props.checked}
-          downloadExpsReq={props.downloadExps}
-          token={props.authToken}
-        />
-      )
+      extra = <SearchControls searchCheckedState={props.checked} toggleModal={props.toggleDownloadMdl} />
 
       break
 
@@ -254,7 +248,7 @@ const mapDispatchToProps = dispatch => {
     toggleBookSamples: () => dispatch(toggleBookSamplesModal()),
     submitSamples: (data, token) => dispatch(submitSamples(data, token)),
     cancelSamples: (data, token) => dispatch(cancelSamples(data, token)),
-    downloadExps: (expIds, token) => dispatch(downloadExps(expIds, token))
+    toggleDownloadMdl: () => dispatch(toggleDownloadModal())
   }
 }
 

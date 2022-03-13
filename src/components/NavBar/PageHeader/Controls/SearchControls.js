@@ -4,17 +4,7 @@ import { Button } from 'antd'
 import classes from '../PageHeader.module.css'
 
 const SearchControls = props => {
-  const { searchCheckedState, downloadExpsReq, token } = props
-
-  const getExpsArr = () => {
-    let expsArr = []
-    searchCheckedState.forEach(entry => {
-      expsArr = [...expsArr, ...entry.exps]
-    })
-    return expsArr
-  }
-
-  const downloadHandler = () => downloadExpsReq(getExpsArr(), token)
+  const { searchCheckedState, toggleModal } = props
 
   return (
     <div className={classes.ExtraContainer}>
@@ -25,7 +15,7 @@ const SearchControls = props => {
       </a>
       <Button
         className={classes.Button}
-        onClick={() => downloadHandler()}
+        onClick={() => toggleModal()}
         disabled={searchCheckedState.length === 0}
       >
         Download
