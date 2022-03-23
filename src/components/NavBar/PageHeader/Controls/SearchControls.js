@@ -6,9 +6,16 @@ import classes from '../PageHeader.module.css'
 const SearchControls = props => {
   const { searchCheckedState, toggleModal } = props
 
+  let expsArr = []
+  searchCheckedState.forEach(entry => {
+    expsArr = [...expsArr, ...entry.exps]
+  })
+
+  const searchParams = new URLSearchParams({ expIds: expsArr, token: 'token' })
+
   return (
     <div className={classes.ExtraContainer}>
-      <a href={process.env.REACT_APP_NMRIUM_URL}>
+      <a href={process.env.REACT_APP_NMRIUM_URL + '/?' + searchParams.toString()}>
         <Button className={classes.Button} type='primary' disabled={searchCheckedState.length === 0}>
           Open NMRium
         </Button>
