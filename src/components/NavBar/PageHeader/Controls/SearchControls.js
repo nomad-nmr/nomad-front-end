@@ -4,14 +4,14 @@ import { Button } from 'antd'
 import classes from '../PageHeader.module.css'
 
 const SearchControls = props => {
-  const { searchCheckedState, toggleModal } = props
+  const { searchCheckedState, toggleModal, token } = props
 
   let expsArr = []
   searchCheckedState.forEach(entry => {
     expsArr = [...expsArr, ...entry.exps]
   })
 
-  const searchParams = new URLSearchParams({ expIds: expsArr, token: 'token' })
+  const searchParams = new URLSearchParams({ expIds: expsArr, token })
 
   return (
     <div className={classes.ExtraContainer}>

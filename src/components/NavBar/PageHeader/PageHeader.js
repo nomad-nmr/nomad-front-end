@@ -181,7 +181,13 @@ const PageHeaderEl = props => {
     case '/search':
       headerTitle = 'Search'
       avatarSrc = searchIcon
-      extra = <SearchControls searchCheckedState={props.checked} toggleModal={props.toggleDownloadMdl} />
+      extra = (
+        <SearchControls
+          searchCheckedState={props.checked}
+          toggleModal={props.toggleDownloadMdl}
+          token={props.authToken}
+        />
+      )
 
       break
 
