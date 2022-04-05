@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Table } from 'antd'
+import { Table, Pagination } from 'antd'
 import moment from 'moment'
 
 import classes from './SearchExpsTable.module.css'
@@ -142,13 +142,27 @@ const SearchExpsTable = props => {
   }
 
   return (
-    <Table
-      columns={columns}
-      dataSource={props.data}
-      loading={props.loading}
-      expandable={{ expandedRowRender }}
-      rowSelection={selectDataset}
-    />
+    <div>
+      <Table
+        columns={columns}
+        dataSource={props.data}
+        loading={props.loading}
+        expandable={{ expandedRowRender }}
+        rowSelection={selectDataset}
+        pagination={false}
+      />
+      <Pagination
+        style={{ marginTop: '20px', textAlign: 'right' }}
+        size='small'
+        //Page size hardcoded to limit number of experiments available to download
+        pageSize={20}
+        current={props.currentPage}
+        total={props.total}
+        showSizeChanger={false}
+        onChange={page => props.pageHandler(page)}
+        showTotal={total => `Total ${total} experiments`}
+      />
+    </div>
   )
 }
 

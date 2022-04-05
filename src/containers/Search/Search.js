@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Modal, Form, Input, Button, Space } from 'antd'
 import moment from 'moment'
@@ -21,14 +21,21 @@ const Search = props => {
 
   const defaultZipFileName = 'NOMAD_download-' + moment().format('YY-MM-DD_HH:mm')
 
+  const [currentPage, setCurrentPage] = useState(1)
+
   useEffect(() => {
     window.scrollTo(0, 0)
     if (!authToken) {
       openModal()
     } else {
-      fetchExps(authToken)
+      const searchParams = {
+        currentPage,
+        //Page size hardcoded to limit number of experiments available to download
+        pageSize: 20
+      }
+      fetchExps(authToken, searchParams)
     }
-  }, [authToken, openModal, fetchExps])
+  }, [authToken, openModal, fetchExps, currentPage])
 
   const downloadHandler = values => {
     let expsArr = []
@@ -48,6 +55,9 @@ const Search = props => {
           checkedExpsHandler={props.updCheckedExps}
           checked={props.checked}
           resetCheckedState={props.resetChecked}
+          currentPage={currentPage}
+          total={props.total}
+          pageHandler={setCurrentPage}
         />
       )}
       <Modal visible={mdlVisible} onCancel={props.tglModal} width={600} footer={null}>
@@ -89,12 +99,13 @@ const mapStateToProps = state => ({
   tabData: state.search.tableData,
   loading: state.search.loading,
   checked: state.search.checked,
-  mdlVisible: state.search.showDownloadModal
+  mdlVisible: state.search.showDownloadModal,
+  total: state.search.total
 })
 
 const mapDispatchToProps = dispatch => ({
   openModal: () => dispatch(openAuthModal()),
-  fetchExps: token => dispatch(fetchExperiments(token)),
+  fetchExps: (token, searchParams) => dispatch(fetchExperiments(token, searchParams)),
   updCheckedDatasets: payload => dispatch(updateCheckedDatasets(payload)),
   updCheckedExps: payload => dispatch(updateCheckedExps(payload)),
   resetChecked: () => dispatch(resetChecked()),

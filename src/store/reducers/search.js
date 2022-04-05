@@ -6,7 +6,8 @@ const initialState = {
   //checked holds state of checkboxes in search exps table
   //[{datasetName, exps: [_id]}]
   checked: [],
-  showDownloadModal: false
+  showDownloadModal: false,
+  total: undefined
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -15,7 +16,7 @@ const reducer = (state = initialState, { type, payload }) => {
       return { ...state, loading: true }
 
     case actionTypes.FETCH_EXPERIMENTS_SUCCESS:
-      return { ...state, tableData: payload, loading: false }
+      return { ...state, tableData: payload.data, loading: false, total: payload.total }
 
     case actionTypes.UPDATE_CHECKED_DATASETS:
       const { dataset, selected } = payload

@@ -13,11 +13,11 @@ export const fetchExperimentsSuccess = payload => ({
   payload
 })
 
-export const fetchExperiments = token => {
+export const fetchExperiments = (token, searchParams) => {
   return dispatch => {
     dispatch(fetchExperimentsStart())
     axios
-      .get('/search/experiments', {
+      .get('/search/experiments/?' + new URLSearchParams(searchParams).toString(), {
         headers: { Authorization: 'Bearer ' + token }
       })
       .then(res => {
