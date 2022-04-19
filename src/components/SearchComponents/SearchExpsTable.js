@@ -31,6 +31,11 @@ const SearchExpsTable = props => {
       align: 'center'
     },
     {
+      title: 'Solvent',
+      dataIndex: 'solvent',
+      align: 'center'
+    },
+    {
       title: 'Dataset Name',
       dataIndex: 'datasetName',
       align: 'center'
@@ -62,17 +67,15 @@ const SearchExpsTable = props => {
       {
         title: 'Parameter Set',
         dataIndex: 'parameterSet',
-        align: 'center'
+        align: 'center',
+        width: 300
       },
       {
         title: 'Parameters',
         dataIndex: 'parameters',
         width: 200
       },
-      {
-        title: 'Title',
-        dataIndex: 'title'
-      },
+
       {
         title: 'Archived At',
         dataIndex: 'archivedAt',

@@ -25,7 +25,8 @@ import {
   toggleBookSamplesModal,
   submitSamples,
   cancelSamples,
-  toggleDownloadModal
+  toggleDownloadModal,
+  toggleSearchForm
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -186,6 +187,8 @@ const PageHeaderEl = props => {
           searchCheckedState={props.checked}
           toggleModal={props.toggleDownloadMdl}
           token={props.authToken}
+          toggleForm={props.tglSearchForm}
+          showForm={props.showSearchForm}
         />
       )
 
@@ -227,7 +230,8 @@ const mapStateToProps = state => {
     activeRackId: state.batchSubmit.activeRackId,
     racksData: state.batchSubmit.racks,
     slots: state.batchSubmit.selectedSlots,
-    checked: state.search.checked
+    checked: state.search.checked,
+    showSearchForm: state.search.showForm
   }
 }
 
@@ -254,7 +258,8 @@ const mapDispatchToProps = dispatch => {
     toggleBookSamples: () => dispatch(toggleBookSamplesModal()),
     submitSamples: (data, token) => dispatch(submitSamples(data, token)),
     cancelSamples: (data, token) => dispatch(cancelSamples(data, token)),
-    toggleDownloadMdl: () => dispatch(toggleDownloadModal())
+    toggleDownloadMdl: () => dispatch(toggleDownloadModal()),
+    tglSearchForm: () => dispatch(toggleSearchForm())
   }
 }
 

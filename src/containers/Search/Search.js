@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { Modal, Form, Input, Button, Space } from 'antd'
-import moment from 'moment'
+import Animate from 'rc-animate'
 
 import SearchExpsTable from '../../components/SearchComponents/SearchExpsTable'
+import DownloadModal from '../../components/SearchComponents/DownloadModal'
+
 import {
   fetchExperiments,
   openAuthModal,
@@ -14,93 +15,78 @@ import {
   downloadExps
 } from '../../store/actions'
 
-import classes from './Search.module.css'
+import SearchForm from '../../components/SearchComponents/SearchForm'
+import './Search.css'
 
 const Search = props => {
-  const { authToken, openModal, fetchExps, tabData, mdlVisible, checked } = props
-
-  const defaultZipFileName = 'NOMAD_download-' + moment().format('YY-MM-DD_HH:mm')
-
-  const [currentPage, setCurrentPage] = useState(1)
+  const { authToken, openModal, fetchExps, tabData, mdlVisible, checked, showForm } = props
+  //Page size hardcoded to limit number of experiments available to download
+  const [searchParams, setSearchParams] = useState({ currentPage: 1, pageSize: 20 })
 
   useEffect(() => {
     window.scrollTo(0, 0)
     if (!authToken) {
       openModal()
     } else {
-      const searchParams = {
-        currentPage,
-        //Page size hardcoded to limit number of experiments available to download
-        pageSize: 20
-      }
       fetchExps(authToken, searchParams)
     }
-  }, [authToken, openModal, fetchExps, currentPage])
+  }, [authToken, openModal, fetchExps, searchParams])
 
-  const downloadHandler = values => {
-    let expsArr = []
-    checked.forEach(entry => {
-      expsArr = [...expsArr, ...entry.exps]
-    })
-    props.downloadExps(expsArr, values.zipFileName, authToken)
+  const onPageChange = page => {
+    const newSearchParams = { ...searchParams }
+    newSearchParams.currentPage = page
+    setSearchParams(newSearchParams)
+  }
+
+  const onFormSubmit = values => {
+    const { dateRange } = values
+    if (dateRange) {
+      values.dateRange = dateRange.map(date => date.format('YYYY-MM-DD'))
+    }
+    console.log(values)
+    setSearchParams({ ...searchParams, ...values })
   }
 
   return (
-    <div className={classes.Container}>
+    <div className='Container'>
       {authToken && (
-        <SearchExpsTable
-          data={tabData}
-          loading={props.loading}
-          checkedDatasetsHandler={props.updCheckedDatasets}
-          checkedExpsHandler={props.updCheckedExps}
-          checked={props.checked}
-          resetCheckedState={props.resetChecked}
-          currentPage={currentPage}
-          total={props.total}
-          pageHandler={setCurrentPage}
-        />
+        <div>
+          <Animate transitionName='fade-form'>
+            {showForm && <SearchForm submitHandler={onFormSubmit} />}
+          </Animate>
+          <SearchExpsTable
+            data={tabData}
+            loading={props.loading}
+            checkedDatasetsHandler={props.updCheckedDatasets}
+            checkedExpsHandler={props.updCheckedExps}
+            checked={props.checked}
+            resetCheckedState={props.resetChecked}
+            currentPage={searchParams.currentPage}
+            total={props.total}
+            pageHandler={onPageChange}
+          />
+        </div>
       )}
-      <Modal visible={mdlVisible} onCancel={props.tglModal} width={600} footer={null}>
-        <Form
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 16 }}
-          style={{ marginTop: 40 }}
-          onFinish={values => downloadHandler(values)}
-          initialValues={{ zipFileName: defaultZipFileName }}
-        >
-          <Form.Item
-            label='File Name'
-            name='zipFileName'
-            rules={[
-              {
-                required: true,
-                message: 'Please input download file name!'
-              }
-            ]}
-          >
-            <Input addonAfter='.zip' />
-          </Form.Item>
-          <Form.Item style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
-            <Space size='large'>
-              <Button type='primary' htmlType='submit'>
-                Download
-              </Button>
-              <Button onClick={props.tglModal}>Cancel</Button>
-            </Space>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <DownloadModal
+        visible={mdlVisible}
+        toggleHandler={props.tglModal}
+        downloadHandler={props.downloadExps}
+        token={authToken}
+        checkedExps={checked}
+      />
     </div>
   )
 }
 
 const mapStateToProps = state => ({
   authToken: state.auth.token,
+  accessLvl: state.auth.accessLevel,
   tabData: state.search.tableData,
   loading: state.search.loading,
   checked: state.search.checked,
   mdlVisible: state.search.showDownloadModal,
-  total: state.search.total
+  total: state.search.total,
+  showForm: state.search.showForm
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -7,7 +7,8 @@ const initialState = {
   //[{datasetName, exps: [_id]}]
   checked: [],
   showDownloadModal: false,
-  total: undefined
+  total: undefined,
+  showForm: false
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -54,6 +55,9 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case actionTypes.TOGGLE_DOWNLOAD_MODAL:
       return { ...state, showDownloadModal: !state.showDownloadModal }
+
+    case actionTypes.TOGGLE_SEARCH_FORM:
+      return { ...state, showForm: !state.showForm }
 
     default:
       return state

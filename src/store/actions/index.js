@@ -104,5 +104,6 @@ export {
   updateCheckedDatasets,
   resetChecked,
   downloadExps,
-  toggleDownloadModal
+  toggleDownloadModal,
+  toggleSearchForm
 } from './search'

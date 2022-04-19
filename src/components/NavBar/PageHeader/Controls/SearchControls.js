@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'antd'
+import { Button, Switch } from 'antd'
 
 import classes from '../PageHeader.module.css'
 
@@ -15,6 +15,17 @@ const SearchControls = props => {
 
   return (
     <div className={classes.ExtraContainer}>
+      <div className={classes.SwitchElement}>
+        <label>Search Form</label>
+        <Switch
+          size='small'
+          checked={props.showForm}
+          checkedChildren='On'
+          unCheckedChildren='Off'
+          onChange={props.toggleForm}
+        />
+      </div>
+
       <a href={process.env.REACT_APP_NMRIUM_URL + '/?' + searchParams.toString()}>
         <Button className={classes.Button} type='primary' disabled={searchCheckedState.length === 0}>
           Open NMRium

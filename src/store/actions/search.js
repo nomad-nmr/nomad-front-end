@@ -71,3 +71,7 @@ export const downloadExps = (expIds, fileName, token) => {
 export const toggleDownloadModal = () => ({
   type: actionTypes.TOGGLE_DOWNLOAD_MODAL
 })
+
+export const toggleSearchForm = () => ({
+  type: actionTypes.TOGGLE_SEARCH_FORM
+})
