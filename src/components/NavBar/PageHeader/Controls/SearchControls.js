@@ -26,7 +26,11 @@ const SearchControls = props => {
         />
       </div>
 
-      <a href={process.env.REACT_APP_NMRIUM_URL + '/?' + searchParams.toString()}>
+      <a
+        href={process.env.REACT_APP_NMRIUM_URL + '/?' + searchParams.toString()}
+        target='_blank'
+        rel='noreferrer noopener'
+      >
         <Button className={classes.Button} type='primary' disabled={searchCheckedState.length === 0}>
           Open NMRium
         </Button>
