@@ -24,7 +24,9 @@ import {
   openAuthModal,
   toggleBookSamplesModal,
   submitSamples,
-  cancelSamples
+  cancelSamples,
+  toggleDownloadModal,
+  toggleSearchForm
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -36,6 +38,7 @@ import InstrumentsTabControls from './Controls/InstrumentsTabControls'
 import GroupsTabControls from './Controls/GroupsTabControls'
 import UsersTabControls from './Controls/UsersTabControls'
 import DashControls from './Controls/DashControls'
+import SearchControls from './Controls/SearchControls'
 
 import dashIcon from '../../../assets/dashboard.svg'
 import userIcon from '../../../assets/user.svg'
@@ -46,6 +49,7 @@ import historyIcon from '../../../assets/history-icon.webp'
 import submitIcon from '../../../assets/submit.png'
 import messageIcon from '../../../assets/email.png'
 import batchSubmitIcon from '../../../assets/batch-submit.png'
+import searchIcon from '../../../assets/loupe.svg'
 
 const PageHeaderEl = props => {
   const {
@@ -175,6 +179,21 @@ const PageHeaderEl = props => {
 
       break
 
+    case '/search':
+      headerTitle = 'Search'
+      avatarSrc = searchIcon
+      extra = (
+        <SearchControls
+          searchCheckedState={props.checked}
+          toggleModal={props.toggleDownloadMdl}
+          token={props.authToken}
+          toggleForm={props.tglSearchForm}
+          showForm={props.showSearchForm}
+        />
+      )
+
+      break
+
     default:
       headerTitle = ''
       avatarSrc = ''
@@ -210,7 +229,9 @@ const mapStateToProps = state => {
     addRackModalVisible: state.batchSubmit.addRackVisible,
     activeRackId: state.batchSubmit.activeRackId,
     racksData: state.batchSubmit.racks,
-    slots: state.batchSubmit.selectedSlots
+    slots: state.batchSubmit.selectedSlots,
+    checked: state.search.checked,
+    showSearchForm: state.search.showForm
   }
 }
 
@@ -236,7 +257,9 @@ const mapDispatchToProps = dispatch => {
     openAuthModal: () => dispatch(openAuthModal()),
     toggleBookSamples: () => dispatch(toggleBookSamplesModal()),
     submitSamples: (data, token) => dispatch(submitSamples(data, token)),
-    cancelSamples: (data, token) => dispatch(cancelSamples(data, token))
+    cancelSamples: (data, token) => dispatch(cancelSamples(data, token)),
+    toggleDownloadMdl: () => dispatch(toggleDownloadModal()),
+    tglSearchForm: () => dispatch(toggleSearchForm())
   }
 }
 

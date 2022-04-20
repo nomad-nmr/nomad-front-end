@@ -21,7 +21,7 @@ const LogoutModal = props => {
       visible={visible}
       onOk={() => {
         //user should stay on /batch-submit page after log out
-        if (location.pathname !== '/batch-submit') {
+        if (location.pathname !== '/batch-submit' && location.pathname !== '/search') {
           navigate('/')
         }
         okClicked(token)

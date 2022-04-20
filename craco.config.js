@@ -17,7 +17,8 @@ module.exports = {
               '@table-header-bg': '#f0f0f0',
               '@layout-sider-background-light': '#001529',
               '@layout-sider-background': '#001529',
-              '@table-row-hover-bg': '#fffbe6'
+              '@table-row-hover-bg': '#fffbe6',
+              '@layout-header-height': '72px'
             },
             javascriptEnabled: true
           }

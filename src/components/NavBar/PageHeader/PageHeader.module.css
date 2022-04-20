@@ -1,20 +1,21 @@
 .PageHeader {
-	border-right: 1px solid #f0f0f0;
-	/* border-bottom: 2px solid #1890ff; */
+  border-right: 1px solid #f0f0f0;
+  /* border-bottom: 2px solid #1890ff; */
 }
 
 .ExtraContainer {
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
 
 .SwitchElement {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding-left: 20px;
-	/* display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 20px;
+  padding-bottom: 5px;
+  /* display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
     align-items: baseline;
@@ -22,12 +23,12 @@
 }
 
 .SwitchElement label {
-	font-weight: 600;
-	font-size: 0.9rem;
-	margin-top: -5px;
-	padding-bottom: 2px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: -5px;
+  padding-bottom: 2px;
 }
 
 .Button {
-	margin-left: 20px;
+  margin-left: 20px;
 }

@@ -34,10 +34,10 @@ const NavBar = props => {
           alt='NOMAD logo wide'
           className={classes.Logo}
           onClick={() => {
-            if (props.accessLevel) {
-              if (props.accessLevel.includes('admin') || location.pathname !== '/batch-submit') {
-                navigate('/dashboard')
-              }
+            if (!props.accessLevel || props.accessLevel === 'user-b') {
+              return
+            } else {
+              navigate('/dashboard')
             }
           }}
         />
@@ -55,7 +55,7 @@ const NavBar = props => {
       {navLeft}
       <PageHeader />
       <div className={classes.MainMenu}>
-        {menuElement}
+        {location.pathname !== '/search' && location.pathname !== '/batch-submit' ? menuElement : null}
         <div className={!menuElement ? classes.Avatar : undefined}>
           <AuthAvatar
             onClick={props.openModalHandler}
