@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, DatePicker, Button, Select, Row, Col, Space } from 'antd'
+import { Form, Input, DatePicker, Button, Select, Row, Col, Space, Tooltip } from 'antd'
 import { SearchOutlined, CloseOutlined } from '@ant-design/icons'
 
 import SelectGrpUsr from '../Forms/SelectGrpUsr/SelectGrpUsr'
@@ -115,7 +115,9 @@ const SearchForm = props => {
               </Button>
             </Form.Item>
             <Form.Item>
-              <Button danger shape='circle' icon={<CloseOutlined />} onClick={() => form.resetFields()} />
+              <Tooltip title='Reset Form'>
+                <Button danger shape='circle' icon={<CloseOutlined />} onClick={() => form.resetFields()} />
+              </Tooltip>
             </Form.Item>
           </Space>
         </Col>
