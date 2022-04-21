@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
-import { Table, Pagination } from 'antd'
+import { Table, Pagination, Button, Tooltip } from 'antd'
 import moment from 'moment'
+import { FilePdfOutlined } from '@ant-design/icons'
 
 import classes from './SearchExpsTable.module.css'
 
@@ -80,6 +81,22 @@ const SearchExpsTable = props => {
         title: 'Archived At',
         dataIndex: 'archivedAt',
         render: record => (record ? moment(record).format('DD-MMM-YY HH:mm') : '-'),
+        align: 'center',
+        width: 200
+      },
+
+      {
+        title: 'Actions',
+        render: record => (
+          <Tooltip title='Get PDF'>
+            <Button
+              type='text'
+              onClick={() => props.getPDF(record.key, record.datasetName + '-' + record.expNo, props.token)}
+            >
+              <FilePdfOutlined style={{ fontSize: '1.2rem', color: 'red' }} />
+            </Button>
+          </Tooltip>
+        ),
         align: 'center',
         width: 200
       }

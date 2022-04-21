@@ -12,7 +12,8 @@ import {
   toggleDownloadModal,
   updateCheckedDatasets,
   updateCheckedExps,
-  downloadExps
+  downloadExps,
+  getPDF
 } from '../../store/actions'
 
 import SearchForm from '../../components/SearchComponents/SearchForm'
@@ -64,6 +65,8 @@ const Search = props => {
             currentPage={searchParams.currentPage}
             total={props.total}
             pageHandler={onPageChange}
+            token={authToken}
+            getPDF={props.fetchPDF}
           />
         </div>
       )}
@@ -96,7 +99,8 @@ const mapDispatchToProps = dispatch => ({
   updCheckedExps: payload => dispatch(updateCheckedExps(payload)),
   resetChecked: () => dispatch(resetChecked()),
   tglModal: () => dispatch(toggleDownloadModal()),
-  downloadExps: (expIds, fileName, token) => dispatch(downloadExps(expIds, fileName, token))
+  downloadExps: (expIds, fileName, token) => dispatch(downloadExps(expIds, fileName, token)),
+  fetchPDF: (expIds, fileName, token) => dispatch(getPDF(expIds, fileName, token))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search)

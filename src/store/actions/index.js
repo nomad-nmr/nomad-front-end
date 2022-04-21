@@ -105,5 +105,6 @@ export {
   resetChecked,
   downloadExps,
   toggleDownloadModal,
-  toggleSearchForm
+  toggleSearchForm,
+  getPDF
 } from './search'

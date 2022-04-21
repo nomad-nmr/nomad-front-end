@@ -75,3 +75,21 @@ export const toggleDownloadModal = () => ({
 export const toggleSearchForm = () => ({
   type: actionTypes.TOGGLE_SEARCH_FORM
 })
+
+export const getPDF = (expId, fileName, token) => {
+  return dispatch => {
+    dispatch(downloadExpsStart())
+    axios
+      .get('/data/pdf/' + expId, {
+        responseType: 'blob',
+        headers: { Authorization: 'Bearer ' + token }
+      })
+      .then(res => {
+        fileDownload(res.data, fileName + '.pdf')
+        dispatch(downloadExpsSuccess())
+      })
+      .catch(err => {
+        dispatch(errorHandler(err))
+      })
+  }
+}
