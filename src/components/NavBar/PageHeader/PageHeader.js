@@ -26,7 +26,8 @@ import {
   submitSamples,
   cancelSamples,
   toggleDownloadModal,
-  toggleSearchForm
+  toggleSearchForm,
+  fetchRepair
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -149,7 +150,14 @@ const PageHeaderEl = props => {
     case '/admin/history':
       headerTitle = 'Experiment History'
       avatarSrc = historyIcon
-      extra = <ExpHistControls dateHandler={props.setExpHistoryDate} />
+      extra = (
+        <ExpHistControls
+          dateHandler={props.setExpHistoryDate}
+          instrId={props.selectedInstrId}
+          token={props.authToken}
+          fetchRepair={props.getRepair}
+        />
+      )
       break
 
     case '/submit':
@@ -231,7 +239,8 @@ const mapStateToProps = state => {
     racksData: state.batchSubmit.racks,
     slots: state.batchSubmit.selectedSlots,
     checked: state.search.checked,
-    showSearchForm: state.search.showForm
+    showSearchForm: state.search.showForm,
+    selectedInstrId: state.expHistory.instrumentId
   }
 }
 
@@ -259,7 +268,8 @@ const mapDispatchToProps = dispatch => {
     submitSamples: (data, token) => dispatch(submitSamples(data, token)),
     cancelSamples: (data, token) => dispatch(cancelSamples(data, token)),
     toggleDownloadMdl: () => dispatch(toggleDownloadModal()),
-    tglSearchForm: () => dispatch(toggleSearchForm())
+    tglSearchForm: () => dispatch(toggleSearchForm()),
+    getRepair: (instrId, token) => dispatch(fetchRepair(instrId, token))
   }
 }
 

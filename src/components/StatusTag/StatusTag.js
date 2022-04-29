@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tag, Badge } from 'antd'
+import { Tag } from 'antd'
 
 import {
   CheckCircleOutlined,
@@ -51,7 +51,7 @@ const StatusTag = props => {
       )
 
     default:
-      return <Badge status='default' text={text} />
+      return <Tag color='default'>{text ? text : 'undefined'}</Tag>
   }
 }
 

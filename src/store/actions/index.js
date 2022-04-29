@@ -58,7 +58,15 @@ export {
   addUsers
 } from './groups'
 
-export { fetchHistory, setExpHistoryDate } from './expHistory'
+export {
+  fetchHistory,
+  setExpHistoryDate,
+  fetchRepair,
+  postRepair,
+  setInstrId,
+  closeRepairModal,
+  getRefresh
+} from './expHistory'
 
 export {
   fetchParamSets,
