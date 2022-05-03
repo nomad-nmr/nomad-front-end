@@ -121,6 +121,7 @@ const RepairModal = props => {
           dataSource={data}
           rowSelection={!repaired && rowSelection}
           pagination={!repaired}
+          loading={props.loading}
         />
       )}
       <div style={{ textAlign: 'center', marginTop: repaired && 20 }}>{buttons}</div>

@@ -62,6 +62,7 @@ const ExpHistory = props => {
         instrId={props.instrId}
         repaired={props.repaired}
         refreshHandler={props.refresh}
+        loading={props.loading}
       />
     </Fragment>
   )
