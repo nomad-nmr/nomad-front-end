@@ -6,6 +6,7 @@ import Animate from 'rc-animate'
 import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
 
 import GroupForm from '../../components/Forms/GroupForm/GroupForm'
+import { renderDataAccess } from '../../utils/tableUtils'
 
 import {
   fetchGroups,
@@ -105,11 +106,7 @@ const Groups = props => {
           Edit
         </Button>
         <Tooltip title='Add users from csv file' placement='topLeft'>
-          <Upload
-            accept='.csv'
-            showUploadList={false}
-            beforeUpload={file => addUsersfromCSV(file, record)}
-          >
+          <Upload accept='.csv' showUploadList={false} beforeUpload={file => addUsersfromCSV(file, record)}>
             <Button size='small' type='link'>
               Add users
             </Button>
@@ -118,6 +115,7 @@ const Groups = props => {
       </Space>
     )
   }
+
   const columns = [
     {
       title: 'Group Name',
@@ -152,6 +150,11 @@ const Groups = props => {
       render: record => {
         return record.isBatch && <CheckCircleOutlined style={{ color: '#52c41a' }} />
       }
+    },
+    {
+      title: 'Data Access',
+      align: 'center',
+      render: record => renderDataAccess(record.dataAccess)
     },
 
     {
@@ -207,8 +210,7 @@ const mapDispatchToProps = dispatch => {
     updateGrp: (data, token) => dispatch(updateGroup(data, token)),
     toggleGrpForm: editing => dispatch(toggleGroupForm(editing)),
     toggleActive: (groupId, token) => dispatch(toggleActiveGroup(groupId, token)),
-    addUsrs: (users, groupId, token, showInactive) =>
-      dispatch(addUsers(users, groupId, token, showInactive))
+    addUsrs: (users, groupId, token, showInactive) => dispatch(addUsers(users, groupId, token, showInactive))
   }
 }
 

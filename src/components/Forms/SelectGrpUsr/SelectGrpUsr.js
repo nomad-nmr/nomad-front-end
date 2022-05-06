@@ -19,10 +19,15 @@ const SelectGrpUsr = props => {
     </Option>
   ))
 
+  if (groupList.length === 1) {
+    onGrpChange(token, groupList[0].id, false)
+  }
+
   return (
     <Space size='large'>
       <Form.Item label='Group' name='groupId'>
         <Select
+          disabled={groupList.length === 1}
           style={{ width: 150 }}
           onChange={value => {
             props.formRef.current.setFieldsValue({ userId: undefined })

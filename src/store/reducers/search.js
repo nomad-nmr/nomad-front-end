@@ -8,7 +8,8 @@ const initialState = {
   checked: [],
   showDownloadModal: false,
   total: undefined,
-  showForm: false
+  showForm: false,
+  dataAccess: undefined
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -58,6 +59,9 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case actionTypes.TOGGLE_SEARCH_FORM:
       return { ...state, showForm: !state.showForm }
+
+    case actionTypes.GET_DATA_ACCESS_SUCCESS:
+      return { ...state, dataAccess: payload }
 
     default:
       return state

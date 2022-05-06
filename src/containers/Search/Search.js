@@ -44,7 +44,6 @@ const Search = props => {
     if (dateRange) {
       values.dateRange = dateRange.map(date => date.format('YYYY-MM-DD'))
     }
-    console.log(values)
     setSearchParams({ ...searchParams, ...values })
   }
 

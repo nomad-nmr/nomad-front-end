@@ -93,3 +93,23 @@ export const getPDF = (expId, fileName, token) => {
       })
   }
 }
+
+export const getDataAccessSuccess = payload => ({
+  type: actionTypes.GET_DATA_ACCESS_SUCCESS,
+  payload
+})
+
+export const getDataAccess = token => {
+  return dispatch => {
+    axios
+      .get('/search/data-access', {
+        headers: { Authorization: 'Bearer ' + token }
+      })
+      .then(res => {
+        dispatch(getDataAccessSuccess(res.data))
+      })
+      .catch(err => {
+        dispatch(errorHandler(err))
+      })
+  }
+}

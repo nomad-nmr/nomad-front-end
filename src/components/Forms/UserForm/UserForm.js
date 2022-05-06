@@ -1,16 +1,17 @@
 import React, { useEffect, useState, Fragment } from 'react'
 import { Form, Input, Button, Select, Checkbox } from 'antd'
 
+import dataAccessOptions from '../dataAccessOptions'
 import classes from '../Form.module.css'
 
 const { Option } = Select
 
 const layout = {
   labelCol: {
-    span: 6
+    span: 7
   },
   wrapperCol: {
-    span: 18
+    span: 17
   }
 }
 
@@ -98,15 +99,16 @@ const UserForm = props => {
     )
   }
 
+  const newDataAccessOptions = [
+    <Option key='undefined' value={undefined}>
+      undefined
+    </Option>,
+    ...dataAccessOptions
+  ]
+
   return (
     <div className={classes.formInDrawer}>
-      <Form
-        {...layout}
-        form={form}
-        ref={props.formReference}
-        initialValues={formValues}
-        onFinish={onFinish}
-      >
+      <Form {...layout} form={form} ref={props.formReference} initialValues={formValues} onFinish={onFinish}>
         <Form.Item
           name='username'
           label='Username'
@@ -138,6 +140,13 @@ const UserForm = props => {
         </Form.Item>
         <Form.Item name='accessLevel' label='Access Level'>
           <Select style={{ width: '60%' }}>{accessLevelOptions}</Select>
+        </Form.Item>
+        <Form.Item
+          name='dataAccess'
+          label='Data Access'
+          tooltip='Leave undefined if you want to use settings from the group table'
+        >
+          <Select style={{ width: '60%' }}>{newDataAccessOptions}</Select>
         </Form.Item>
         <Form.Item name='isActive' label='Active' valuePropName='checked'>
           <Checkbox />

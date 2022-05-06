@@ -114,5 +114,6 @@ export {
   downloadExps,
   toggleDownloadModal,
   toggleSearchForm,
-  getPDF
+  getPDF,
+  getDataAccess
 } from './search'

@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { Form, Input, Select, Button, Space, Col, Row, Checkbox, Modal } from 'antd'
 
 import { ExclamationCircleOutlined } from '@ant-design/icons'
+import dataAccessOptions from '../dataAccessOptions'
 
 const { confirm } = Modal
 const { Option } = Select
@@ -55,7 +56,7 @@ const GroupForm = props => {
         ref={props.formReference}
         layout='horizontal'
         onFinish={onFinish}
-        initialValues={{ isActive: true }}
+        initialValues={{ isActive: true, dataAccess: 'user' }}
       >
         <Form.Item hidden name='_id'>
           <Input />
@@ -76,7 +77,12 @@ const GroupForm = props => {
             </Form.Item>
           </Col>
           <Col span={3}>
-            <Form.Item name='isBatch' label='Batch Submit' valuePropName='checked'>
+            <Form.Item
+              name='isBatch'
+              label='Batch Submit'
+              valuePropName='checked'
+              tooltip='The group can use batch submission'
+            >
               <Checkbox />
             </Form.Item>
           </Col>
@@ -87,7 +93,7 @@ const GroupForm = props => {
           </Col>
         </Row>
 
-        <Row>
+        <Row gutter={24}>
           <Col span={14}>
             <Form.Item name='expList' label='Custom experiment list'>
               <Select mode='multiple' allowClear style={{ marginRight: '40px' }}>
@@ -95,7 +101,20 @@ const GroupForm = props => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={3}>
+            <Form.Item
+              name='dataAccess'
+              label='Data Access'
+              tooltip={`
+              user - users can see only own data,
+              group - users can see data of other users in the group, 
+              admin - users can see data of all other users
+              `}
+            >
+              <Select>{dataAccessOptions}</Select>
+            </Form.Item>
+          </Col>
+          <Col span={4}>
             <Form.Item>
               <Space size='middle'>
                 <Button type='primary' htmlType='submit'>

@@ -5,13 +5,20 @@ import { SearchOutlined, CloseOutlined } from '@ant-design/icons'
 
 import SelectGrpUsr from '../Forms/SelectGrpUsr/SelectGrpUsr'
 import solvents from '../../misc/solvents'
-import { fetchInstrumentList, fetchParamSets, fetchGroupList, fetchUserList } from '../../store/actions'
+import {
+  fetchInstrumentList,
+  fetchParamSets,
+  fetchGroupList,
+  fetchUserList,
+  getDataAccess
+} from '../../store/actions'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
 
 const SearchForm = props => {
-  const { fetchInstList, authToken, fetchParamSets, fetchGrpList, accessLvl } = props
+  const { fetchInstList, authToken, fetchParamSets, fetchGrpList, fetchDataAccess, dataAccess, grpList } =
+    props
 
   const [form] = Form.useForm()
   const [instrumentId, setInstrumentId] = useState(null)
@@ -21,19 +28,34 @@ const SearchForm = props => {
   useEffect(() => {
     fetchInstList(authToken)
     fetchParamSets(authToken, { instrumentId: null, searchValue: '' })
-    if (accessLvl === 'admin') {
-      fetchGrpList(authToken)
-    }
+    fetchDataAccess(authToken)
+    fetchGrpList(authToken)
     return () => {
       form.resetFields()
     }
-  }, [fetchInstList, fetchParamSets, authToken, form, accessLvl, fetchGrpList])
+  }, [fetchInstList, fetchParamSets, authToken, form, dataAccess, fetchGrpList, fetchDataAccess])
 
   const solventOptions = solvents.map((solvent, i) => (
     <Option value={solvent} key={i}>
       {solvent}
     </Option>
   ))
+
+  let groupList = []
+
+  switch (dataAccess) {
+    case 'admin':
+      groupList = grpList
+      break
+    case 'admin-b':
+      groupList = grpList.filter(entry => entry.isBatch)
+      break
+    case 'group':
+      groupList = grpList.filter(entry => entry.name === props.grpName)
+      break
+    default:
+      break
+  }
 
   //Generating Option list for Select element
   let instOptions = []
@@ -95,11 +117,11 @@ const SearchForm = props => {
         </Col>
       </Row>
       <Row justify='center' gutter={32}>
-        {accessLvl === 'admin' && (
+        {dataAccess !== 'user' && (
           <Col span={10}>
             <SelectGrpUsr
               userList={props.usrList}
-              groupList={props.grpList}
+              groupList={groupList}
               token={authToken}
               onGrpChange={props.fetchUsrList}
               formRef={formRef}
@@ -128,18 +150,20 @@ const SearchForm = props => {
 
 const mapStateToProps = state => ({
   authToken: state.auth.token,
-  accessLvl: state.auth.accessLevel,
+  dataAccess: state.search.dataAccess,
   instList: state.instruments.instrumentList,
   paramSets: state.paramSets.paramSetsData,
   grpList: state.groups.groupList,
-  usrList: state.users.userList
+  usrList: state.users.userList,
+  grpName: state.auth.groupName
 })
 
 const mapDispatchToProps = dispatch => ({
   fetchInstList: token => dispatch(fetchInstrumentList(token)),
   fetchParamSets: (token, searchParams) => dispatch(fetchParamSets(token, searchParams)),
   fetchGrpList: token => dispatch(fetchGroupList(token)),
-  fetchUsrList: (token, groupId, showInactive) => dispatch(fetchUserList(token, groupId, showInactive))
+  fetchUsrList: (token, groupId, showInactive) => dispatch(fetchUserList(token, groupId, showInactive)),
+  fetchDataAccess: token => dispatch(getDataAccess(token))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchForm)

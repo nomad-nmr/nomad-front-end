@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Button, Table, Drawer, Tag, Space, Pagination } from 'antd'
+import { Button, Table, Drawer, Tag, Space, Pagination, Tooltip } from 'antd'
 
 import UserForm from '../../components/Forms/UserForm/UserForm'
 import {
@@ -12,6 +12,7 @@ import {
   toggleActive,
   fetchGroupList
 } from '../../store/actions/index'
+import { renderDataAccess } from '../../utils/tableUtils'
 
 import { MailOutlined } from '@ant-design/icons'
 
@@ -123,6 +124,12 @@ const Users = props => {
       filteredValue: filters.accessLevel || null
     },
     {
+      title: <Tooltip title='If undefined then settings from the group table apply'>Data Access</Tooltip>,
+
+      align: 'center',
+      render: record => renderDataAccess(record.dataAccess)
+    },
+    {
       title: 'Last login',
       dataIndex: 'lastLogin',
       align: 'center',
@@ -134,6 +141,7 @@ const Users = props => {
       dataIndex: 'inactiveDays',
       align: 'center'
     },
+
     {
       title: 'Actions',
       align: 'center',
