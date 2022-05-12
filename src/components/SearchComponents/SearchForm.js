@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, Fragment } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, DatePicker, Button, Select, Row, Col, Space, Tooltip } from 'antd'
+import { Form, Input, DatePicker, Button, Select, Row, Col, Space, Tooltip, Switch } from 'antd'
 import { SearchOutlined, CloseOutlined } from '@ant-design/icons'
 
 import SelectGrpUsr from '../Forms/SelectGrpUsr/SelectGrpUsr'
@@ -22,6 +22,8 @@ const SearchForm = props => {
 
   const [form] = Form.useForm()
   const [instrumentId, setInstrumentId] = useState(null)
+  const [grpInactiveChecked, setGrpInactiveChecked] = useState(false)
+  const [usrInactiveChecked, setUsrInactiveChecked] = useState(false)
 
   const formRef = useRef({})
 
@@ -29,7 +31,7 @@ const SearchForm = props => {
     fetchInstList(authToken)
     fetchParamSets(authToken, { instrumentId: null, searchValue: '' })
     fetchDataAccess(authToken)
-    fetchGrpList(authToken)
+    fetchGrpList(authToken, false)
     return () => {
       form.resetFields()
     }
@@ -55,6 +57,10 @@ const SearchForm = props => {
       break
     default:
       break
+  }
+
+  if (grpInactiveChecked) {
+    groupList = groupList.filter(grp => !grp.isActive)
   }
 
   //Generating Option list for Select element
@@ -118,15 +124,49 @@ const SearchForm = props => {
       </Row>
       <Row justify='center' gutter={32}>
         {dataAccess !== 'user' && (
-          <Col span={10}>
-            <SelectGrpUsr
-              userList={props.usrList}
-              groupList={groupList}
-              token={authToken}
-              onGrpChange={props.fetchUsrList}
-              formRef={formRef}
-            />
-          </Col>
+          <Fragment>
+            <Col span={3}>
+              <Form.Item
+                label='Inactive Groups'
+                name='inactiveGrp'
+                tooltip='if ON select from inactive groups'
+                valuePropName='checked'
+              >
+                <Switch
+                  onChange={checked => {
+                    fetchGrpList(authToken, checked)
+                    setGrpInactiveChecked(checked)
+                  }}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={3}>
+              <Form.Item
+                label='Inactive Users'
+                name='inactiveUsr'
+                tooltip='if ON select from inactive users'
+                valuePropName='checked'
+              >
+                <Switch
+                  onChange={checked => {
+                    // props.fetchUsrList(authToken, checked)
+                    setUsrInactiveChecked(checked)
+                  }}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={10}>
+              <SelectGrpUsr
+                userList={props.usrList}
+                groupList={groupList}
+                token={authToken}
+                onGrpChange={props.fetchUsrList}
+                formRef={formRef}
+                search={true}
+                inactiveUsrList={usrInactiveChecked}
+              />
+            </Col>
+          </Fragment>
         )}
 
         <Col span={2}>
@@ -161,8 +201,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchInstList: token => dispatch(fetchInstrumentList(token)),
   fetchParamSets: (token, searchParams) => dispatch(fetchParamSets(token, searchParams)),
-  fetchGrpList: token => dispatch(fetchGroupList(token)),
-  fetchUsrList: (token, groupId, showInactive) => dispatch(fetchUserList(token, groupId, showInactive)),
+  fetchGrpList: (token, showInactive) => dispatch(fetchGroupList(token, showInactive)),
+  fetchUsrList: (token, groupId, showInactive, search) =>
+    dispatch(fetchUserList(token, groupId, showInactive, search)),
   fetchDataAccess: token => dispatch(getDataAccess(token))
 })
 

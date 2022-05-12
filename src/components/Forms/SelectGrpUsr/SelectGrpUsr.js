@@ -2,7 +2,7 @@ import React from 'react'
 import { Form, Select, Space } from 'antd'
 
 const SelectGrpUsr = props => {
-  const { groupList, onGrpChange, token } = props
+  const { groupList, onGrpChange, token, search, inactiveUsrList } = props
   let userList = props.userList
 
   const { Option } = Select
@@ -30,8 +30,9 @@ const SelectGrpUsr = props => {
           disabled={groupList.length === 1}
           style={{ width: 150 }}
           onChange={value => {
+            console.log(value)
             props.formRef.current.setFieldsValue({ userId: undefined })
-            onGrpChange(token, value, false)
+            onGrpChange(token, value, inactiveUsrList, search)
           }}
         >
           {grpOptions}

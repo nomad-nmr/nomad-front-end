@@ -120,12 +120,15 @@ export const fetchUserListSuccess = payload => ({
   payload
 })
 
-export const fetchUserList = (token, groupId, showInactive) => {
+export const fetchUserList = (token, groupId, showInactive, search) => {
   return dispatch => {
     axios
-      .get('admin/users/?list=true&group=' + groupId + '&showInactive=' + showInactive, {
-        headers: { Authorization: 'Bearer ' + token }
-      })
+      .get(
+        'admin/users/?list=true&group=' + groupId + '&showInactive=' + showInactive + '&search=' + search,
+        {
+          headers: { Authorization: 'Bearer ' + token }
+        }
+      )
       .then(res => dispatch(fetchUserListSuccess(res.data)))
       .catch(err => {
         dispatch(errorHandler(err))
