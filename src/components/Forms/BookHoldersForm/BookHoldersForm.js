@@ -36,7 +36,7 @@ const BookHoldersForm = props => {
               userList={props.userList}
               groupList={props.groupList}
               token={props.token}
-              onGrpChange={props.onGrpChange}
+              fetchUsrListHandler={props.onGrpChange}
               formRef={props.formRef}
             />
           )}

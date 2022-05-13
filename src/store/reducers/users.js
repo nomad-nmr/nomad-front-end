@@ -69,9 +69,7 @@ const reducer = (state = initialState, action) => {
 
     case actionTypes.UPDATE_USER_SUCCESS:
       const newUsersTable = [...state.usersTableData]
-      const userIndex = newUsersTable.findIndex(
-        usr => usr._id.toString() === action.data._id.toString()
-      )
+      const userIndex = newUsersTable.findIndex(usr => usr._id.toString() === action.data._id.toString())
       const updatedUser = { ...action.data }
       updatedUser.groupName = updatedUser.group.groupName
       updatedUser.groupId = updatedUser.group._id
@@ -113,6 +111,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         userList: action.payload
+      }
+
+    case actionTypes.RESET_USER_LIST:
+      return {
+        ...state,
+        userList: []
       }
 
     default:

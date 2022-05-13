@@ -135,3 +135,7 @@ export const fetchUserList = (token, groupId, showInactive, search) => {
       })
   }
 }
+
+export const resetUserList = () => ({
+  type: actionTypes.RESET_USER_LIST
+})

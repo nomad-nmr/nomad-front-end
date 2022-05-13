@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef, Fragment } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, DatePicker, Button, Select, Row, Col, Space, Tooltip, Switch } from 'antd'
+import { Form, Input, DatePicker, Button, Select, Row, Col, Space, Tooltip } from 'antd'
 import { SearchOutlined, CloseOutlined } from '@ant-design/icons'
 
 import SelectGrpUsr from '../Forms/SelectGrpUsr/SelectGrpUsr'
@@ -10,7 +10,8 @@ import {
   fetchParamSets,
   fetchGroupList,
   fetchUserList,
-  getDataAccess
+  getDataAccess,
+  resetUserList
 } from '../../store/actions'
 
 const { Option } = Select
@@ -22,8 +23,6 @@ const SearchForm = props => {
 
   const [form] = Form.useForm()
   const [instrumentId, setInstrumentId] = useState(null)
-  const [grpInactiveChecked, setGrpInactiveChecked] = useState(false)
-  const [usrInactiveChecked, setUsrInactiveChecked] = useState(false)
 
   const formRef = useRef({})
 
@@ -35,7 +34,8 @@ const SearchForm = props => {
     return () => {
       form.resetFields()
     }
-  }, [fetchInstList, fetchParamSets, authToken, form, dataAccess, fetchGrpList, fetchDataAccess])
+    // eslint-disable-next-line
+  }, [])
 
   const solventOptions = solvents.map((solvent, i) => (
     <Option value={solvent} key={i}>
@@ -57,10 +57,6 @@ const SearchForm = props => {
       break
     default:
       break
-  }
-
-  if (grpInactiveChecked) {
-    groupList = groupList.filter(grp => !grp.isActive)
   }
 
   //Generating Option list for Select element
@@ -123,51 +119,24 @@ const SearchForm = props => {
         </Col>
       </Row>
       <Row justify='center' gutter={32}>
-        {dataAccess !== 'user' && (
-          <Fragment>
-            <Col span={3}>
-              <Form.Item
-                label='Inactive Groups'
-                name='inactiveGrp'
-                tooltip='if ON select from inactive groups'
-                valuePropName='checked'
-              >
-                <Switch
-                  onChange={checked => {
-                    fetchGrpList(authToken, checked)
-                    setGrpInactiveChecked(checked)
-                  }}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={3}>
-              <Form.Item
-                label='Inactive Users'
-                name='inactiveUsr'
-                tooltip='if ON select from inactive users'
-                valuePropName='checked'
-              >
-                <Switch
-                  onChange={checked => {
-                    // props.fetchUsrList(authToken, checked)
-                    setUsrInactiveChecked(checked)
-                  }}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={10}>
+        {
+          //The component has be render only if groupList is not empty
+          // That allows to call useEffect efficiently only when the component mounts
+          dataAccess !== 'user' && groupList.length !== 0 ? (
+            <Col span={16}>
               <SelectGrpUsr
                 userList={props.usrList}
                 groupList={groupList}
                 token={authToken}
-                onGrpChange={props.fetchUsrList}
+                fetchUsrListHandler={props.fetchUsrList}
+                fetchGrpListHandler={props.fetchGrpList}
+                resetUserListHandler={props.resetUsrList}
                 formRef={formRef}
-                search={true}
-                inactiveUsrList={usrInactiveChecked}
+                inactiveSwitch
               />
             </Col>
-          </Fragment>
-        )}
+          ) : null
+        }
 
         <Col span={2}>
           <Space size='large'>
@@ -204,7 +173,8 @@ const mapDispatchToProps = dispatch => ({
   fetchGrpList: (token, showInactive) => dispatch(fetchGroupList(token, showInactive)),
   fetchUsrList: (token, groupId, showInactive, search) =>
     dispatch(fetchUserList(token, groupId, showInactive, search)),
-  fetchDataAccess: token => dispatch(getDataAccess(token))
+  fetchDataAccess: token => dispatch(getDataAccess(token)),
+  resetUsrList: () => dispatch(resetUserList())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchForm)

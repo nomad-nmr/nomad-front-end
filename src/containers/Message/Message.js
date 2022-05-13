@@ -172,7 +172,7 @@ const Message = props => {
           <SelectGrpUsr
             groupList={props.grpList}
             userList={props.usrList}
-            onGrpChange={props.fetchUsrList}
+            fetchUsrListHandler={props.fetchUsrList}
             formRef={formRef}
             token={props.authToken}
           />

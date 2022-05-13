@@ -44,7 +44,8 @@ export {
   updateUser,
   toggleActive,
   toggleShowInactive,
-  searchUser
+  searchUser,
+  resetUserList
 } from './users'
 
 export {
