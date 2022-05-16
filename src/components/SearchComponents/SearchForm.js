@@ -133,6 +133,7 @@ const SearchForm = props => {
                 resetUserListHandler={props.resetUsrList}
                 formRef={formRef}
                 inactiveSwitch
+                dataAccessLvl={dataAccess}
               />
             </Col>
           ) : null
@@ -147,7 +148,15 @@ const SearchForm = props => {
             </Form.Item>
             <Form.Item>
               <Tooltip title='Reset Form'>
-                <Button danger shape='circle' icon={<CloseOutlined />} onClick={() => form.resetFields()} />
+                <Button
+                  danger
+                  shape='circle'
+                  icon={<CloseOutlined />}
+                  onClick={() => {
+                    form.resetFields()
+                    props.resetUsrList()
+                  }}
+                />
               </Tooltip>
             </Form.Item>
           </Space>

@@ -44,7 +44,7 @@ const SelectGrpUsr = props => {
       {inactiveSwitch && (
         <Form.Item label='Inactive Groups' tooltip='if ON select from inactive groups'>
           <Switch
-            disabled={groupList.length === 1}
+            disabled={props.dataAccessLvl === 'group'}
             checkedChildren='ON'
             unCheckedChildren='OFF'
             onChange={checked => {
@@ -62,7 +62,7 @@ const SelectGrpUsr = props => {
       )}
       <Form.Item label='Group' name='groupId'>
         <Select
-          disabled={groupList.length === 1}
+          disabled={props.dataAccessLvl === 'group'}
           style={{ width: 150 }}
           onChange={value => {
             fetchUsrListHandler(token, value, usrInactiveChecked, inactiveSwitch)
