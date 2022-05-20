@@ -13,14 +13,15 @@ import {
   updateCheckedDatasets,
   updateCheckedExps,
   downloadExps,
-  getPDF
+  getPDF,
+  toggleSearchForm
 } from '../../store/actions'
 
 import SearchForm from '../../components/SearchComponents/SearchForm'
 import './Search.css'
 
 const Search = props => {
-  const { authToken, openModal, fetchExps, tabData, mdlVisible, checked, showForm } = props
+  const { authToken, openModal, fetchExps, tabData, mdlVisible, checked, showForm, tglSearchForm } = props
   //Page size hardcoded to limit number of experiments available to download
   const [searchParams, setSearchParams] = useState({ currentPage: 1, pageSize: 20 })
 
@@ -32,6 +33,17 @@ const Search = props => {
       fetchExps(authToken, searchParams)
     }
   }, [authToken, openModal, fetchExps, searchParams])
+
+  //cleaning function that closes the search form if component dismounts
+  useEffect(
+    () => () => {
+      if (showForm) {
+        tglSearchForm()
+      }
+    },
+    // eslint-disable-next-line
+    []
+  )
 
   const onPageChange = page => {
     const newSearchParams = { ...searchParams }
@@ -93,6 +105,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   openModal: () => dispatch(openAuthModal()),
+  tglSearchForm: () => dispatch(toggleSearchForm()),
   fetchExps: (token, searchParams) => dispatch(fetchExperiments(token, searchParams)),
   updCheckedDatasets: payload => dispatch(updateCheckedDatasets(payload)),
   updCheckedExps: payload => dispatch(updateCheckedExps(payload)),
