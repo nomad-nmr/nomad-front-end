@@ -32,7 +32,8 @@
   },
   "scripts": {
     "start": "env-cmd -f ./config/dev.env craco start",
-    "build": "env-cmd -f ./config/production.env craco build"
+    "build": "env-cmd -f ./config/production.env craco build",
+    "dev-docker": "craco start"
   },
   "eslintConfig": {
     "extends": "react-app"
