@@ -7,7 +7,7 @@ COPY package.json /app/
 RUN npm install --legacy-peer-deps
 
 ## next line allows to avoid overwriting node_modules using anonymous volume
-# RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 
 COPY . .
 
