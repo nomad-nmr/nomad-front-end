@@ -7,6 +7,7 @@ import nodeLogo from '../../assets/node-logo.svg'
 import mongoLogo from '../../assets/mongoDB-logo.png'
 import socketIO from '../../assets/websocket.png'
 import nginxLogo from '../../assets/nginx.png'
+import dockerLogo from '../../assets/docker-logo.png'
 import gitHubLogo from '../../assets/GitHub-logo.png'
 import classes from './Credits.module.css'
 
@@ -40,6 +41,10 @@ const credits = () => {
       <Divider type='vertical' />
       <a href='https://www.nginx.com/'>
         <img src={nginxLogo} alt='Nginx Logo' />
+      </a>
+      <Divider type='vertical' />
+      <a href='https://www.docker.com'>
+        <img src={dockerLogo} alt='Docker Logo' />
       </a>
       <Divider type='vertical' />
       <a href='https://github.com/nomad-nmr'>
