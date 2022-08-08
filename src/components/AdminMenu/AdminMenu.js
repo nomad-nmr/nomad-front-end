@@ -12,7 +12,8 @@ import {
   ExperimentOutlined,
   DeploymentUnitOutlined,
   BarChartOutlined,
-  MailOutlined
+  MailOutlined,
+  BankOutlined
 } from '@ant-design/icons'
 
 const { SubMenu } = Menu
@@ -94,6 +95,10 @@ const AdminMenu = props => {
           <Menu.Item key='/admin/parameter-sets'>
             <ExperimentOutlined />
             <span>Parameter Sets</span>
+          </Menu.Item>
+          <Menu.Item key='/admin/grants'>
+            <BankOutlined />
+            <span>Grants</span>
           </Menu.Item>
         </SubMenu>
       </Menu>

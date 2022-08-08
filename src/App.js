@@ -34,8 +34,16 @@ const App = props => {
     setAdminMenuCollapsed(!adminMenuCollapsed)
   }
 
-  const { username, accessLevel, authModalVisible, closeModal, onSignIn, onSignOut, onTryAutoSignIn, err } =
-    props
+  const {
+    username,
+    accessLevel,
+    authModalVisible,
+    closeModal,
+    onSignIn,
+    onSignOut,
+    onTryAutoSignIn,
+    err
+  } = props
 
   useEffect(() => {
     onTryAutoSignIn()
@@ -55,6 +63,7 @@ const App = props => {
   const Submit = React.lazy(() => import('./containers/Submit/Submit'))
   const BatchSubmit = React.lazy(() => import('./containers/BatchSubmit/BatchSubmit'))
   const Search = React.lazy(() => import('./containers/Search/Search'))
+  const Grants = React.lazy(() => import('./containers/Grants/Grants'))
 
   //Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
   let authModal = null
@@ -85,7 +94,12 @@ const App = props => {
     <Layout>
       {accessLevel === 'admin' ? (
         <Affix className={classes.AdminMenu}>
-          <Sider trigger={null} className={classes.Sider} collapsible collapsed={adminMenuCollapsed}>
+          <Sider
+            trigger={null}
+            className={classes.Sider}
+            collapsible
+            collapsed={adminMenuCollapsed}
+          >
             <AdminMenu collapsed={adminMenuCollapsed} />
           </Sider>
         </Affix>
@@ -124,12 +138,18 @@ const App = props => {
                 path='/admin/parameter-sets'
                 element={accessLevel === 'admin' ? <ParameterSets /> : <Navigate to='/dashboard' />}
               />
+              <Route
+                path='/admin/grants'
+                element={accessLevel === 'admin' ? <Grants /> : <Navigate to='/dashboard' />}
+              />
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/reset/:token' element={<Reset />} />
               <Route
                 path='/submit'
                 element={
-                  username && process.env.REACT_APP_SUBMIT_ON === 'true' && accessLevel !== 'user-b' ? (
+                  username &&
+                  process.env.REACT_APP_SUBMIT_ON === 'true' &&
+                  accessLevel !== 'user-b' ? (
                     <Submit />
                   ) : (
                     <Navigate to='/dashboard' />
@@ -149,7 +169,11 @@ const App = props => {
               <Route
                 path='/search'
                 element={
-                  process.env.REACT_APP_DATASTORE_ON === 'true' ? <Search /> : <Navigate to='/dashboard' />
+                  process.env.REACT_APP_DATASTORE_ON === 'true' ? (
+                    <Search />
+                  ) : (
+                    <Navigate to='/dashboard' />
+                  )
                 }
               />
 
