@@ -53,7 +53,14 @@ const SearchExpsTable = props => {
       dataIndex: 'submittedAt',
       render: record => (record ? moment(record).format('DD-MMM-YY HH:mm') : '-'),
       align: 'center',
-      width: 200
+      width: 150
+    },
+    {
+      title: 'Archived At',
+      dataIndex: 'lastArchivedAt',
+      render: record => (record ? moment(record).format('DD-MMM-YY HH:mm') : '-'),
+      align: 'center',
+      width: 150
     }
   ]
 
@@ -91,7 +98,9 @@ const SearchExpsTable = props => {
           <Tooltip title='Get PDF'>
             <Button
               type='text'
-              onClick={() => props.getPDF(record.key, record.datasetName + '-' + record.expNo, props.token)}
+              onClick={() =>
+                props.getPDF(record.key, record.datasetName + '-' + record.expNo, props.token)
+              }
             >
               <FilePdfOutlined style={{ fontSize: '1.2rem', color: 'red' }} />
             </Button>
