@@ -56,7 +56,7 @@ const SearchExpsTable = props => {
       width: 150
     },
     {
-      title: 'Archived At',
+      title: 'Finished At',
       dataIndex: 'lastArchivedAt',
       render: record => (record ? moment(record).format('DD-MMM-YY HH:mm') : '-'),
       align: 'center',
