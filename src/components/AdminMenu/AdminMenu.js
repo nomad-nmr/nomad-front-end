@@ -96,10 +96,10 @@ const AdminMenu = props => {
             <ExperimentOutlined />
             <span>Parameter Sets</span>
           </Menu.Item>
-          <Menu.Item key='/admin/grants'>
+          {/*<Menu.Item key='/admin/grants'>
             <BankOutlined />
             <span>Grants</span>
-          </Menu.Item>
+        </Menu.Item>*/}
         </SubMenu>
       </Menu>
     </nav>

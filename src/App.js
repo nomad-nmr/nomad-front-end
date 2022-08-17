@@ -138,10 +138,10 @@ const App = props => {
                 path='/admin/parameter-sets'
                 element={accessLevel === 'admin' ? <ParameterSets /> : <Navigate to='/dashboard' />}
               />
-              <Route
+              {/* <Route
                 path='/admin/grants'
                 element={accessLevel === 'admin' ? <Grants /> : <Navigate to='/dashboard' />}
-              />
+      />*/}
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/reset/:token' element={<Reset />} />
               <Route
