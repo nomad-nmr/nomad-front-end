@@ -63,7 +63,8 @@ const App = props => {
   const Submit = React.lazy(() => import('./containers/Submit/Submit'))
   const BatchSubmit = React.lazy(() => import('./containers/BatchSubmit/BatchSubmit'))
   const Search = React.lazy(() => import('./containers/Search/Search'))
-  const Grants = React.lazy(() => import('./containers/Grants/Grants'))
+  // const Grants = React.lazy(() => import('./containers/Grants/Grants'))
+  const Accounts = React.lazy(() => import('./containers/Accounts/Accounts'))
 
   //Logic for authentication modal. Different modal is rendered depending whether a user is logged in or not
   let authModal = null
@@ -133,6 +134,10 @@ const App = props => {
               <Route
                 path='/admin/history'
                 element={accessLevel === 'admin' ? <ExpHistory /> : <Navigate to='/dashboard' />}
+              />
+              <Route
+                path='/admin/accounts'
+                element={accessLevel === 'admin' ? <Accounts /> : <Navigate to='/dashboard' />}
               />
               <Route
                 path='/admin/parameter-sets'
