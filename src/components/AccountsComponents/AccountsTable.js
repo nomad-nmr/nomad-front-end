@@ -1,30 +1,18 @@
 import React from 'react'
 import { Table } from 'antd'
 
-const AccountsTable = props => {
-  // const dataTest = [
-  //   {
-  //     name: 'Tomas Lebl [tl12]',
-  //     costsPerInstrument: [
-  //       { instrument: 'Alec', expCount: 10, expT: '0:25:14', cost: 25 },
-  //       { instrument: 'Felix', expCount: 20, expT: '0:50:14', cost: 51 },
-  //       { instrument: 'Felix', expCount: 20, expT: '0:50:14', cost: 51 },
-  //       { instrument: 'Felix', expCount: 20, expT: '0:50:14', cost: 51 },
-  //       { instrument: 'Felix', expCount: 20, expT: '0:50:14', cost: 51 },
-  //       { instrument: 'Felix', expCount: 20, expT: '0:50:14', cost: 51 }
-  //     ],
-  //     totalCost: '76'
-  //   }
-  // ]
+import classes from './AccountsTable.module.css'
 
+const AccountsTable = props => {
   const columns = [
     {
-      title: 'User',
+      title: props.header,
       width: 35,
       dataIndex: 'name',
       key: 'name',
       fixed: 'left',
-      align: 'center'
+      align: 'center',
+      className: classes.NameHighlight
     }
   ]
 
@@ -60,7 +48,8 @@ const AccountsTable = props => {
     dataIndex: 'totalCost',
     align: 'center',
     fixed: 'right',
-    width: 20
+    width: 10,
+    className: classes.ColHighlight
   })
 
   const data = props.data.map((entry, key) => {
@@ -85,9 +74,8 @@ const AccountsTable = props => {
       bordered={true}
       size='small'
       pagination={false}
-      scroll={{
-        x: true
-      }}
+      rowClassName={record => record.name === 'Total' && classes.RowHighlight}
+      scroll={{ x: 1500, y: 600 }}
     />
   )
 }

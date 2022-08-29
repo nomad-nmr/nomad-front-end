@@ -119,4 +119,10 @@ export {
   getDataAccess
 } from './search'
 
-export { fetchCosts, resetCostsTable } from './accounts'
+export {
+  fetchCosts,
+  resetCostsTable,
+  toggleCostingDrawer,
+  fetchInstrumentsCosting,
+  updateInstrumentsCosting
+} from './accounts'

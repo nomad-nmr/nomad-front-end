@@ -22,14 +22,6 @@ const AccountsForm = props => {
       <Form.Item label='Date Range' name='dateRange'>
         <RangePicker allowClear={true} />
       </Form.Item>
-      {/*<Form.Item
-        label='Exclude inactive'
-        name='excludeInactive'
-        valuePropName='checked'
-        tooltip='Inactive users and groups with 0 cost are automatically excluded'
-      >
-        <Checkbox />
-  </Form.Item>*/}
       <Form.Item>
         <Button type='primary' htmlType='submit' loading={props.loading}>
           Calculate Costs
@@ -41,7 +33,10 @@ const AccountsForm = props => {
             danger
             shape='circle'
             icon={<CloseOutlined />}
-            onClick={() => form.resetFields()}
+            onClick={() => {
+              form.resetFields()
+              props.resetHandler()
+            }}
           />
         </Tooltip>
       </Form.Item>
