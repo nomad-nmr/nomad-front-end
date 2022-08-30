@@ -203,6 +203,8 @@ const PageHeaderEl = props => {
         />
       )
 
+      break
+
     case '/admin/accounts':
       headerTitle = 'Accounting'
       avatarSrc = accountingIcon
