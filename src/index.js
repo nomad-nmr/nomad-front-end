@@ -18,6 +18,7 @@ import submitReducer from './store/reducers/submit'
 import messageReducer from './store/reducers/message'
 import batchSubmitReducer from './store/reducers/batchSubmit'
 import searchReducer from './store/reducers/search'
+import accountsReducer from './store/reducers/accounts'
 
 import './index.css'
 import App from './App'
@@ -41,7 +42,8 @@ const rootReducer = combineReducers({
   submit: submitReducer,
   message: messageReducer,
   batchSubmit: batchSubmitReducer,
-  search: searchReducer
+  search: searchReducer,
+  accounts: accountsReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))

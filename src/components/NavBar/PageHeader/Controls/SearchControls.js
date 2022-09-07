@@ -31,7 +31,11 @@ const SearchControls = props => {
         target='_blank'
         rel='noreferrer noopener'
       >
-        <Button className={classes.Button} type='primary' disabled={searchCheckedState.length === 0}>
+        <Button
+          className={classes.Button}
+          type='primary'
+          disabled={searchCheckedState.length === 0}
+        >
           Open NMRium
         </Button>
       </a>

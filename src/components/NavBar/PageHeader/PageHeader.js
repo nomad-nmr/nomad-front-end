@@ -27,7 +27,8 @@ import {
   cancelSamples,
   toggleDownloadModal,
   toggleSearchForm,
-  fetchRepair
+  fetchRepair,
+  toggleCostingDrawer
 } from '../../../store/actions/index'
 
 import classes from './PageHeader.module.css'
@@ -40,6 +41,7 @@ import GroupsTabControls from './Controls/GroupsTabControls'
 import UsersTabControls from './Controls/UsersTabControls'
 import DashControls from './Controls/DashControls'
 import SearchControls from './Controls/SearchControls'
+import AccountingControls from './Controls/AccountingControls'
 
 import dashIcon from '../../../assets/dashboard.svg'
 import userIcon from '../../../assets/user.svg'
@@ -51,6 +53,7 @@ import submitIcon from '../../../assets/submit.png'
 import messageIcon from '../../../assets/email.png'
 import batchSubmitIcon from '../../../assets/batch-submit.png'
 import searchIcon from '../../../assets/loupe.svg'
+import accountingIcon from '../../../assets/accounting.png'
 
 const PageHeaderEl = props => {
   const {
@@ -202,6 +205,13 @@ const PageHeaderEl = props => {
 
       break
 
+    case '/admin/accounts':
+      headerTitle = 'Accounting'
+      avatarSrc = accountingIcon
+      extra = <AccountingControls toggleDrawer={props.tglCostingDrawer} />
+
+      break
+
     default:
       headerTitle = ''
       avatarSrc = ''
@@ -269,7 +279,8 @@ const mapDispatchToProps = dispatch => {
     cancelSamples: (data, token) => dispatch(cancelSamples(data, token)),
     toggleDownloadMdl: () => dispatch(toggleDownloadModal()),
     tglSearchForm: () => dispatch(toggleSearchForm()),
-    getRepair: (instrId, token) => dispatch(fetchRepair(instrId, token))
+    getRepair: (instrId, token) => dispatch(fetchRepair(instrId, token)),
+    tglCostingDrawer: () => dispatch(toggleCostingDrawer())
   }
 }
 

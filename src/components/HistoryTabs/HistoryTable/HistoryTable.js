@@ -87,8 +87,12 @@ const HistoryTable = props => {
       sorter: (a, b) => a.updatedAt.localeCompare(b.updatedAt)
     },
     {
-      title: 'ExpT',
-      dataIndex: 'expTime',
+      title: (
+        <Tooltip title='Total Experimental time from status "Running" to "Archived". Used for accounting'>
+          <span>Total ExpT</span>
+        </Tooltip>
+      ),
+      dataIndex: 'totalExpTime',
       align: 'center'
     },
     {
@@ -168,6 +172,10 @@ const HistoryTable = props => {
         <div className={classes.TimeStamp}>
           <span>Created at: </span>
           {record.createdAt}
+        </div>
+        <div className={classes.TimeStamp}>
+          <span>Experimental time: </span>
+          {record.expTime}
         </div>
       </Space>
       <div className={classes.Remarks}>
