@@ -48,7 +48,7 @@ const AccountsTable = props => {
     dataIndex: 'totalCost',
     align: 'center',
     fixed: 'right',
-    width: 10,
+    width: 25,
     className: classes.ColHighlight
   })
 
@@ -67,16 +67,17 @@ const AccountsTable = props => {
   })
 
   return (
-    <Table
-      style={{ margin: '0 50px 0 50px' }}
-      columns={columns}
-      dataSource={data}
-      bordered={true}
-      size='small'
-      pagination={false}
-      rowClassName={record => record.name === 'Total' && classes.RowHighlight}
-      scroll={{ x: 1500, y: 600 }}
-    />
+    <div style={{ margin: '0 50px 0 50px', height: 'fit-content' }}>
+      <Table
+        columns={columns}
+        dataSource={data}
+        bordered={true}
+        size='small'
+        pagination={false}
+        rowClassName={record => record.name === 'Total' && classes.RowHighlight}
+        scroll={{ x: 1500, y: 500 }}
+      />
+    </div>
   )
 }
 
