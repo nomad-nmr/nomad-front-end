@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Form, InputNumber, Popconfirm, Table, Typography } from 'antd'
+import React, { useState } from 'react'
+import { Form, InputNumber, Popconfirm, Table, Button, Space } from 'antd'
 
 //The original code from antd was simplified as only the table
 // will ever have only one row
@@ -72,7 +72,6 @@ const CostingTable = props => {
       newData.splice(0, 1, { ...item, ...row })
       setData(newData)
       setEditing(false)
-      console.log(row)
       props.updateDataHandler(props.token, row)
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo)
@@ -98,23 +97,18 @@ const CostingTable = props => {
     width: 100,
     render: () => {
       return editing ? (
-        <span>
-          <Typography.Link
-            onClick={() => save()}
-            style={{
-              marginRight: 8
-            }}
-          >
+        <Space>
+          <Button type='link' onClick={() => save()}>
             Save
-          </Typography.Link>
+          </Button>
           <Popconfirm title='Sure to cancel?' onConfirm={cancel}>
-            <a>Cancel</a>
+            <Button type='link'>Cancel</Button>
           </Popconfirm>
-        </span>
+        </Space>
       ) : (
-        <Typography.Link disabled={editing} onClick={() => edit()}>
+        <Button type='link' disabled={editing} onClick={() => edit()}>
           Edit
-        </Typography.Link>
+        </Button>
       )
     }
   })
